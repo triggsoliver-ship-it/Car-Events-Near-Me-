@@ -2,6 +2,7 @@ import type { CarEvent, EventType } from "@/lib/types";
 import { SEED_1 } from "@/lib/seed1";
 import { SEED_2 } from "@/lib/seed2";
 import { SEED_3 } from "@/lib/seed3";
+import { SEED_4 } from "@/lib/seed4";
 import { dbEnabled, getClient, rowToEvent, EventRow } from "@/lib/db";
 
 export const CATEGORIES: { type: EventType; label: string; img: number }[] = [
@@ -25,7 +26,7 @@ export const REGIONS: string[] = [
   "West Midlands", "Yorkshire",
 ];
 
-const SEED: CarEvent[] = [...SEED_1, ...SEED_2, ...SEED_3];
+const SEED: CarEvent[] = [...SEED_1, ...SEED_2, ...SEED_3, ...SEED_4];
 const today = () => new Date().toISOString().slice(0, 10);
 
 /** Bundled seed events (used as fallback and to pre-seed the database). */
