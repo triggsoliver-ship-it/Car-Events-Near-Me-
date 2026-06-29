@@ -8,7 +8,7 @@ export const maxDuration = 60;
 
 function authed(request: Request) {
   const secret = process.env.CRON_SECRET;
-  if (!secret) return true; // if no secret set, allow (e.g. first manual run)
+  if (!secret) return true;
   const auth = request.headers.get("authorization");
   const q = new URL(request.url).searchParams.get("secret");
   return auth === "Bearer " + secret || q === secret;
@@ -28,6 +28,7 @@ function seedRows(): ImportRow[] {
     description: e.desc || null,
     booking_url: e.bookingUrl || null,
     img: e.img,
+    tiers: e.tiers,
     free: Boolean(e.free),
     status: "approved" as const,
     source: "seed",
@@ -54,7 +55,7 @@ export async function GET(request: Request) {
     }
     return NextResponse.json({ ok: true, imported: rows.length, seeded: seedRows().length, upserted, errors });
   } catch (err: any) {
-    return NextResponse.json({ error: err?.message || "Import failed", stack: String(err?.stack || "").split("\n").slice(0, 4) }, { status: 500 });
+    return NextResponse.json({ error: err?.message || "Import failed" }, { status: 500 });
   }
 }
 
