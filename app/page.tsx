@@ -1,7 +1,7 @@
 import Explore from "@/components/Explore";
 import { getUpcomingEvents } from "@/lib/events";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const events = await getUpcomingEvents();
