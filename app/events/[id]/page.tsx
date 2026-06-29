@@ -1,25 +1,25 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getAllEvents, getEventById } from "@/lib/events";
+import { getEventById, getSeedEvents } from "@/lib/events";
 import { px, dateRange, GRAD } from "@/lib/util";
 import BookingBox from "@/components/BookingBox";
 
+export const dynamicParams = true;
+export const revalidate = 3600;
+
 export function generateStaticParams() {
-  return getAllEvents().map((e) => ({ id: String(e.id) }));
+  return getSeedEvents().map((e) => ({ id: String(e.id) }));
 }
 
-export function generateMetadata({ params }: { params: { id: string } }): Metadata {
-  const e = getEventById(Number(params.id));
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const e = await getEventById(Number(params.id));
   if (!e) return { title: "Event not found — Car Events Near Me" };
-  return {
-    title: `${e.name} — Car Events Near Me`,
-    description: e.desc,
-  };
+  return { title: `${e.name} — Car Events Near Me`, description: e.desc };
 }
 
-export default function EventPage({ params }: { params: { id: string } }) {
-  const e = getEventById(Number(params.id));
+export default async function EventPage({ params }: { params: { id: string } }) {
+  const e = await getEventById(Number(params.id));
   if (!e) notFound();
   const grad = GRAD[(e.id - 1) % GRAD.length];
   return (
