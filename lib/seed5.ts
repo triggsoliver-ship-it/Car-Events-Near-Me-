@@ -26,7 +26,7 @@ const SHIFT: { date: string; slug: string }[] = [
 
 const base = (id: number, v: Venue, iso: string): CarEvent => ({
   id, name: v.name, type: "meet", region: v.region, county: v.county, town: v.town,
-  venue: v.venue, start: iso, end: iso, img: 16896020, organiser: v.organiser,
+  venue: v.venue, start: iso, end: iso, img: 33419743, organiser: v.organiser,
   desc: v.desc, tiers: [{ name: "Entry", price: 0 }], free: true, bookingUrl: v.url,
 });
 
@@ -37,7 +37,7 @@ const recurring: CarEvent[] = VENUES.flatMap((v, vi) =>
 const shift: CarEvent[] = SHIFT.map((s, i) => ({
   id: 1369 + i, name: "Shift Social Morning Meet", type: "meet", region: "South East",
   county: "Hampshire", town: "Andover", venue: "The Lion, Clanville", start: s.date, end: s.date,
-  img: 16896020, organiser: "Shift Social",
+  img: 33419743, organiser: "Shift Social",
   desc: "Free monthly morning meet at The Lion, Clanville. Bacon rolls, coffee and lots of cars. RSVP to attend.",
   tiers: [{ name: "Entry", price: 0 }], free: true,
   bookingUrl: `https://www.shift-social.co.uk/event-details/${s.slug}`,

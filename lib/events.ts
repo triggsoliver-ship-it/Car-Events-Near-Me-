@@ -4,11 +4,12 @@ import { SEED_2 } from "@/lib/seed2";
 import { SEED_3 } from "@/lib/seed3";
 import { SEED_4 } from "@/lib/seed4";
 import { SEED_5 } from "@/lib/seed5";
+import { SEED_6 } from "@/lib/seed6";
 import { dbEnabled, getClient, rowToEvent, EventRow } from "@/lib/db";
 
 export const CATEGORIES: { type: EventType; label: string; img: number }[] = [
   { type: "show", label: "Car Shows", img: 17075732 },
-  { type: "meet", label: "Meets", img: 16896020 },
+  { type: "meet", label: "Meets", img: 33419743 },
   { type: "track day", label: "Track Days", img: 15155737 },
   { type: "classic", label: "Classic", img: 2272281 },
   { type: "modified", label: "Modified", img: 20406502 },
@@ -27,7 +28,7 @@ export const REGIONS: string[] = [
   "West Midlands", "Yorkshire",
 ];
 
-const SEED: CarEvent[] = [...SEED_1, ...SEED_2, ...SEED_3, ...SEED_4, ...SEED_5];
+const SEED: CarEvent[] = [...SEED_1, ...SEED_2, ...SEED_3, ...SEED_4, ...SEED_5, ...SEED_6];
 const today = () => new Date().toISOString().slice(0, 10);
 
 /** Bundled seed events (used as fallback and to pre-seed the database). */
