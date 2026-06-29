@@ -2,6 +2,7 @@ import type { CarEvent, EventType } from "@/lib/types";
 import { SEED_1 } from "@/lib/seed1";
 import { SEED_2 } from "@/lib/seed2";
 import { SEED_3 } from "@/lib/seed3";
+import { dbEnabled, getClient, rowToEvent, EventRow } from "@/lib/db";
 
 export const CATEGORIES: { type: EventType; label: string; img: number }[] = [
   { type: "show", label: "Car Shows", img: 17075732 },
@@ -18,18 +19,58 @@ export const TYPES: EventType[] = [
   "show", "meet", "modified", "classic", "track day", "auction", "autojumble", "motorsport",
 ];
 
+export const REGIONS: string[] = [
+  "East Midlands", "East of England", "London", "North East", "North West",
+  "Northern Ireland", "Scotland", "South East", "South West", "Wales",
+  "West Midlands", "Yorkshire",
+];
+
 const SEED: CarEvent[] = [...SEED_1, ...SEED_2, ...SEED_3];
+const today = () => new Date().toISOString().slice(0, 10);
 
-export function getAllEvents(): CarEvent[] { return SEED; }
-
-// Only events whose end date is today or later — past events expire automatically.
-export function getUpcomingEvents(): CarEvent[] {
-  const today = new Date().toISOString().slice(0, 10);
-  return SEED.filter((e) => e.end >= today).sort((a, b) => a.start.localeCompare(b.start));
+/** Bundled seed events (used as fallback and to pre-seed the database). */
+export function getSeedEvents(): CarEvent[] {
+  return SEED;
 }
 
-export function getEventById(id: number): CarEvent | undefined {
+/** Upcoming, approved events — from Supabase if configured, else seed. */
+export async function getUpcomingEvents(): Promise<CarEvent[]> {
+  if (dbEnabled) {
+    try {
+      const sb = getClient();
+      if (sb) {
+        const { data, error } = await sb
+          .from("events")
+          .select("*")
+          .eq("status", "approved")
+          .gte("end_date", today())
+          .order("start_date", { ascending: true })
+          .limit(5000);
+        if (!error && data) return (data as EventRow[]).map(rowToEvent);
+      }
+    } catch {
+      /* fall through to seed */
+    }
+  }
+  return SEED.filter((e) => e.end >= today()).sort((a, b) => a.start.localeCompare(b.start));
+}
+
+export async function getEventById(id: number): Promise<CarEvent | undefined> {
+  if (dbEnabled) {
+    try {
+      const sb = getClient();
+      if (sb) {
+        const { data } = await sb
+          .from("events")
+          .select("*")
+          .eq("id", id)
+          .eq("status", "approved")
+          .maybeSingle();
+        if (data) return rowToEvent(data as EventRow);
+      }
+    } catch {
+      /* fall through to seed */
+    }
+  }
   return SEED.find((e) => e.id === id);
 }
-
-export const REGIONS: string[] = Array.from(new Set(SEED.map((e) => e.region))).sort();
