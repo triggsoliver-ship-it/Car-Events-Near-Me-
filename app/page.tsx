@@ -1,11 +1,10 @@
 import Explore from "@/components/Explore";
 import { getUpcomingEvents } from "@/lib/events";
 
-// Re-evaluate on each request window so the "upcoming" date filter stays current.
 export const revalidate = 3600;
 
-export default function HomePage() {
-  const events = getUpcomingEvents();
+export default async function HomePage() {
+  const events = await getUpcomingEvents();
   return (
     <main>
       <Explore events={events} />
