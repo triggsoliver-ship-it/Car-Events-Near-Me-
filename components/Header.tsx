@@ -10,6 +10,7 @@ export default function Header() {
         </Link>
         <nav className="nav-links">
           <Link href="/#events">Browse events</Link>
+          <Link href="/track-days">Track days</Link>
           <Link href="/#categories">Categories</Link>
           <Link href="/list">List your event</Link>
           <Link href="/signin">Sign in</Link>
