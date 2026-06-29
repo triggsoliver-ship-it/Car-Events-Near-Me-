@@ -19,4 +19,5 @@ export type CarEvent = {
   desc: string;
   tiers: Tier[];
   free?: boolean;
+  bookingUrl?: string;
 };
