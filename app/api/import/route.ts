@@ -36,22 +36,26 @@ function seedRows(): ImportRow[] {
 }
 
 export async function GET(request: Request) {
-  if (!dbEnabled) return NextResponse.json({ error: "DB not enabled" }, { status: 503 });
-  if (!authed(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const sb = getClient(true);
-  if (!sb) return NextResponse.json({ error: "Server not configured" }, { status: 503 });
+  try {
+    if (!dbEnabled) return NextResponse.json({ error: "DB not enabled" }, { status: 503 });
+    if (!authed(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const sb = getClient(true);
+    if (!sb) return NextResponse.json({ error: "Server not configured" }, { status: 503 });
 
-  const { rows, errors } = await runImport();
-  const all = [...seedRows(), ...rows];
+    const { rows, errors } = await runImport();
+    const all = [...seedRows(), ...rows];
 
-  let upserted = 0;
-  for (let i = 0; i < all.length; i += 500) {
-    const batch = all.slice(i, i + 500);
-    const { error } = await sb.from("events").upsert(batch, { onConflict: "external_id" });
-    if (error) errors.push("upsert: " + error.message);
-    else upserted += batch.length;
+    let upserted = 0;
+    for (let i = 0; i < all.length; i += 500) {
+      const batch = all.slice(i, i + 500);
+      const { error } = await sb.from("events").upsert(batch, { onConflict: "external_id" });
+      if (error) errors.push("upsert: " + error.message);
+      else upserted += batch.length;
+    }
+    return NextResponse.json({ ok: true, imported: rows.length, seeded: seedRows().length, upserted, errors });
+  } catch (err: any) {
+    return NextResponse.json({ error: err?.message || "Import failed", stack: String(err?.stack || "").split("\n").slice(0, 4) }, { status: 500 });
   }
-  return NextResponse.json({ ok: true, imported: rows.length, seeded: seedRows().length, upserted, errors });
 }
 
 export const POST = GET;
