@@ -26,7 +26,7 @@ export type ImportRow = {
 export type Source = {
   name: string;
   url: string;
-  kind: "ical" | "jsonld" | "json" | "csv";
+  kind: "ical" | "jsonld" | "json" | "csv" | "trackdays";
   type: EventType;
   region: string;
   county?: string;
@@ -40,6 +40,7 @@ export type Source = {
 
 // Add real, permitted sources here (affiliate feeds, organiser iCal feeds, etc.).
 export const SOURCES: Source[] = [
+  { name: "TrackDays", url: "https://www.trackdays.co.uk/rss-feeds/car-trackdays/", kind: "trackdays", type: "track day", region: "Other", organiser: "TrackDays.co.uk", img: 15155737 },
   // Affiliate product feed example (fill in once you have the feed URL + field names):
   // { name: "TrackDays", url: "https://feed.example.com/trackdays.json", kind: "json", type: "track day",
   //   region: "Other", organiser: "TrackDays.co.uk", img: 15155737, root: "events",
@@ -169,6 +170,73 @@ function mappedRow(rec: any, s: Source): ImportRow | null {
   };
 }
 
+
+// ---- TrackDays.co.uk affiliate feed (HTML table) ----
+const TD_VENUES: Record<string, { region: string; county: string; town: string }> = {
+  "Brands Hatch": { region: "South East", county: "Kent", town: "West Kingsdown" },
+  "Snetterton": { region: "East of England", county: "Norfolk", town: "Norwich" },
+  "Oulton Park": { region: "North West", county: "Cheshire", town: "Little Budworth" },
+  "Cadwell Park": { region: "East Midlands", county: "Lincolnshire", town: "Louth" },
+  "Donington Park": { region: "East Midlands", county: "Leicestershire", town: "Castle Donington" },
+  "Silverstone": { region: "East Midlands", county: "Northamptonshire", town: "Towcester" },
+  "Castle Combe": { region: "South West", county: "Wiltshire", town: "Chippenham" },
+  "Bedford Autodrome": { region: "East of England", county: "Bedfordshire", town: "Bedford" },
+  "Anglesey": { region: "Wales", county: "Anglesey", town: "Ty Croes" },
+  "Croft": { region: "North East", county: "North Yorkshire", town: "Darlington" },
+  "Thruxton": { region: "South East", county: "Hampshire", town: "Andover" },
+  "Mallory Park": { region: "East Midlands", county: "Leicestershire", town: "Hinckley" },
+  "Blyton Park": { region: "Yorkshire", county: "Lincolnshire", town: "Gainsborough" },
+  "Lydden Hill": { region: "South East", county: "Kent", town: "Dover" },
+  "Goodwood": { region: "South East", county: "West Sussex", town: "Chichester" },
+  "Abingdon Track Days": { region: "South East", county: "Oxfordshire", town: "Abingdon" },
+  "Abingdon": { region: "South East", county: "Oxfordshire", town: "Abingdon" },
+  "Seighford": { region: "West Midlands", county: "Staffordshire", town: "Stafford" },
+};
+const TD_VENUE_KEYS = Object.keys(TD_VENUES).sort((a, b) => b.length - a.length);
+
+/** Parse the TrackDays.co.uk car-track-days feed. Date-anchored so it is robust
+ *  to table markup: each row begins with a dd/mm/yy date; bookable rows contain a
+ *  /book/cartrackday/<id>/ link with a price. Non-UK venues and "Full" rows are skipped. */
+export function parseTrackdaysHtml(html: string, s: Source): ImportRow[] {
+  const rows: ImportRow[] = [];
+  const clean = html.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<style[\s\S]*?<\/style>/gi, "");
+  const dates = [...clean.matchAll(/(\d{2})\/(\d{2})\/(\d{2})/g)];
+  for (let i = 0; i < dates.length; i++) {
+    const d = dates[i];
+    const seg = clean.slice(d.index!, dates[i + 1]?.index ?? clean.length);
+    const link = seg.match(/href="(https?:\/\/www\.trackdays\.co\.uk\/book\/cartrackday\/(\d+)\/)"[^>]*>\s*£?\s*([\d,]+(?:\.\d+)?)/i);
+    if (!link) continue; // not bookable
+    const text = seg.replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ");
+    const venue = TD_VENUE_KEYS.find((v) => text.includes(v));
+    if (!venue) continue; // non-UK / unknown venue
+    const loc = TD_VENUES[venue];
+    const start = `20${d[3]}-${d[2]}-${d[1]}`;
+    const price = parseFloat(link[3].replace(/,/g, ""));
+    const after = text.slice(text.indexOf(venue) + venue.length).trim();
+    const fmt = after.split(/\d+\s*dB/)[0].replace(/N\/A|Full|Static|Drive By/gi, "").trim();
+    rows.push({
+      name: `${venue} Track Day`,
+      type: s.type,
+      region: loc.region,
+      county: loc.county,
+      town: loc.town,
+      venue,
+      start_date: start,
+      end_date: start,
+      organiser: "TrackDays.co.uk",
+      description: (fmt ? fmt + " — " : "") + "Take your own car on track. Booked via TrackDays.co.uk.",
+      booking_url: link[1],
+      img: s.img || 15155737,
+      tiers: [{ name: "Driver", price: isNaN(price) ? 0 : price }],
+      free: false,
+      status: "approved",
+      source: "import:" + s.name,
+      external_id: "trackdays-" + link[2],
+    });
+  }
+  return rows;
+}
+
 async function fetchText(url: string): Promise<string> {
   const res = await fetch(url, { headers: { "User-Agent": "CarEventsNearMeBot/1.0 (+https://careventsnearme.uk)" } });
   if (!res.ok) throw new Error("HTTP " + res.status);
@@ -204,6 +272,8 @@ async function importSource(s: Source): Promise<ImportRow[]> {
         external_id: "jsonld-" + s.name + "-" + start + "-" + String(e.name).slice(0, 40),
       });
     }
+  } else if (s.kind === "trackdays") {
+    rows.push(...parseTrackdaysHtml(text, s));
   } else {
     // json | csv mapped product feed
     let records: any[] = [];
