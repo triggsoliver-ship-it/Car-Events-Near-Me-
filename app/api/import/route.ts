@@ -43,7 +43,12 @@ export async function GET(request: Request) {
     const sb = getClient(true);
     if (!sb) return NextResponse.json({ error: "Server not configured" }, { status: 503 });
 
-    const { rows, errors } = await runImport();
+    // Live web sources are paused (TrackDays returns 403 to cloud IPs until they whitelist careventsnearme.uk;
+    // their events are baked into lib/seed4.ts). Flip to true to re-enable runImport().
+    const LIVE_SOURCES_ENABLED = false;
+    const { rows, errors } = LIVE_SOURCES_ENABLED
+      ? await runImport()
+      : { rows: [] as ImportRow[], errors: [] as string[] };
 
     if (new URL(request.url).searchParams.get("dry")) {
       const sample = rows.slice(0, 8).map((r) => `${r.start_date} | ${r.name} | ${r.town} (${r.region}) | £${r.tiers[0]?.price} | ${r.booking_url}`).join("\n");
