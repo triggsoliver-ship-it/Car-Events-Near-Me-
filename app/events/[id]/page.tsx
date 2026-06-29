@@ -1,16 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getEventById, getSeedEvents } from "@/lib/events";
+import { getEventById } from "@/lib/events";
 import { px, dateRange, GRAD } from "@/lib/util";
 import BookingBox from "@/components/BookingBox";
 
-export const dynamicParams = true;
-export const revalidate = 3600;
-
-export function generateStaticParams() {
-  return getSeedEvents().map((e) => ({ id: String(e.id) }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const e = await getEventById(Number(params.id));
@@ -45,7 +40,7 @@ export default async function EventPage({ params }: { params: { id: string } }) 
           <h3 className="sub">Organiser</h3>
           <p className="desc">{e.organiser}</p>
           <h3 className="sub">Good to know</h3>
-          <p className="desc">Instant e-ticket with QR code on booking · Secure payment · Booked direct with the organiser.</p>
+          <p className="desc">Secure booking · Past events drop off automatically · Found something wrong? Let us know.</p>
         </div>
         <BookingBox event={e} />
       </div>
