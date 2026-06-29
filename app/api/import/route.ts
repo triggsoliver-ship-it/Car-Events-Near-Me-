@@ -44,6 +44,12 @@ export async function GET(request: Request) {
     if (!sb) return NextResponse.json({ error: "Server not configured" }, { status: 503 });
 
     const { rows, errors } = await runImport();
+
+    if (new URL(request.url).searchParams.get("dry")) {
+      const sample = rows.slice(0, 8).map((r) => `${r.start_date} | ${r.name} | ${r.town} (${r.region}) | £${r.tiers[0]?.price} | ${r.booking_url}`).join("\n");
+      return new Response("DRY RUN (nothing written)\nimported rows: " + rows.length + "\nerrors: " + JSON.stringify(errors) + "\n\n" + sample, { headers: { "content-type": "text/plain" } });
+    }
+
     const all = [...seedRows(), ...rows];
 
     let upserted = 0;
