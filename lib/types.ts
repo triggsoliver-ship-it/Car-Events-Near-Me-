@@ -14,7 +14,8 @@ export type CarEvent = {
   venue: string;
   start: string; // ISO yyyy-mm-dd
   end: string;   // ISO yyyy-mm-dd
-  img: number;   // Pexels photo id
+  img: number;   // Pexels photo id (fallback)
+  imgUrl?: string; // real official OG share image (preferred over Pexels)
   organiser: string;
   desc: string;
   tiers: Tier[];

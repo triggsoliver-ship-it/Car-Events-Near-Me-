@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { CarEvent } from "@/lib/types";
 import { CATEGORIES, REGIONS, TYPES } from "@/lib/events";
-import { px, fmtPrice, dateRange, priceFrom, GRAD } from "@/lib/util";
+import { px, eventImg, fmtPrice, dateRange, priceFrom, GRAD } from "@/lib/util";
 
 const TODAY = new Date().toISOString().slice(0, 10);
 
@@ -104,7 +104,7 @@ export default function Explore({ events }: { events: CarEvent[] }) {
               <Link key={e.id} href={`/events/${e.id}`} className="card">
                 <div className="imgwrap" style={{ background: grad }}>
                   <div className="photo" style={{ position: "absolute", inset: 0, background: grad, backgroundSize: "cover", backgroundPosition: "center" }}>
-                    <img className="photo" loading="lazy" src={px(e.img, 900, 560)} alt="" onError={(ev) => { (ev.currentTarget as HTMLImageElement).style.display = "none"; }} />
+                    <img className="photo" loading="lazy" src={eventImg(e, 900, 560)} alt="" onError={(ev) => { (ev.currentTarget as HTMLImageElement).style.display = "none"; }} />
                   </div>
                   <div className="scrim" />
                   <span className="tag">{e.type}</span>

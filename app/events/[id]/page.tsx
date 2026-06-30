@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getEventById } from "@/lib/events";
-import { px, dateRange, GRAD } from "@/lib/util";
+import { eventImg, dateRange, GRAD } from "@/lib/util";
 import BookingBox from "@/components/BookingBox";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +21,7 @@ export default async function EventPage({ params }: { params: { id: string } }) 
     <main className="detail">
       <Link className="back" href="/#events">← Back to events</Link>
       <div className="dbanner" style={{ background: grad }}>
-        <img className="photo" src={px(e.img, 1400, 800)} alt={e.name} />
+        <img className="photo" src={eventImg(e, 1400, 800)} alt={e.name} />
         <div className="scrim" />
         <div className="ttl">
           <span className="tg">{e.type}</span>
