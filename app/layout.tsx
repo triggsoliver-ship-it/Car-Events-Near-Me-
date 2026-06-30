@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PWARegister from "@/components/PWARegister";
 
 const SITE_URL = "https://careventsnearme.uk";
 const SITE_NAME = "Car Events Near Me";
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
+  manifest: "/manifest.webmanifest",
   keywords: [
     "UK car events",
     "car shows",
@@ -46,6 +48,16 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Car Events",
+  },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: ["/icon.svg"],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export const viewport: Viewport = {
@@ -53,6 +65,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   themeColor: "#0a0e14",
   colorScheme: "dark",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -67,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         {children}
         <Footer />
+        <PWARegister />
       </body>
     </html>
   );
