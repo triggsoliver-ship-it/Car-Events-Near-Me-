@@ -42,7 +42,20 @@ export default function Footer() {
           </div>
         </div>
         <div className="fbot">
-          <div>© 2026 Car Events Near Me</div>
+          <div>
+            <div>© 2026 Car Events Near Me</div>
+            <div style={{ marginTop: 6, fontSize: 12, color: "var(--muted)", opacity: 0.85 }}>
+              Site designed by{" "}
+              <a
+                href="https://shipitstudio.co.uk"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "var(--muted)", textDecoration: "underline" }}
+              >
+                shipitstudio.co.uk
+              </a>
+            </div>
+          </div>
           <div>Privacy · Terms · Contact</div>
         </div>
       </div>
