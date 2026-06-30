@@ -2,6 +2,14 @@
 export const px = (id: number, w = 900, h = 600) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=${w}&h=${h}`;
 
+// Prefer an event's real official OG share image when present,
+// otherwise fall back to the licence-free Pexels photo.
+export const eventImg = (
+  e: { imgUrl?: string; img: number },
+  w = 900,
+  h = 600
+) => e.imgUrl || px(e.img, w, h);
+
 export const GRAD = [
   "linear-gradient(135deg,#ff5118,#ffb800)",
   "linear-gradient(135deg,#22d3ee,#3b82f6)",
