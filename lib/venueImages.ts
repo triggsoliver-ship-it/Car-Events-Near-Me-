@@ -14,7 +14,10 @@ import type { CarEvent, EventType } from "@/lib/types";
  * our own /img proxy so it loads regardless of cross-origin hotlink protection.
  * Only photos actually retrieved and verified from each event's own site are
  * used here; anything without a usable real photo falls back to a relevant,
- * licence-free Pexels image from CATEGORY_IMAGES.
+ * licence-free Pexels image — either a curated per-series rule below or a
+ * category pool from CATEGORY_IMAGES. Every Pexels id used here was verified to
+ * exist and was chosen because its description genuinely matches the event
+ * (a cars-and-coffee meet, a classic show, a JDM gathering, etc.).
  *
  * This module is intentionally plain TypeScript data plus one pure function so
  * it can be imported by client components (e.g. components/Explore.tsx) as well
@@ -29,6 +32,13 @@ const pex = (id: number) =>
 // cross-origin hotlinking (see app/img/route.ts). Every host wrapped here must
 // be present in that route's ALLOW set.
 const proxy = (url: string) => `/img?u=${encodeURIComponent(url)}`;
+
+// The real Goodwood Festival of Speed hero (Jayson Fong) already used by the
+// `/goodwood/` rule. Reused for Goodwood Breakfast Club so that series shows a
+// genuine Goodwood photo rather than stock.
+const GOODWOOD_HERO = proxy(
+  "https://www.goodwood.com/bynderassets/5498/Website-FOS2022_JaysonFong_0292.jpg",
+);
 
 // Genuine track-day photography from trackdays.co.uk — the booking partner most
 // track days link to. Their CDN blocks cross-origin hotlinking, so these are
@@ -49,9 +59,9 @@ export type VenueImageRule = { test: RegExp; url: string };
 export const VENUE_IMAGE_RULES: VenueImageRule[] = [
   // ── Goodwood (FoS / Revival / Members' Meeting / Breakfast Club) ──────────
   // Real Goodwood hero photography (Jayson Fong) pulled from goodwood.com via
-  // an in-browser DOM read, served through /img. Breakfast Club's own page is
-  // a 404 with no usable photo, so it keeps a relevant licence-free image.
-  { test: /goodwood breakfast club/, url: pex(10809693) },
+  // an in-browser DOM read, served through /img. Breakfast Club reuses the real
+  // Goodwood FoS hero so it is genuine Goodwood imagery, not stock.
+  { test: /goodwood breakfast club/, url: GOODWOOD_HERO },
   { test: /goodwood revival/, url: proxy("https://www.goodwood.com/bynderassets/90937/Website-Revival2018_JaysonFong_0031.jpg") },
   { test: /goodwood/, url: proxy("https://www.goodwood.com/bynderassets/5498/Website-FOS2022_JaysonFong_0292.jpg") },
 
@@ -80,14 +90,48 @@ export const VENUE_IMAGE_RULES: VenueImageRule[] = [
   { test: /eikon/, url: pex(20406502) },
   { test: /olympia/, url: "https://www.thelondonclassiccarshow.co.uk/wp-content/uploads/Main-Slider-shots-1-1.jpg" },
 
-  // ── Meet series ───────────────────────────────────────────────────────────
+  // ── Meet series (curated, distinct licence-free Pexels photos) ────────────
+  // Each pattern below points at a different, genuinely on-topic photo so the
+  // series don't all repeat one stock image. Keep these AFTER the real-venue
+  // rules above and BEFORE the broad category fallback.
+  // Caffeine & Machine — real photo from their own media CDN (unchanged).
   { test: /caffeine ?(&|and)? ?machine/, url: "https://media.caffeineandmachine.com/20250311150854/Caffeine-and-Machine-1024x576.jpg" },
-  { test: /cars ?(&|and)? ?coffee/, url: pex(33419743) },
-  { test: /podium place/, url: pex(3608542) },
-  { test: /ace cafe/, url: pex(2533092) },
-  { test: /crystal palace/, url: pex(2127733) },
-  { test: /newlands corner/, url: pex(33419743) },
-  { test: /shift social/, url: pex(3608542) },
+  // Cars & Coffee — vintage BMW at an outdoor car event with people socialising.
+  { test: /cars ?(&|and)? ?coffee/, url: pex(29237049) },
+  // Podium Place — nighttime urban car meet under city lights.
+  { test: /podium place/, url: pex(13010597) },
+  // Crystal Palace — aerial view of a group enjoying a car meet in a city park.
+  { test: /crystal palace/, url: pex(11638941) },
+  // Newlands Corner — outdoor car meet, classic vehicles, people and motorbikes.
+  { test: /newlands corner/, url: pex(9331881) },
+  // Shift Social — custom Honda Civic at a car meet (modern / modified vibe).
+  { test: /shift social/, url: pex(30517071) },
+  // Ace Cafe — classic Mercedes on a city street (classic cafe-meet feel).
+  { test: /ace cafe/, url: pex(32968061) },
+  // Cotswold / Lygon Arms meets — classic vintage car in a sunlit setting.
+  { test: /cotswold|lygon/, url: pex(18239712) },
+  // Newcastle Quayside — evening car meet with various people and cars.
+  { test: /newcastle quayside/, url: pex(9331880) },
+  // CarFest — vibrant gathering of classic cars with enthusiastic crowds.
+  { test: /carfest/, url: pex(9545305) },
+  // Players (Players Classic / Players Show) — modified/stance cars in a park.
+  { test: /\bplayers\b/, url: pex(29013423) },
+  // Ultimate Dubs — VW Beetles on display at an urban classic-car show.
+  { test: /ultimate dubs/, url: pex(15241077) },
+  // JapFest — lineup of classic JDM cars incl. Nissan Skyline R32.
+  { test: /japfest/, url: pex(30145523) },
+  // Tatton Park shows — row of colourful vintage cars at an outdoor exhibition.
+  { test: /tatton/, url: pex(37768141) },
+  // Longleat — luxury sports cars and people mingling at an outdoor event.
+  { test: /longleat/, url: pex(12590793) },
+  // Bromley Pageant of Motoring — row of vintage muscle cars side by side.
+  { test: /bromley/, url: pex(28470707) },
+  // Harrogate shows — vintage cars on display at an outdoor automotive gathering.
+  { test: /harrogate/, url: pex(29366940) },
+  // Bristol Classic Car Show — vintage cars in a stylish indoor showroom.
+  { test: /bristol classic/, url: pex(30934036) },
+  // Auto Italia — classic red Alfa Romeo at a bustling car show (Italian theme).
+  { test: /auto italia/, url: pex(16210132) },
 ];
 
 /**
@@ -95,17 +139,29 @@ export const VENUE_IMAGE_RULES: VenueImageRule[] = [
  * matches. A stable per-event index spreads events across each array so
  * visually-similar events don't all repeat one picture. Each category keeps
  * four DISTINCT, on-topic automotive photographs so the long-tail catch-all
- * still looks varied and relevant.
+ * still looks varied and relevant. Every id was verified to exist and chosen
+ * because its description matches the category (show crowds/displays for shows,
+ * casual meets for meets, modified/JDM for modified, vintage cars for classic,
+ * cars on track for track day, indoor hall lineups for auction, engine/parts
+ * imagery for autojumble, historic racing for motorsport).
  */
 export const CATEGORY_IMAGES: Record<EventType, string[]> = {
-  show: [pex(17075732), pex(29252120), pex(12801211), pex(112452)],
-  meet: [pex(33419743), pex(3608542), pex(2533092), pex(1335077)],
-  modified: [pex(20406502), pex(3729464), pex(2127733), pex(170811)],
-  classic: [pex(2272281), pex(248687), pex(13683840), pex(112460)],
+  // Car-show crowds and outdoor displays.
+  show: [pex(17075732), pex(33815997), pex(8878672), pex(12565876)],
+  // Casual car meets and gatherings.
+  meet: [pex(9661296), pex(12765686), pex(18385836), pex(32107427)],
+  // Modified / JDM / custom cars.
+  modified: [pex(22039970), pex(26448051), pex(29236908), pex(34388184)],
+  // Vintage / classic cars.
+  classic: [pex(31114473), pex(33419702), pex(37958112), pex(33924797)],
+  // Cars on track (left as-is — already genuine track imagery).
   "track day": [pex(15155737), pex(11488012), pex(12789344), pex(3354648)],
-  auction: [pex(34879476), pex(29831803), pex(112452), pex(2127015)],
-  autojumble: [pex(17356337), pex(13683840), pex(2244746), pex(190574)],
-  motorsport: [pex(10373678), pex(10807493), pex(12801211), pex(2526128)],
+  // Classic cars lined up in indoor halls / showrooms.
+  auction: [pex(29831803), pex(14065436), pex(12203663), pex(18435526)],
+  // Engine bays and car parts (swap-meet / autojumble imagery).
+  autojumble: [pex(11456554), pex(13690605), pex(6517339), pex(19499386)],
+  // Historic / vintage motor racing.
+  motorsport: [pex(13602135), pex(34214809), pex(33184111), pex(6134249)],
 };
 
 /**
