@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getEventById } from "@/lib/events";
-import { px, dateRange, GRAD, priceFrom } from "@/lib/util";
+import { eventImg, dateRange, GRAD } from "@/lib/util";
 import BookingBox from "@/components/BookingBox";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const e = await getEventById(Number(params.id));
   if (!e) return { title: "Event not found" };
-  const image = px(e.img, 1200, 630);
+  const image = eventImg(e, 1200, 630);
   return {
     title: e.name,
     description: e.desc,
@@ -36,7 +36,7 @@ export default async function EventPage({ params }: { params: { id: string } }) 
   if (!e) notFound();
   const grad = GRAD[(e.id - 1) % GRAD.length];
 
-  const startsFrom = priceFrom(e);
+  const startsFrom = Math.min(...e.tiers.map((t) => t.price));
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Event",
@@ -46,7 +46,7 @@ export default async function EventPage({ params }: { params: { id: string } }) 
     endDate: e.end,
     eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    image: [px(e.img, 1200, 630)],
+    image: [eventImg(e, 1200, 630)],
     url: `https://careventsnearme.uk/events/${e.id}`,
     location: {
       "@type": "Place",
@@ -79,7 +79,7 @@ export default async function EventPage({ params }: { params: { id: string } }) 
       />
       <Link className="back" href="/#events">← Back to events</Link>
       <div className="dbanner" style={{ background: grad }}>
-        <img className="photo" src={px(e.img, 1400, 800)} alt={e.name} />
+        <img className="photo" src={eventImg(e, 1400, 800)} alt={e.name} />
         <div className="scrim" />
         <div className="ttl">
           <span className="tg">{e.type}</span>
