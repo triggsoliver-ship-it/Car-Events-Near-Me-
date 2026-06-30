@@ -5,9 +5,17 @@ import { px, GRAD, fmtPrice, dateRange, priceFrom } from "@/lib/util";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "UK Car Track Days — Car Events Near Me",
+  title: "UK Car Track Days",
   description:
     "Every upcoming UK car track day — live dates, circuits and prices, bookable direct. In partnership with TrackDays.co.uk.",
+  alternates: { canonical: "/track-days" },
+  openGraph: {
+    type: "website",
+    title: "UK Car Track Days — Car Events Near Me",
+    description:
+      "Every upcoming UK car track day — live dates, circuits and prices, bookable direct.",
+    url: "https://careventsnearme.uk/track-days",
+  },
 };
 
 export default async function TrackDaysPage() {
@@ -17,7 +25,7 @@ export default async function TrackDaysPage() {
     .sort((a, b) => a.start.localeCompare(b.start));
 
   return (
-    <main className="detail" style={{ maxWidth: 1240 }}>
+    <main className="detail" id="main-content" style={{ maxWidth: 1240 }}>
       <h1 style={{ fontSize: 34, letterSpacing: "-1px", marginBottom: 8 }}>UK Car Track Days</h1>
       <p className="desc" style={{ maxWidth: 720 }}>
         Take your own car on track. {list.length} upcoming UK car track days — live dates,
@@ -32,7 +40,7 @@ export default async function TrackDaysPage() {
             <Link key={e.id} href={`/events/${e.id}`} className="card">
               <div className="imgwrap" style={{ background: grad }}>
                 <div className="photo" style={{ position: "absolute", inset: 0, background: grad, backgroundSize: "cover", backgroundPosition: "center" }}>
-                  <img className="photo" loading="lazy" src={px(e.img, 900, 560)} alt="" />
+                  <img className="photo" loading="lazy" src={px(e.img, 900, 560)} alt={`${e.name} track day at ${e.venue}`} />
                 </div>
                 <div className="scrim" />
                 <span className="tag">{e.type}</span>

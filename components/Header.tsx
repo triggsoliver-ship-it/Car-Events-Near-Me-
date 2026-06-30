@@ -4,11 +4,11 @@ export default function Header() {
   return (
     <header>
       <div className="wrap nav">
-        <Link href="/" className="logo">
-          <div className="mark">📍</div>
+        <Link href="/" className="logo" aria-label="Car Events Near Me — home">
+          <div className="mark" aria-hidden="true">📍</div>
           <div>Car Events <span className="brandtext">Near Me</span></div>
         </Link>
-        <nav className="nav-links">
+        <nav className="nav-links" aria-label="Primary">
           <Link href="/#events">Browse events</Link>
           <Link href="/track-days">Track days</Link>
           <Link href="/#categories">Categories</Link>
