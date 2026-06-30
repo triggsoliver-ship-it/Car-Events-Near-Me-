@@ -9,6 +9,13 @@ import type { CarEvent, EventType } from "@/lib/types";
  * seed rows, we instead match on strings that EVERY event has — `name`,
  * `venue` and `organiser` — and pull a real, relevant photo through.
  *
+ * Where an event has an official / booking website with a usable photographic
+ * og:image (or hero photo), we copy that exact image URL and serve it through
+ * our own /img proxy so it loads regardless of cross-origin hotlink protection.
+ * Only photos actually retrieved and verified from each event's own site are
+ * used here; anything without a usable real photo falls back to a relevant,
+ * licence-free Pexels image from CATEGORY_IMAGES.
+ *
  * This module is intentionally plain TypeScript data plus one pure function so
  * it can be imported by client components (e.g. components/Explore.tsx) as well
  * as server components. No server-only APIs, no new dependencies.
@@ -19,7 +26,8 @@ const pex = (id: number) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1200&h=800`;
 
 // Real photos are served through our own /img proxy when the source blocks
-// cross-origin hotlinking (see app/img/route.ts).
+// cross-origin hotlinking (see app/img/route.ts). Every host wrapped here must
+// be present in that route's ALLOW set.
 const proxy = (url: string) => `/img?u=${encodeURIComponent(url)}`;
 
 // Genuine track-day photography from trackdays.co.uk — the booking partner most
@@ -40,16 +48,24 @@ export type VenueImageRule = { test: RegExp; url: string };
  */
 export const VENUE_IMAGE_RULES: VenueImageRule[] = [
   // ── Goodwood (FoS / Revival / Members' Meeting / Breakfast Club) ──────────
+  // Goodwood sits behind a Cloudflare challenge, so its og:image can't be
+  // verified server-side; these stay on relevant licence-free photography.
   { test: /goodwood breakfast club/, url: pex(10809693) },
   { test: /goodwood/, url: pex(10807493) },
 
-  // ── Venues / shows (publisher og:image where available) ──────────────────
+  // ── Venues / shows (real photo from each event's own official site) ───────
   { test: /beaulieu|national motor museum/, url: "https://www.beaulieu.co.uk/wp-content/uploads/2016/11/2-e1740762014153.jpg" },
   { test: /\bnec\b|necbirmingham|birmingham nec/, url: pex(17075732) },
-  { test: /farnborough|british motor show/, url: "https://www.thebritishmotorshow.live/wp-content/uploads/2026/02/Crowd-1.png" },
+  // The British Motor Show — real crowd photo from their official site.
+  { test: /farnborough|british motor show/, url: proxy("https://www.thebritishmotorshow.live/wp-content/uploads/2026/02/Crowd-1.png") },
   { test: /blenheim|salon priv/, url: "https://www.salonpriveconcours.com/wp-content/uploads/2021/03/salonprive-facebook-blue.jpg" },
-  { test: /hampton court|concours of elegance/, url: pex(112460) },
+  // Concours of Elegance (Hampton Court Palace) — real car photo from the
+  // official concoursofelegance.co.uk media library, served via /img.
+  { test: /hampton court|concours of elegance/, url: proxy("https://concoursofelegance.co.uk/wp-content/uploads/2025/11/Concours-of-Elegance-Side-Exhaust.jpg") },
   { test: /brooklands/, url: "https://www.brooklandsmuseum.com/media/bx3fphxr/brooklands-museum-surrey-concorde-aviation-aircraft-family.jpg" },
+  // Bonhams Cars / "THE MARKET" (MPH, Bicester) — real Ferrari Testarossa
+  // hero photo from their official CDN, served via /img.
+  { test: /bonhams|\bmph\b|bicester/, url: proxy("https://cdn.themarket.co.uk/content/2688x800/7a9486ac15/ferrari-testarossa.jpg") },
   { test: /stoneleigh|race retro/, url: pex(10373678) },
   { test: /telford/, url: pex(20406502) },
   { test: /eikon/, url: pex(20406502) },
@@ -68,7 +84,9 @@ export const VENUE_IMAGE_RULES: VenueImageRule[] = [
 /**
  * Relevant licence-free Pexels photos per category, used when no venue rule
  * matches. A stable per-event index spreads events across each array so
- * visually-similar events don't all repeat one picture.
+ * visually-similar events don't all repeat one picture. Each category keeps
+ * four DISTINCT, on-topic automotive photographs so the long-tail catch-all
+ * still looks varied and relevant.
  */
 export const CATEGORY_IMAGES: Record<EventType, string[]> = {
   show: [pex(17075732), pex(29252120), pex(12801211), pex(112452)],
