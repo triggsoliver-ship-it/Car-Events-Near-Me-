@@ -52,6 +52,27 @@ export const TRACKDAY_PHOTOS = [
 export type VenueImageRule = { test: RegExp; url: string };
 
 /**
+ * Real photos for four specific event series, sourced from Google Images result
+ * pages and verified to load via an in-browser `new Image()` check (each
+ * naturalWidth >= 600, landscape, clearly showing the event). Served through the
+ * /img proxy; every host below is allow-listed in app/img/route.ts.
+ *
+ * These are checked FIRST in resolveEventImage — before the track-day
+ * short-circuit and before MARQUE_RULES — so they always take precedence over
+ * the generic JDM / VW marque photos for these four series.
+ */
+export const EVENT_PHOTO_RULES: VenueImageRule[] = [
+  // Japfest — real photo of JDM cars at the show (CarEvents.com gallery).
+  { test: /japfest/, url: proxy("https://www.carevents.com/uk/wp-content/uploads/sites/3/2024/11/japfest3-1024x684.jpg") },
+  // CarFest — real photo of cars at the festival (CarEvents.com gallery).
+  { test: /carfest/, url: proxy("https://www.carevents.com/uk/wp-content/uploads/sites/3/2025/10/CarFest_Sunday_53583_websize-1024x683.jpg") },
+  // Ultimate Dubs (and Dubshed) — real photo of VWs at the indoor show.
+  { test: /ultimate dubs|dubshed/, url: proxy("https://www.cumbriavag.co.uk/wp-content/uploads/2016/03/IMG_2260-6-1024x654.jpg") },
+  // Podium Place — real photo of supercars at the Podium Place venue.
+  { test: /podium place/, url: proxy("https://visitnewbury.org.uk/wp-content/uploads/2021/04/Podium-Place-Super-Cars-scaled.jpg") },
+];
+
+/**
  * Marque / car-type rules matched against the event TITLE only.
  *
  * Many events name a specific make or type in their title — e.g. "Simply
@@ -226,6 +247,10 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
 /**
  * Resolve a real, relevant image URL for an event.
  *
+ * 0. The four EVENT_PHOTO_RULES series (Japfest, CarFest, Ultimate Dubs /
+ *    Dubshed, Podium Place) get their genuine event photo — checked FIRST so
+ *    these always win over the track-day short-circuit and the JDM/VW marque
+ *    photos.
  * 1. Track-day events get a genuine trackdays.co.uk photo (rotated by id).
  * 2. Otherwise, if the event TITLE names a marque / car type (Simply Jaguar,
  *    Auto Italia, Japfest, …), the first matching MARQUE_RULES rule wins so the
@@ -235,6 +260,12 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
  * 5. Returns undefined if nothing applies (caller falls back to the Pexels id).
  */
 export function resolveEventImage(e: CarEvent): string | undefined {
+  // Real photos for the four specific event series take precedence over
+  // everything else — including the track-day short-circuit and MARQUE_RULES.
+  const name = e.name.toLowerCase();
+  for (const rule of EVENT_PHOTO_RULES) {
+    if (rule.test.test(name)) return rule.url;
+  }
   if (e.type === "track day") {
     const i = ((e.id % TRACKDAY_PHOTOS.length) + TRACKDAY_PHOTOS.length) % TRACKDAY_PHOTOS.length;
     return TRACKDAY_PHOTOS[i];
