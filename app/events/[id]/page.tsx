@@ -9,16 +9,74 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const e = await getEventById(Number(params.id));
-  if (!e) return { title: "Event not found — Car Events Near Me" };
-  return { title: `${e.name} — Car Events Near Me`, description: e.desc };
+  if (!e) return { title: "Event not found" };
+  const image = eventImg(e, 1200, 630);
+  return {
+    title: e.name,
+    description: e.desc,
+    alternates: { canonical: `/events/${e.id}` },
+    openGraph: {
+      type: "website",
+      title: `${e.name} — Car Events Near Me`,
+      description: e.desc,
+      url: `https://careventsnearme.uk/events/${e.id}`,
+      images: [{ url: image, width: 1200, height: 630, alt: e.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${e.name} — Car Events Near Me`,
+      description: e.desc,
+      images: [image],
+    },
+  };
 }
 
 export default async function EventPage({ params }: { params: { id: string } }) {
   const e = await getEventById(Number(params.id));
   if (!e) notFound();
   const grad = GRAD[(e.id - 1) % GRAD.length];
+
+  const startsFrom = Math.min(...e.tiers.map((t) => t.price));
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: e.name,
+    description: e.desc,
+    startDate: e.start,
+    endDate: e.end,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    image: [eventImg(e, 1200, 630)],
+    url: `https://careventsnearme.uk/events/${e.id}`,
+    location: {
+      "@type": "Place",
+      name: e.venue,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: e.town,
+        addressRegion: e.county,
+        addressCountry: "GB",
+      },
+    },
+    organizer: {
+      "@type": "Organization",
+      name: e.organiser,
+    },
+    offers: {
+      "@type": "Offer",
+      price: startsFrom,
+      priceCurrency: "GBP",
+      availability: "https://schema.org/InStock",
+      url: `https://careventsnearme.uk/events/${e.id}`,
+    },
+  };
+
   return (
-    <main className="detail">
+    <main className="detail" id="main-content">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link className="back" href="/#events">← Back to events</Link>
       <div className="dbanner" style={{ background: grad }}>
         <img className="photo" src={eventImg(e, 1400, 800)} alt={e.name} />

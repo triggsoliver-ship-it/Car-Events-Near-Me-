@@ -59,7 +59,7 @@ export default function BookingBox({ event }: { event: CarEvent }) {
   if (stage === "done") {
     return (
       <div className="bookbox" style={{ textAlign: "center" }}>
-        <div className="tick">&#10003;</div>
+        <div className="tick" aria-hidden="true">&#10003;</div>
         <div className="bh">You&apos;re booked in!</div>
         <p style={{ color: "var(--muted)", fontSize: 14 }}>A confirmation and e-ticket have been sent to {email || "your email"}.</p>
         <div style={{ borderTop: "1px solid var(--line)", margin: "12px 0", paddingTop: 12, fontSize: 14, textAlign: "left" }}>
@@ -67,7 +67,7 @@ export default function BookingBox({ event }: { event: CarEvent }) {
           <span style={{ color: "var(--muted)" }}>&#128197; {dateRange(event.start, event.end)}</span><br />
           <span style={{ color: "var(--muted)" }}>{t.name} &times; {qty} &middot; </span><b>{fmtPrice(total)}</b>
         </div>
-        <div className="qr" />
+        <div className="qr" aria-hidden="true" />
         <div className="refcode">{ref}</div>
         <button className="btn block lg" style={{ marginTop: 16 }} onClick={() => { setStage("select"); setQty(1); }}>Done</button>
       </div>
@@ -81,14 +81,14 @@ export default function BookingBox({ event }: { event: CarEvent }) {
         <div style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12 }}>
           {t.name} &times; {qty} &mdash; <b style={{ color: "var(--text)" }}>{fmtPrice(total)}</b>{fee > 0 ? <span> (incl. {fmtPrice(fee)} fee)</span> : null}
         </div>
-        <div className="formrow"><label>Full name</label><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Jane Smith" /></div>
-        <div className="formrow"><label>Email (e-ticket sent here)</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" /></div>
+        <div className="formrow"><label htmlFor="bk-name">Full name</label><input id="bk-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Jane Smith" /></div>
+        <div className="formrow"><label htmlFor="bk-email">Email (e-ticket sent here)</label><input id="bk-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" /></div>
         {t.price > 0 && (
           <>
-            <div className="formrow"><label>Card number</label><input placeholder="4242 4242 4242 4242" /></div>
+            <div className="formrow"><label htmlFor="bk-card">Card number</label><input id="bk-card" inputMode="numeric" placeholder="4242 4242 4242 4242" /></div>
             <div className="two">
-              <div className="formrow"><label>Expiry</label><input placeholder="MM / YY" /></div>
-              <div className="formrow"><label>CVC</label><input placeholder="123" /></div>
+              <div className="formrow"><label htmlFor="bk-exp">Expiry</label><input id="bk-exp" placeholder="MM / YY" /></div>
+              <div className="formrow"><label htmlFor="bk-cvc">CVC</label><input id="bk-cvc" inputMode="numeric" placeholder="123" /></div>
             </div>
           </>
         )}
@@ -108,11 +108,11 @@ export default function BookingBox({ event }: { event: CarEvent }) {
         </div>
       ))}
       <div className="qty">
-        <span>Quantity</span>
-        <div className="ctrl">
-          <button onClick={() => setQty(Math.max(1, qty - 1))}>&minus;</button>
-          <b>{qty}</b>
-          <button onClick={() => setQty(qty + 1)}>+</button>
+        <span id="qty-label">Quantity</span>
+        <div className="ctrl" role="group" aria-labelledby="qty-label">
+          <button aria-label="Decrease quantity" onClick={() => setQty(Math.max(1, qty - 1))}>&minus;</button>
+          <b aria-live="polite">{qty}</b>
+          <button aria-label="Increase quantity" onClick={() => setQty(qty + 1)}>+</button>
         </div>
       </div>
       <div className="total"><span style={{ color: "var(--muted)" }}>Total</span><b>{fmtPrice(t.price * qty)}</b></div>
