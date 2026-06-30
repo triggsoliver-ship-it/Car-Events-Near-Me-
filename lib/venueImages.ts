@@ -52,14 +52,22 @@ export const TRACKDAY_PHOTOS = [
 export type VenueImageRule = { test: RegExp; url: string };
 
 /**
- * Real photos for four specific event series, sourced from Google Images result
- * pages and verified to load via an in-browser `new Image()` check (each
- * naturalWidth >= 600, landscape, clearly showing the event). Served through the
- * /img proxy; every host below is allow-listed in app/img/route.ts.
+ * Real photos for specific event series, sourced from each event's own official
+ * site and verified to load via an in-browser `new Image()` check (clearly
+ * showing the event). Served through the /img proxy; every host below is
+ * allow-listed in app/img/route.ts.
  *
  * These are checked FIRST in resolveEventImage — before the track-day
  * short-circuit and before MARQUE_RULES — so they always take precedence over
- * the generic JDM / VW marque photos for these four series.
+ * the generic JDM / VW / marque photos for these series.
+ *
+ * The Beaulieu block below gives each Beaulieu / National Motor Museum event
+ * its OWN dedicated photo from the official Beaulieu events listing
+ * (beaulieu.co.uk/events), instead of every Beaulieu event sharing the single
+ * generic venue photo in VENUE_IMAGE_RULES. Because these run before
+ * MARQUE_RULES, the dedicated "Simply [Marque]" photos win over the generic
+ * marque photos too. Each title regex is scoped tightly so the Simply events
+ * don't collide (e.g. /simply japanese/ vs /simply jaguar/, /simply italian/).
  */
 export const EVENT_PHOTO_RULES: VenueImageRule[] = [
   // Japfest — real photo of JDM cars at the show (CarEvents.com gallery).
@@ -70,6 +78,30 @@ export const EVENT_PHOTO_RULES: VenueImageRule[] = [
   { test: /ultimate dubs|dubshed/, url: proxy("https://www.cumbriavag.co.uk/wp-content/uploads/2016/03/IMG_2260-6-1024x654.jpg") },
   // Podium Place — real photo of supercars at the Podium Place venue.
   { test: /podium place/, url: proxy("https://visitnewbury.org.uk/wp-content/uploads/2021/04/Podium-Place-Super-Cars-scaled.jpg") },
+
+  // ── Beaulieu / National Motor Museum (dedicated per-event photos) ─────────
+  // Each photo below was read directly from the official Beaulieu events page
+  // (https://www.beaulieu.co.uk/events/) where every event card carries its own
+  // distinct image, and verified to load via an in-browser new Image() check.
+  // Served through the /img proxy (www.beaulieu.co.uk is allow-listed). Ordered
+  // so the more specific Simply titles never collide with one another.
+  { test: /swedish takeover/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2024/11/Image-Image-4.jpg") },
+  { test: /simply land[ -]?rover/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2016/11/Simply-Land-Rover-Image.jpg") },
+  { test: /simply audi/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2024/03/Main-1.jpg") },
+  { test: /simply japanese/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2016/11/Simply-Japanese-Image.jpg") },
+  { test: /simply aston( martin)?/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2024/03/Simply-Aston-Image.jpg") },
+  { test: /simply mercedes/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2018/11/Simply-Mercedes-Image.jpg") },
+  { test: /simply jaguar/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2016/11/Simply-Jaguar-Image.jpg") },
+  { test: /simply bmw/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2020/01/main-1.jpg") },
+  { test: /simply smart/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2022/12/image-image.jpg") },
+  { test: /simply italian/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2024/03/Grid-Image-Image.jpg") },
+  { test: /supercar weekend/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2016/11/Supercar-Weekend-2024-HERO-IMAGE-LANDSCAPE-4-e1720691764265.jpg") },
+  { test: /international autojumble/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2016/11/IAJ24_Automobile-890-x-475-1-scaled-e1720691672107.jpg") },
+  { test: /oak run/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2022/01/Oak-Run-desktop-calendar.jpg") },
+  { test: /vauxall/, url: proxy("https://www.beaulieu.co.uk/wp-content/uploads/2025/06/image-image.jpg") },
+  // Note: Spring Autojumble is intentionally left unmapped — the Beaulieu events
+  // page showed no distinct photo for it (only International Autojumble), so it
+  // keeps the generic Beaulieu venue photo / autojumble category fallback.
 ];
 
 /**
@@ -247,10 +279,11 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
 /**
  * Resolve a real, relevant image URL for an event.
  *
- * 0. The four EVENT_PHOTO_RULES series (Japfest, CarFest, Ultimate Dubs /
- *    Dubshed, Podium Place) get their genuine event photo — checked FIRST so
- *    these always win over the track-day short-circuit and the JDM/VW marque
- *    photos.
+ * 0. The EVENT_PHOTO_RULES series (Japfest, CarFest, Ultimate Dubs / Dubshed,
+ *    Podium Place, and the per-event Beaulieu photos) get their genuine event
+ *    photo — checked FIRST so these always win over the track-day short-circuit
+ *    and the JDM/VW/marque photos. The dedicated Beaulieu "Simply [Marque]"
+ *    photos therefore beat the generic MARQUE_RULES photos.
  * 1. Track-day events get a genuine trackdays.co.uk photo (rotated by id).
  * 2. Otherwise, if the event TITLE names a marque / car type (Simply Jaguar,
  *    Auto Italia, Japfest, …), the first matching MARQUE_RULES rule wins so the
@@ -260,7 +293,7 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
  * 5. Returns undefined if nothing applies (caller falls back to the Pexels id).
  */
 export function resolveEventImage(e: CarEvent): string | undefined {
-  // Real photos for the four specific event series take precedence over
+  // Real photos for the specific event series take precedence over
   // everything else — including the track-day short-circuit and MARQUE_RULES.
   const name = e.name.toLowerCase();
   for (const rule of EVENT_PHOTO_RULES) {
