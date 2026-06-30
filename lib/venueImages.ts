@@ -48,14 +48,18 @@ export type VenueImageRule = { test: RegExp; url: string };
  */
 export const VENUE_IMAGE_RULES: VenueImageRule[] = [
   // ── Goodwood (FoS / Revival / Members' Meeting / Breakfast Club) ──────────
-  // Goodwood sits behind a Cloudflare challenge, so its og:image can't be
-  // verified server-side; these stay on relevant licence-free photography.
+  // Real Goodwood hero photography (Jayson Fong) pulled from goodwood.com via
+  // an in-browser DOM read, served through /img. Breakfast Club's own page is
+  // a 404 with no usable photo, so it keeps a relevant licence-free image.
   { test: /goodwood breakfast club/, url: pex(10809693) },
-  { test: /goodwood/, url: pex(10807493) },
+  { test: /goodwood revival/, url: proxy("https://www.goodwood.com/bynderassets/90937/Website-Revival2018_JaysonFong_0031.jpg") },
+  { test: /goodwood/, url: proxy("https://www.goodwood.com/bynderassets/5498/Website-FOS2022_JaysonFong_0292.jpg") },
 
   // ── Venues / shows (real photo from each event's own official site) ───────
   { test: /beaulieu|national motor museum/, url: "https://www.beaulieu.co.uk/wp-content/uploads/2016/11/2-e1740762014153.jpg" },
-  { test: /\bnec\b|necbirmingham|birmingham nec/, url: pex(17075732) },
+  // NEC Classic Motor Show — real hero of classic cars from the official site's
+  // ASP Events CDN, served via /img.
+  { test: /\bnec\b|necbirmingham|birmingham nec/, url: proxy("https://cdn.asp.events/CLIENT_CL_EE_9A415A31_C601_41ED_1AF7C7E527DCB474/sites/classic-motor-show-2025/media/graphics/CMS-DYNAMIC-BACKGROUND-2026-3-main-cars.png") },
   // The British Motor Show — real crowd photo from their official site.
   { test: /farnborough|british motor show/, url: proxy("https://www.thebritishmotorshow.live/wp-content/uploads/2026/02/Crowd-1.png") },
   { test: /blenheim|salon priv/, url: "https://www.salonpriveconcours.com/wp-content/uploads/2021/03/salonprive-facebook-blue.jpg" },
@@ -66,7 +70,12 @@ export const VENUE_IMAGE_RULES: VenueImageRule[] = [
   // Bonhams Cars / "THE MARKET" (MPH, Bicester) — real Ferrari Testarossa
   // hero photo from their official CDN, served via /img.
   { test: /bonhams|\bmph\b|bicester/, url: proxy("https://cdn.themarket.co.uk/content/2688x800/7a9486ac15/ferrari-testarossa.jpg") },
-  { test: /stoneleigh|race retro/, url: pex(10373678) },
+  // Race Retro (Stoneleigh Park) — real event photo from the official site's
+  // ASP Events CDN, served via /img.
+  { test: /stoneleigh|race retro/, url: proxy("https://cdn.asp.events/CLIENT_CL_EE_9A415A31_C601_41ED_1AF7C7E527DCB474/sites/race-retro-2026/media/pages/welcome/220225_RAC_0939.jpg/fit-in/1920x9999/filters:no_upscale()") },
+  // Iconic Auctioneers — real classic-car photo from their official site
+  // (og:image). Served directly; host is allow-listed in /img anyway.
+  { test: /iconic auctioneers|iconic auction/, url: proxy("https://www.iconicauctioneers.com/images/2023/08/09/ia002_brochure_2023_02_dg-pt-amends_page_10_image_0001.jpg") },
   { test: /telford/, url: pex(20406502) },
   { test: /eikon/, url: pex(20406502) },
   { test: /olympia/, url: "https://www.thelondonclassiccarshow.co.uk/wp-content/uploads/Main-Slider-shots-1-1.jpg" },

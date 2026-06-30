@@ -31,6 +31,13 @@ const ALLOW = new Set([
   "media.caffeineandmachine.com",
   // The London Classic Car Show.
   "www.thelondonclassiccarshow.co.uk",
+  // Goodwood (Festival of Speed / Revival) hero photography — Bynder asset host.
+  "www.goodwood.com",
+  // ASP Events CDN — hosts hero/library photos for NEC Classic Motor Show and
+  // Race Retro (both run on the same events platform).
+  "cdn.asp.events",
+  // Iconic Auctioneers (classic car & motorcycle auctions).
+  "www.iconicauctioneers.com",
 ]);
 
 export async function GET(req: Request) {
