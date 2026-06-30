@@ -2,7 +2,7 @@ import { iconResponse } from "@/lib/appIcon";
 
 export const dynamic = "force-static";
 
-// 180x180 iOS home-screen icon, generated at build time.
+// 192x192 PNG icon for the web manifest (Android/Chrome installability).
 export function GET() {
-  return iconResponse(180);
+  return iconResponse(192);
 }
