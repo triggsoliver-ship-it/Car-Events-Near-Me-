@@ -52,6 +52,63 @@ export const TRACKDAY_PHOTOS = [
 export type VenueImageRule = { test: RegExp; url: string };
 
 /**
+ * Marque / car-type rules matched against the event TITLE only.
+ *
+ * Many events name a specific make or type in their title — e.g. "Simply
+ * Jaguar", "Simply Audi", "Auto Italia", "Japfest", "Ultimate Dubs" — yet are
+ * held at generic venues, so before these rules existed they showed the venue's
+ * generic photo. These rules run BEFORE the venue rules (see resolveEventImage)
+ * so a "Simply Jaguar at Beaulieu" shows a Jaguar rather than the Beaulieu
+ * stock photo.
+ *
+ * Each `test` is a word-boundary regex deliberately scoped tight enough to
+ * avoid false hits from venue words — e.g. \bford\b must NOT fire on
+ * "Bedford Autodrome", and \bmini\b must not fire on "minimum". Every Pexels id
+ * below was searched for that marque, picked because its ALT text clearly shows
+ * the right make/type, and verified to load at the hero crop.
+ */
+export const MARQUE_RULES: VenueImageRule[] = [
+  // Jaguar — black Jaguar XK convertible sports car in an outdoor setting.
+  { test: /\bjaguar\b/, url: pex(18037176) },
+  // Audi — white Audi R8 luxury car on a contemporary urban street.
+  { test: /\baudi\b/, url: pex(12351517) },
+  // BMW — luxurious BMW Z4 convertible on a picturesque road.
+  { test: /\bbmw\b/, url: pex(93615) },
+  // Mercedes — black Mercedes-Benz AMG parked outdoors, showcasing elegance.
+  { test: /mercedes/, url: pex(12066299) },
+  // Porsche — front view of a luxury white Porsche 911 sports car in daylight.
+  { test: /\bporsche\b/, url: pex(35715223) },
+  // Ferrari — sleek red Ferrari supercar elegantly parked outdoors.
+  { test: /ferrari/, url: pex(12506011) },
+  // Lamborghini — orange Lamborghini Aventador parked on a city street.
+  { test: /lamborghini/, url: pex(24983827) },
+  // Italian (Alfa / Auto Italia) — classic red Alfa Romeo convertible on a street.
+  { test: /alfa|auto italia|\bitalian\b/, url: pex(23945282) },
+  // Japanese (Japfest / JDM / Skyline) — two Nissan GTR R34 at Japfest 2025, England.
+  { test: /japanese|japfest|\bjdm\b|skyline/, url: pex(31673911) },
+  // Dubs (VW / Beetle / Golf GTI / Dubshed) — vintage VW Beetles at a car show.
+  { test: /volkswagen|\bvw\b|\bdub(s|shed)?\b|beetle|golf gti/, url: pex(15241021) },
+  // Vauxhall (incl. the "VauxALL" spelling) — front view of a blue Vauxhall Corsa.
+  { test: /vauxhall|vauxall/, url: pex(17078642) },
+  // Land Rover / Defender — classic Land Rover Defender parked in a natural setting.
+  { test: /land[ -]?rover|defender/, url: pex(13431742) },
+  // Aston Martin — silver Aston Martin DB11 parked in a modern city street.
+  { test: /aston martin/, url: pex(8190663) },
+  // Mini — red Mini Cooper S with a Union Jack design parked outdoors.
+  { test: /\bmini\b/, url: pex(15274844) },
+  // Swedish (Volvo / Saab) — black Volvo V60 parked on a winter city street.
+  { test: /\bvolvo\b|\bsaab\b|swedish/, url: pex(15941295) },
+  // Ford — classic white 1966 Ford Mustang (\bford\b so it never matches Bedford).
+  { test: /\bford\b/, url: pex(32957941) },
+  // Lotus — sleek Lotus Evora 400 parked on a suburban street.
+  { test: /\blotus\b/, url: pex(9805735) },
+  // Smart — white Smart Fortwo parked outdoors under a clear sky.
+  { test: /\bsmart\b/, url: pex(27576117) },
+  // American muscle — classic red Chevrolet Camaro SS in an urban setting.
+  { test: /muscle|american/, url: pex(32726136) },
+];
+
+/**
  * Ordered list of rules. The first rule whose `test` matches the combined
  * lowercased `${name} ${venue} ${organiser}` string wins, so put more specific
  * patterns before broader ones.
@@ -168,14 +225,23 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
  * Resolve a real, relevant image URL for an event.
  *
  * 1. Track-day events get a genuine trackdays.co.uk photo (rotated by id).
- * 2. Otherwise the first VENUE_IMAGE_RULES rule whose `test` matches wins.
- * 3. Otherwise pick from CATEGORY_IMAGES[e.type] using a stable id-based index.
- * 4. Returns undefined if nothing applies (caller falls back to the Pexels id).
+ * 2. Otherwise, if the event TITLE names a marque / car type (Simply Jaguar,
+ *    Auto Italia, Japfest, …), the first matching MARQUE_RULES rule wins so the
+ *    photo shows that make rather than the generic venue photo.
+ * 3. Otherwise the first VENUE_IMAGE_RULES rule whose `test` matches wins.
+ * 4. Otherwise pick from CATEGORY_IMAGES[e.type] using a stable id-based index.
+ * 5. Returns undefined if nothing applies (caller falls back to the Pexels id).
  */
 export function resolveEventImage(e: CarEvent): string | undefined {
   if (e.type === "track day") {
     const i = ((e.id % TRACKDAY_PHOTOS.length) + TRACKDAY_PHOTOS.length) % TRACKDAY_PHOTOS.length;
     return TRACKDAY_PHOTOS[i];
+  }
+  // Marque rules run on the TITLE only, before venue/series rules, so an event
+  // that names a make wins over its (generic) venue photo.
+  const title = e.name.toLowerCase();
+  for (const rule of MARQUE_RULES) {
+    if (rule.test.test(title)) return rule.url;
   }
   const hay = `${e.name} ${e.venue} ${e.organiser}`.toLowerCase();
   for (const rule of VENUE_IMAGE_RULES) {
