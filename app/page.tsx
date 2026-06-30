@@ -1,5 +1,7 @@
+import Link from "next/link";
 import Explore from "@/components/Explore";
-import { getUpcomingEvents } from "@/lib/events";
+import { getUpcomingEvents, REGIONS } from "@/lib/events";
+import { slugify } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -8,6 +10,25 @@ export default async function HomePage() {
   return (
     <main id="main-content">
       <Explore events={events} />
+
+      <section className="block" id="regions" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="shead">
+            <div>
+              <h2>Car events by region</h2>
+              <p>Find car shows, meets, track days, auctions and motorsport near you.</p>
+            </div>
+          </div>
+          <div className="loc" style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+            {REGIONS.map((r) => (
+              <Link key={r} className="chip" href={`/car-events/${slugify(r)}`}>
+                Car events in {r}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="block why">
         <div className="wrap">
           <div className="shead">
