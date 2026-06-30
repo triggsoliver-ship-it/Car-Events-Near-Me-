@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { REGIONS } from "@/lib/events";
+import { slugify } from "@/lib/seo";
 
 export default function Footer() {
   return (
@@ -16,7 +18,14 @@ export default function Footer() {
             <h5>Explore</h5>
             <Link className="fl" href="/#events">All events</Link>
             <Link className="fl" href="/#categories">Categories</Link>
+            <Link className="fl" href="/#regions">By region</Link>
             <Link className="fl" href="/#events">This weekend</Link>
+          </div>
+          <div>
+            <h5>Car events by region</h5>
+            {REGIONS.map((r) => (
+              <Link key={r} className="fl" href={`/car-events/${slugify(r)}`}>{r}</Link>
+            ))}
           </div>
           <div>
             <h5>Organisers</h5>
