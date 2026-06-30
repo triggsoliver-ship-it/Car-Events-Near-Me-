@@ -1,14 +1,18 @@
+import { resolveEventImage } from "@/lib/venueImages";
+import type { CarEvent } from "@/lib/types";
+
 // Pexels image helper (license-free; commercial use OK)
 export const px = (id: number, w = 900, h = 600) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=${w}&h=${h}`;
 
-// Prefer an event's real official OG share image when present,
-// otherwise fall back to the licence-free Pexels photo.
+// Prefer an event's real official OG share image when present, then a
+// code-level venue/organiser/category match (covers DB events that only carry
+// a Pexels id), otherwise fall back to the licence-free Pexels photo.
 export const eventImg = (
-  e: { imgUrl?: string; img: number },
+  e: CarEvent,
   w = 900,
   h = 600
-) => e.imgUrl || px(e.img, w, h);
+) => e.imgUrl || resolveEventImage(e) || px(e.img, w, h);
 
 export const GRAD = [
   "linear-gradient(135deg,#ff5118,#ffb800)",
