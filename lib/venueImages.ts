@@ -161,8 +161,10 @@ export const VENUE_IMAGE_RULES: VenueImageRule[] = [
   { test: /crystal palace/, url: pex(11638941) },
   // Newlands Corner — outdoor car meet, classic vehicles, people and motorbikes.
   { test: /newlands corner/, url: pex(9331881) },
-  // Shift Social — custom Honda Civic at a car meet (modern / modified vibe).
-  { test: /shift social/, url: pex(30517071) },
+  // Shift Social — real photo from the organiser's own Wix gallery
+  // (shift-social.co.uk/gallery), served through /img. Verified to load at
+  // 1600x1066 via an in-browser new Image() check.
+  { test: /shift social/, url: proxy("https://static.wixstatic.com/media/0f1712_0e0acc58d1e243149e93176850e2c7ad~mv2.jpg") },
   // Ace Cafe — classic Mercedes on a city street (classic cafe-meet feel).
   { test: /ace cafe/, url: pex(32968061) },
   // Cotswold / Lygon Arms meets — classic vintage car in a sunlit setting.

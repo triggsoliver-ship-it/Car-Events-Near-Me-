@@ -38,6 +38,9 @@ const ALLOW = new Set([
   "cdn.asp.events",
   // Iconic Auctioneers (classic car & motorcycle auctions).
   "www.iconicauctioneers.com",
+  // Wix static media CDN — hosts the real gallery photos on the Shift Social
+  // meet's own Wix site (shift-social.co.uk). Routed via the proxy to be safe.
+  "static.wixstatic.com",
 ]);
 
 export async function GET(req: Request) {
