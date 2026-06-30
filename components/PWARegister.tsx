@@ -5,11 +5,16 @@ import { useEffect } from "react";
 export default function PWARegister() {
   useEffect(() => {
     if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
-    const onLoad = () => {
+    const register = () => {
       navigator.serviceWorker.register("/sw.js").catch(() => {});
     };
-    window.addEventListener("load", onLoad);
-    return () => window.removeEventListener("load", onLoad);
+    // The window "load" event has usually already fired by the time React
+    // hydrates, so register immediately in that case; otherwise wait for load.
+    if (document.readyState === "complete") {
+      register();
+    } else {
+      window.addEventListener("load", register, { once: true });
+    }
   }, []);
   return null;
 }
