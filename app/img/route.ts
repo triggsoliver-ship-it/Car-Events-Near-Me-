@@ -41,6 +41,13 @@ const ALLOW = new Set([
   // Wix static media CDN — hosts the real gallery photos on the Shift Social
   // meet's own Wix site (shift-social.co.uk). Routed via the proxy to be safe.
   "static.wixstatic.com",
+  // CarEvents.com — hosts the real Japfest and Ultimate Dubs event photos used
+  // by the EVENT_PHOTO_RULES in lib/venueImages.ts.
+  "www.carevents.com",
+  // Cumbria VAG — VW/Audi club gallery hosting a real Ultimate Dubs show photo.
+  "www.cumbriavag.co.uk",
+  // Visit Newbury — tourism site hosting the real Podium Place supercars photo.
+  "visitnewbury.org.uk",
 ]);
 
 export async function GET(req: Request) {
