@@ -26,12 +26,33 @@ export const GRAD = [
 export const fmtPrice = (n: number) =>
   n === 0 ? "Free" : "£" + n.toFixed(2).replace(/\.00$/, "");
 
+// 1 -> "1st", 2 -> "2nd", 7 -> "7th", 22 -> "22nd" ...
+const ordinal = (n: number) => {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
+
+// Single day:  "Tuesday 7th July 2026"
+// Same month:  "Thu 9th – Sun 12th July 2026"
+// Cross month: "Fri 28th Aug – Sun 30th Aug 2026"
 export function dateRange(start: string, end: string) {
-  const o: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
   const s = new Date(start), e = new Date(end);
-  return start === end
-    ? s.toLocaleDateString("en-GB", { ...o, year: "numeric" })
-    : s.toLocaleDateString("en-GB", o) + "–" + e.toLocaleDateString("en-GB", { ...o, year: "numeric" });
+  const wd = (d: Date, style: "long" | "short") =>
+    d.toLocaleDateString("en-GB", { weekday: style });
+  const mo = (d: Date, style: "long" | "short") =>
+    d.toLocaleDateString("en-GB", { month: style });
+
+  if (start === end) {
+    return `${wd(s, "long")} ${ordinal(s.getDate())} ${mo(s, "long")} ${s.getFullYear()}`;
+  }
+
+  const sameMonth =
+    s.getMonth() === e.getMonth() && s.getFullYear() === e.getFullYear();
+  if (sameMonth) {
+    return `${wd(s, "short")} ${ordinal(s.getDate())} – ${wd(e, "short")} ${ordinal(e.getDate())} ${mo(e, "long")} ${e.getFullYear()}`;
+  }
+  return `${wd(s, "short")} ${ordinal(s.getDate())} ${mo(s, "short")} – ${wd(e, "short")} ${ordinal(e.getDate())} ${mo(e, "short")} ${e.getFullYear()}`;
 }
 
 export const priceFrom = (e: { tiers: { price: number }[] }) =>
