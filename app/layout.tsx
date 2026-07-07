@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PWARegister from "@/components/PWARegister";
+import InstallPrompt from "@/components/InstallPrompt";
 
 const SITE_URL = "https://careventsnearme.uk";
 const SITE_NAME = "Car Events Near Me";
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <Footer />
         <PWARegister />
+        <InstallPrompt />
       </body>
     </html>
   );
