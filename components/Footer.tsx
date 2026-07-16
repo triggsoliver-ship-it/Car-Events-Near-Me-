@@ -43,7 +43,7 @@ export default function Footer() {
         </div>
         <div className="fbot">
           <div>
-            <div>© 2026 Car Events Near Me</div>
+            <div>© {new Date().getFullYear()} Car Events Near Me</div>
             <div style={{ marginTop: 6, fontSize: 12, color: "var(--muted)", opacity: 0.85 }}>
               Site designed by{" "}
               <a
