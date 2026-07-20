@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PWARegister from "@/components/PWARegister";
 import InstallPrompt from "@/components/InstallPrompt";
+import { Analytics } from "@vercel/analytics/next";
 
 const SITE_URL = "https://careventsnearme.uk";
 const SITE_NAME = "Car Events Near Me";
@@ -83,6 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <PWARegister />
         <InstallPrompt />
+        <Analytics />
       </body>
     </html>
   );
