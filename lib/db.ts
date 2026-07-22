@@ -27,6 +27,7 @@ export type EventRow = {
   start_date: string;
   end_date: string;
   img: number | null;
+  img_url: string | null;
   organiser: string | null;
   description: string | null;
   tiers: { name: string; price: number }[] | null;
@@ -49,6 +50,7 @@ export function rowToEvent(r: EventRow): CarEvent {
     start: r.start_date,
     end: r.end_date || r.start_date,
     img: r.img ?? 10373678,
+    imgUrl: r.img_url || undefined,
     organiser: r.organiser || "",
     desc: r.description || "",
     tiers: r.tiers && r.tiers.length ? r.tiers : [{ name: "Entry", price: 0 }],
