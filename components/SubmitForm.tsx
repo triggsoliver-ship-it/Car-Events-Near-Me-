@@ -72,6 +72,13 @@ export default function SubmitForm() {
         <div className="formrow"><label>From price (£, blank = free)</label><input name="priceFrom" type="number" min="0" step="0.01" placeholder="0" /></div>
       </div>
       <div className="formrow"><label>Booking / info link</label><input name="bookingUrl" type="url" placeholder="https://…" /></div>
+      <div className="formrow">
+        <label>Event photo (link)</label>
+        <input name="imgUrl" type="url" placeholder="https://link-to-your-photo.jpg" />
+        <small style={{ color: "var(--muted)", fontSize: 13, marginTop: 6, display: "block" }}>
+          Paste a link to a photo or poster (JPG/PNG) — it becomes your event&apos;s main image. Tip: right-click an image on your website and choose “Copy image address”.
+        </small>
+      </div>
       <div className="formrow"><label>Description</label><input name="description" placeholder="One line about the event" /></div>
       <div className="formrow"><label>Your email (so we can confirm) *</label><input name="contactEmail" type="email" required placeholder="you@email.com" /></div>
       {error && <p style={{ color: "#ff6b6b", fontSize: 14, marginBottom: 10 }}>{error}</p>}
