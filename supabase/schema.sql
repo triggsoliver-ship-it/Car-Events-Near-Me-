@@ -11,6 +11,7 @@ create table if not exists public.events (
   start_date   date not null,
   end_date     date not null,
   img          bigint,
+  img_url      text,
   organiser    text,
   description  text,
   tiers        jsonb default '[]'::jsonb,
@@ -22,6 +23,9 @@ create table if not exists public.events (
   contact_email text,
   created_at   timestamptz default now()
 );
+
+-- Safe to re-run on an existing database: adds the event-photo column if missing.
+alter table public.events add column if not exists img_url text;
 
 create index if not exists events_status_end_idx on public.events (status, end_date);
 create index if not exists events_region_idx on public.events (region);
