@@ -20,6 +20,12 @@ export async function POST(request: Request) {
     }
   }
 
+  // Only accept a photo link that is a real http(s) URL.
+  let imgUrl: string | null = null;
+  if (b.imgUrl && /^https?:\/\/\S+$/i.test(String(b.imgUrl).trim())) {
+    imgUrl = String(b.imgUrl).trim().slice(0, 500);
+  }
+
   const priceFrom = b.priceFrom ? parseFloat(b.priceFrom) : 0;
   const row = {
     name: String(b.name).slice(0, 200),
@@ -30,6 +36,7 @@ export async function POST(request: Request) {
     venue: b.venue ? String(b.venue) : null,
     start_date: String(b.start),
     end_date: b.end ? String(b.end) : String(b.start),
+    img_url: imgUrl,
     organiser: String(b.organiser),
     description: b.description ? String(b.description).slice(0, 500) : null,
     booking_url: b.bookingUrl ? String(b.bookingUrl) : null,
