@@ -4,6 +4,8 @@ import { getUpcomingEvents, REGIONS } from "@/lib/events";
 import { slugify } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+export const revalidate = 0;
 
 const FAQS: { q: string; a: string }[] = [
   {
