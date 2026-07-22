@@ -9,6 +9,14 @@ const SERVICE = process.env.SUPABASE_SERVICE_ROLE_KEY;
  *  transparently falls back to the bundled seed data, so it always works. */
 export const dbEnabled = Boolean(URL && (ANON || SERVICE));
 
+// Always hit the network for Supabase reads. Next.js patches fetch() and will
+// otherwise cache results in its persistent Data Cache (which survives
+// redeploys). During an earlier period the anon read was failing, so empty
+// results got cached and kept 404ing real events. Forcing no-store guarantees
+// every read reflects the live database.
+const noStoreFetch: typeof fetch = (input, init) =>
+  fetch(input, { ...init, cache: "no-store" });
+
 export function getClient(admin = false): SupabaseClient | null {
   if (!URL) return null;
   // Prefer the service-role key. All reads run server-side, where SERVICE is
@@ -16,7 +24,10 @@ export function getClient(admin = false): SupabaseClient | null {
   // undefined (not a NEXT_PUBLIC_ var), so ANON is used there instead.
   const key = SERVICE || ANON;
   if (!key) return null;
-  return createClient(URL, key, { auth: { persistSession: false } });
+  return createClient(URL, key, {
+    auth: { persistSession: false },
+    global: { fetch: noStoreFetch },
+  });
 }
 
 export type EventRow = {
