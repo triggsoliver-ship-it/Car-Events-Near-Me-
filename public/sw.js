@@ -1,6 +1,10 @@
 // Car Events Near Me — service worker (offline-capable app shell)
-const CACHE = "cenm-v1";
-const ASSETS = ["/", "/icon.svg", "/manifest.webmanifest", "/apple-icon.png"];
+// v2: pages are always network-first and only OK responses are cached, so a
+// bad response (e.g. a transient 404) can never get pinned and served stale.
+// Bumping the cache name purges the old v1 cache (which had cached broken
+// pages) on every client's next visit — this self-heals stale installs.
+const CACHE = "cenm-v2";
+const ASSETS = ["/icon.svg", "/manifest.webmanifest", "/apple-icon.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
@@ -22,29 +26,40 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  if (req.mode === "navigate") {
+  // Immutable build assets: safe to serve cache-first.
+  const isStaticAsset =
+    url.pathname.startsWith("/_next/static/") || ASSETS.includes(url.pathname);
+  if (isStaticAsset) {
     e.respondWith(
-      fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(req, copy));
+      caches.match(req).then((m) =>
+        m ||
+        fetch(req).then((res) => {
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, copy));
+          }
           return res;
         })
-        .catch(() => caches.match(req).then((m) => m || caches.match("/")))
+      )
     );
     return;
   }
 
+  // Everything else (pages, event details, API, data): always go to the
+  // network. Cache only successful navigations, purely as an offline fallback.
   e.respondWith(
-    caches.match(req).then((m) =>
-      m ||
-      fetch(req).then((res) => {
-        if (res.ok && (url.pathname.startsWith("/_next/") || ASSETS.includes(url.pathname))) {
+    fetch(req)
+      .then((res) => {
+        if (req.mode === "navigate" && res.ok) {
           const copy = res.clone();
           caches.open(CACHE).then((c) => c.put(req, copy));
         }
         return res;
       })
-    )
+      .catch(() =>
+        req.mode === "navigate"
+          ? caches.match(req).then((m) => m || caches.match("/"))
+          : Response.error()
+      )
   );
 });
