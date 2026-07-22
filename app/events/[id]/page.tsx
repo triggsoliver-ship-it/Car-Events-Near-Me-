@@ -6,6 +6,8 @@ import { eventImg, dateRange, GRAD } from "@/lib/util";
 import BookingBox from "@/components/BookingBox";
 
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const e = await getEventById(Number(params.id));
