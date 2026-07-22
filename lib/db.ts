@@ -11,7 +11,10 @@ export const dbEnabled = Boolean(URL && (ANON || SERVICE));
 
 export function getClient(admin = false): SupabaseClient | null {
   if (!URL) return null;
-  const key = admin ? SERVICE || ANON : ANON || SERVICE;
+  // Prefer the service-role key. All reads run server-side, where SERVICE is
+  // defined and bypasses RLS with a known-good key. In the browser SERVICE is
+  // undefined (not a NEXT_PUBLIC_ var), so ANON is used there instead.
+  const key = SERVICE || ANON;
   if (!key) return null;
   return createClient(URL, key, { auth: { persistSession: false } });
 }
