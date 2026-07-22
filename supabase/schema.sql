@@ -1,7 +1,9 @@
--- Car Events Near Me — database schema (run in Supabase SQL editor)
+-- Car Events Near Me — database schema (run this whole file in the Supabase SQL editor)
 
 create table if not exists public.events (
-  id           bigint generated always as identity primary key,
+  -- Ids start at 500000 so database submissions never clash with the bundled
+  -- seed events (which use ids well below that). This lets the site merge both.
+  id           bigint generated always as identity (start with 500000) primary key,
   name         text not null,
   type         text not null,
   region       text,
