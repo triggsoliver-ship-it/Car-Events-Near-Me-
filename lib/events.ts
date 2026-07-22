@@ -32,34 +32,49 @@ export const REGIONS: string[] = [
 const SEED: CarEvent[] = [...SEED_1, ...SEED_2, ...SEED_3, ...SEED_4, ...SEED_5, ...SEED_6, ...SEED_7];
 const today = () => new Date().toISOString().slice(0, 10);
 
-/** Bundled seed events (used as fallback and to pre-seed the database). */
+/** Bundled seed events (used as the always-on base and to pre-seed the database). */
 export function getSeedEvents(): CarEvent[] {
   return SEED;
 }
 
-/** Upcoming, approved events — from Supabase if configured, else seed. */
-export async function getUpcomingEvents(): Promise<CarEvent[]> {
-  if (dbEnabled) {
-    try {
-      const sb = getClient();
-      if (sb) {
-        const { data, error } = await sb
-          .from("events")
-          .select("*")
-          .eq("status", "approved")
-          .gte("end_date", today())
-          .order("start_date", { ascending: true })
-          .limit(5000);
-        if (!error && data) return (data as EventRow[]).map(rowToEvent);
-      }
-    } catch {
-      /* fall through to seed */
-    }
+/** Approved Supabase submissions, if the database is connected. Never throws. */
+async function getDbEvents(): Promise<CarEvent[]> {
+  if (!dbEnabled) return [];
+  try {
+    const sb = getClient();
+    if (!sb) return [];
+    const { data, error } = await sb
+      .from("events")
+      .select("*")
+      .eq("status", "approved")
+      .gte("end_date", today())
+      .order("start_date", { ascending: true })
+      .limit(5000);
+    if (!error && data) return (data as EventRow[]).map(rowToEvent);
+  } catch {
+    /* ignore — just return seed */
   }
-  return SEED.filter((e) => e.end >= today()).sort((a, b) => a.start.localeCompare(b.start));
+  return [];
+}
+
+/**
+ * Upcoming, approved events. Always includes the bundled seed events, and
+ * MERGES in approved Supabase submissions on top when the database is
+ * connected. DB identity ids start at 500000 (see schema.sql) so they never
+ * clash with seed ids — so the live site never goes blank and existing event
+ * URLs stay valid even after the public submission form is switched on.
+ */
+export async function getUpcomingEvents(): Promise<CarEvent[]> {
+  const seedUpcoming = SEED.filter((e) => e.end >= today());
+  const dbEvents = await getDbEvents();
+  const seen = new Set(seedUpcoming.map((e) => e.id));
+  const merged = [...seedUpcoming, ...dbEvents.filter((e) => !seen.has(e.id))];
+  return merged.sort((a, b) => a.start.localeCompare(b.start));
 }
 
 export async function getEventById(id: number): Promise<CarEvent | undefined> {
+  const seedHit = SEED.find((e) => e.id === id);
+  if (seedHit) return seedHit;
   if (dbEnabled) {
     try {
       const sb = getClient();
@@ -73,8 +88,8 @@ export async function getEventById(id: number): Promise<CarEvent | undefined> {
         if (data) return rowToEvent(data as EventRow);
       }
     } catch {
-      /* fall through to seed */
+      /* ignore */
     }
   }
-  return SEED.find((e) => e.id === id);
+  return undefined;
 }
