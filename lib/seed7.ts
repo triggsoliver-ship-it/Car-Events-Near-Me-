@@ -1,13 +1,37 @@
 import type { CarEvent } from "@/lib/types";
 
-// Organiser-verified listings built from the organiser's own event pages before outreach.
-// Beaulieu: International Autojumble was missing from SEED_6 — dates, times and ticket
-// prices below taken from beaulieu.co.uk/events/international-autojumble/ (checked 28 Jul 2026).
+// Organiser-verified listings — built from the organiser's own pages, with permission.
 //
-// NOTE ON IMAGES: beaulieu.co.uk redirects direct image requests to their homepage
-// (anti-hotlinking), so imgUrl is deliberately omitted and the stock autojumble photo is
-// used instead. When an organiser replies, ask them for a photo we can host ourselves —
-// that's both better looking and properly licensed.
+// NOTE ON IMAGES: several organisers (Beaulieu included) redirect direct image requests
+// to their homepage (anti-hotlinking), so imgUrl is omitted and the stock category photo
+// is used. When an organiser replies, ask them for a photo we can host ourselves — better
+// looking and properly licensed.
+
+// CBS Automotive — Cars and Coffee Cambridge.
+// Permission given by CBS Automotive (Saffan Ltd) 28 Jul 2026: "please proceed with listing
+// our Cars & Coffee event using the information from our Eventbrite page."
+// First Saturday of the month, 10am-1pm, Grange Farm, Horningsea. From £3 per vehicle.
+const CBS_DATES = ["2026-08-01", "2026-09-05", "2026-10-03", "2026-11-07", "2026-12-05"];
+
+const cbs: CarEvent[] = CBS_DATES.map((iso, i) => ({
+  id: 1418 + i,
+  name: "Cars and Coffee Cambridge",
+  type: "meet",
+  region: "East of England",
+  county: "Cambridgeshire",
+  town: "Horningsea",
+  venue: "CBS Automotive, Grange Farm, Horningsea, CB25 9JD",
+  start: iso,
+  end: iso,
+  img: 33419743,
+  organiser: "CBS Automotive",
+  desc:
+    "A monthly gathering of classics, supercars, modified builds and everything in between at CBS Automotive's 11,000 sq ft facility just outside Cambridge. Runs 10am-1pm on the first Saturday of the month. Entry from £3 per vehicle and includes a free tea or coffee and nibbles. Indoor and outdoor space, PS5 racing simulator and the DriftMist competition on site.",
+  tiers: [{ name: "Per vehicle (from)", price: 3 }],
+  free: false,
+  bookingUrl: "https://www.eventbrite.co.uk/e/cars-and-coffee-cambridge-tickets-1977294709704",
+}));
+
 export const SEED_7: CarEvent[] = [
   {
     id: 1417,
@@ -34,4 +58,5 @@ export const SEED_7: CarEvent[] = [
     free: false,
     bookingUrl: "https://www.beaulieu.co.uk/events/international-autojumble/",
   },
+  ...cbs,
 ];
