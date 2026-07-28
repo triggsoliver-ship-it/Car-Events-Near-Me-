@@ -14,7 +14,13 @@ function authed(request: Request) {
   return auth === "Bearer " + secret || q === secret;
 }
 
-function seedRows(): ImportRow[] {
+// Seed rows carry an optional organiser image URL. The events table has an
+// img_url column and rowToEvent() reads it, but it used to be dropped here —
+// so organiser-supplied photos never reached the database and every listing
+// fell back to a stock category photo.
+type SeedRow = ImportRow & { img_url: string | null };
+
+function seedRows(): SeedRow[] {
   return getSeedEvents().map((e) => ({
     name: e.name,
     type: e.type,
@@ -28,6 +34,7 @@ function seedRows(): ImportRow[] {
     description: e.desc || null,
     booking_url: e.bookingUrl || null,
     img: e.img,
+    img_url: e.imgUrl || null,
     tiers: e.tiers,
     free: Boolean(e.free),
     status: "approved" as const,
