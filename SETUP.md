@@ -31,7 +31,7 @@ Redeploy after adding them.
 ## 3. Load the events
 
 Visit **`/api/import`** once (e.g. `https://your-site/api/import?secret=YOUR_CRON_SECRET`).
-This seeds the ~150 curated events into the database and pulls any configured feeds.
+This seeds the ~455 curated events bundled in `lib/seed1–7.ts` into the database and pulls any configured feeds.
 After that it runs **automatically every day at 05:00** (configured in `vercel.json`).
 
 ## 4. Take submissions
