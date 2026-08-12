@@ -57,7 +57,7 @@ export default function Explore({ events }: { events: CarEvent[] }) {
             <div className="field"><label>From date</label><input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} /></div>
             <div className="field go"><label>&nbsp;</label><button className="btn" onClick={scrollToEvents}>Search events</button></div>
           </div>
-          <div className="trust"><div>🎟️ <b>Book direct</b> — no middleman</div><div>📍 <b>Every region</b> covered</div><div>🔒 Secure payments by <b>Stripe</b></div></div>
+          <div className="trust"><div>🎟️ <b>Book direct</b> — no middleman</div><div>📍 <b>Every region</b> covered</div><div>🔒 <b>Book on the organiser’s own site</b></div></div>
         </div></div>
       </section>
 
