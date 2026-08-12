@@ -56,7 +56,13 @@ export default function Footer() {
               </a>
             </div>
           </div>
-          <div>Privacy · Terms · Contact</div>
+          <div style={{ display: "flex", gap: 9, alignItems: "center", flexWrap: "wrap" }}>
+            <Link href="/privacy" style={{ textDecoration: "underline" }}>Privacy</Link>
+            <span aria-hidden="true">·</span>
+            <Link href="/terms" style={{ textDecoration: "underline" }}>Terms</Link>
+            <span aria-hidden="true">·</span>
+            <a href="mailto:info@careventsnearme.uk" style={{ textDecoration: "underline" }}>Contact</a>
+          </div>
         </div>
         <div
           style={{
