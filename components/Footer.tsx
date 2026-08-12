@@ -58,6 +58,21 @@ export default function Footer() {
           </div>
           <div>Privacy · Terms · Contact</div>
         </div>
+        <div
+          style={{
+            marginTop: 14,
+            paddingTop: 14,
+            borderTop: "1px solid rgba(255,255,255,0.08)",
+            fontSize: 12,
+            lineHeight: 1.55,
+            color: "var(--muted)",
+            opacity: 0.85,
+          }}
+        >
+          Car Events Near Me is a trading name of Keelson Holdings Ltd, registered in England and
+          Wales, company number 17359226. Registered office: 71-75 Shelton Street, Covent Garden,
+          London WC2H 9JQ.
+        </div>
       </div>
     </footer>
   );
