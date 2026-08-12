@@ -1,0 +1,13 @@
+/* Long-form legal pages: /privacy and /terms. */
+.legal{max-width:820px}
+.legal h1{font-size:34px;letter-spacing:-1px;font-weight:800;margin-bottom:6px}
+.legal h2{font-size:20px;font-weight:800;letter-spacing:-.3px;margin:30px 0 10px}
+.legal h3{font-size:16px;font-weight:700;margin:22px 0 8px}
+.legal p{color:#cdd6e2;font-size:15.5px;margin-bottom:12px}
+.legal ul{margin:0 0 14px 22px;color:#cdd6e2;font-size:15.5px}
+.legal li{margin-bottom:8px}
+.legal strong{color:var(--text)}
+.legal a{color:var(--brand2);text-decoration:underline}
+.legal code{font-family:ui-monospace,Menlo,monospace;font-size:13.5px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.legal .updated{color:var(--muted);font-size:13.5px;margin-bottom:22px}
+.legal .callout{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:var(--r);padding:16px 18px;margin:18px 0 22px;color:#cdd6e2;font-size:15.5px}
