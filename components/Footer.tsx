@@ -32,14 +32,6 @@ export default function Footer() {
             <Link className="fl" href="/list">List an event</Link>
             <Link className="fl" href="/list">How it works</Link>
           </div>
-          <div>
-            <h5>Get event alerts</h5>
-            <p>New events near you, in your inbox.</p>
-            <form className="news" action="/#events">
-              <input type="email" placeholder="you@email.com" aria-label="Email" />
-              <button className="btn" type="submit">Join</button>
-            </form>
-          </div>
         </div>
         <div className="fbot">
           <div>
