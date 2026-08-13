@@ -1,17 +1,35 @@
 import { NextResponse } from "next/server";
+import { timingSafeEqual } from "crypto";
 import { getClient, dbEnabled } from "@/lib/db";
 
 export const runtime = "nodejs";
 
-function authed(token: string | null) {
-  const admin = process.env.ADMIN_TOKEN;
-  return Boolean(admin && token && token === admin);
+function constantTimeEqual(a: string, b: string): boolean {
+  const x = Buffer.from(a, "utf8");
+  const y = Buffer.from(b, "utf8");
+  if (x.length !== y.length) return false;
+  return timingSafeEqual(x, y);
 }
 
+/**
+ * The admin token travels in `Authorization: Bearer <token>`, never in the
+ * query string. A token in the URL ends up in hosting access logs, browser
+ * history and any Referer header sent to a third party. The token is never
+ * logged here either.
+ */
+function authed(request: Request): boolean {
+  const admin = process.env.ADMIN_TOKEN;
+  if (!admin) return false;
+  const header = request.headers.get("authorization");
+  if (!header || !header.startsWith("Bearer ")) return false;
+  return constantTimeEqual(header.slice("Bearer ".length), admin);
+}
+
+const unauthorized = () => NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
 export async function GET(request: Request) {
+  if (!authed(request)) return unauthorized();
   if (!dbEnabled) return NextResponse.json({ error: "DB not enabled" }, { status: 503 });
-  const token = new URL(request.url).searchParams.get("token");
-  if (!authed(token)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const sb = getClient(true);
   if (!sb) return NextResponse.json({ error: "Server not configured" }, { status: 503 });
   const { data, error } = await sb
@@ -25,10 +43,10 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  if (!authed(request)) return unauthorized();
   if (!dbEnabled) return NextResponse.json({ error: "DB not enabled" }, { status: 503 });
   let b: any = {};
   try { b = await request.json(); } catch { /* ignore */ }
-  if (!authed(b.token)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const sb = getClient(true);
   if (!sb) return NextResponse.json({ error: "Server not configured" }, { status: 503 });
   if (b.action === "approve") {

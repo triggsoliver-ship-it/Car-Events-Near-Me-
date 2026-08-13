@@ -9,9 +9,15 @@ export default function AdminPage() {
   const [loaded, setLoaded] = useState(false);
   const [msg, setMsg] = useState("");
 
+  function auth(): Record<string, string> {
+    return { Authorization: "Bearer " + token };
+  }
+
   async function load() {
     setMsg("");
-    const res = await fetch("/api/admin/events?token=" + encodeURIComponent(token));
+    // The token goes in a header, never the query string: a URL would be
+    // recorded in hosting access logs, browser history and Referer headers.
+    const res = await fetch("/api/admin/events", { headers: auth() });
     const d = await res.json();
     if (!res.ok) { setMsg(d.error || "Failed"); return; }
     setEvents(d.events || []);
@@ -20,8 +26,8 @@ export default function AdminPage() {
   async function act(id: number, action: string) {
     await fetch("/api/admin/events", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, action, token }),
+      headers: { ...auth(), "Content-Type": "application/json" },
+      body: JSON.stringify({ id, action }),
     });
     setEvents((ev) => ev.filter((e) => e.id !== id));
   }
