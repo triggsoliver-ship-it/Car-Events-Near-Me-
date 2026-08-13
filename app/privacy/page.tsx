@@ -8,7 +8,7 @@ export const metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const UPDATED = "12 August 2026";
+const UPDATED = "13 August 2026";
 
 export default function PrivacyPage() {
   return (
@@ -213,11 +213,14 @@ export default function PrivacyPage() {
         </li>
         <li>
           <strong>The contact email on a submission</strong> &mdash; kept while the listing is live
-          and for up to 12 months after the event, then deleted.
+          and until 12 months after the event has finished. A scheduled job runs every day and
+          erases the email address from any event that ended more than 12 months ago. The listing
+          itself stays as part of the archive described above, but with no contact details on it.
         </li>
         <li>
-          <strong>Submissions we reject</strong> &mdash; kept for up to 6 months so we can recognise
-          duplicates and repeat spam, then deleted.
+          <strong>Submissions we reject</strong> &mdash; kept for 6 months so we can recognise
+          duplicates and repeat spam. The same daily job then deletes the whole record, including
+          the contact email.
         </li>
         <li>
           <strong>Emails</strong> &mdash; kept for up to 24 months, longer where we need them for a
