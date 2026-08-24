@@ -29,7 +29,7 @@ const cbs: CarEvent[] = CBS_DATES.map((iso, i) => ({
     "A monthly gathering of classics, supercars, modified builds and everything in between at CBS Automotive's 11,000 sq ft facility just outside Cambridge. Runs 10am-1pm on the first Saturday of the month. Entry from £3 per vehicle and includes a free tea or coffee and nibbles. Indoor and outdoor space, PS5 racing simulator and the DriftMist competition on site.",
   tiers: [{ name: "Per vehicle (from)", price: 3 }],
   free: false,
-  bookingUrl: "https://www.eventbrite.co.uk/e/cars-and-coffee-cambridge-tickets-1977294709704",
+  bookingUrl: "https://www.eventbrite.co.uk/e/cars-and-coffee-cambridge-tickets-1977292656563",
 }));
 
 export const SEED_7: CarEvent[] = [

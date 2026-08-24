@@ -13,10 +13,13 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   const e = await getEventById(Number(params.id));
   if (!e) return { title: "Event not found" };
   const image = eventImg(e, 1200, 630);
+  const past = e.end < new Date().toISOString().slice(0, 10);
   return {
     title: e.name,
     description: e.desc,
     alternates: { canonical: `/events/${e.id}` },
+    // Ended events stay reachable as an archive but drop out of search indexes.
+    ...(past ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       type: "website",
       title: `${e.name} — Car Events Near Me`,
@@ -37,6 +40,7 @@ export default async function EventPage({ params }: { params: { id: string } }) 
   const e = await getEventById(Number(params.id));
   if (!e) notFound();
   const grad = GRAD[(e.id - 1) % GRAD.length];
+  const past = e.end < new Date().toISOString().slice(0, 10);
 
   const startsFrom = Math.min(...e.tiers.map((t) => t.price));
   const jsonLd = {
@@ -64,13 +68,17 @@ export default async function EventPage({ params }: { params: { id: string } }) 
       "@type": "Organization",
       name: e.organiser,
     },
-    offers: {
-      "@type": "Offer",
-      price: startsFrom,
-      priceCurrency: "GBP",
-      availability: "https://schema.org/InStock",
-      url: `https://careventsnearme.uk/events/${e.id}`,
-    },
+    ...(past
+      ? {}
+      : {
+          offers: {
+            "@type": "Offer",
+            price: startsFrom,
+            priceCurrency: "GBP",
+            availability: "https://schema.org/InStock",
+            url: `https://careventsnearme.uk/events/${e.id}`,
+          },
+        }),
   };
 
   return (
@@ -102,7 +110,19 @@ export default async function EventPage({ params }: { params: { id: string } }) 
           <h3 className="sub">Good to know</h3>
           <p className="desc">Secure booking · Past events drop off automatically · Found something wrong? Let us know.</p>
         </div>
-        <BookingBox event={e} />
+        {past ? (
+          <div className="bookbox">
+            <div className="bh">This event has ended</div>
+            <p className="desc" style={{ margin: "8px 0 0" }}>
+              It ran on {dateRange(e.start, e.end)} and is kept here as an archive.
+            </p>
+            <Link className="btn block lg" style={{ marginTop: 8 }} href="/#events">
+              Browse upcoming events →
+            </Link>
+          </div>
+        ) : (
+          <BookingBox event={e} />
+        )}
       </div>
     </main>
   );
