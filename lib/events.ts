@@ -7,6 +7,7 @@ import { SEED_5 } from "@/lib/seed5";
 import { SEED_6 } from "@/lib/seed6";
 import { SEED_7 } from "@/lib/seed7";
 import { SEED_8 } from "@/lib/seed8";
+import { SEED_9 } from "@/lib/seed9";
 import { dbEnabled, getClient, rowToEvent, EventRow } from "@/lib/db";
 
 export const CATEGORIES: { type: EventType; label: string; img: number }[] = [
@@ -34,7 +35,7 @@ export const REGIONS: string[] = [
 // database (which was pre-seeded from this same data and now also holds
 // partner events + public submissions). This array is the fallback used only
 // if the database is unreachable, so the site never breaks.
-const SEED: CarEvent[] = [...SEED_1, ...SEED_2, ...SEED_3, ...SEED_4, ...SEED_5, ...SEED_6, ...SEED_7, ...SEED_8];
+const SEED: CarEvent[] = [...SEED_1, ...SEED_2, ...SEED_3, ...SEED_4, ...SEED_5, ...SEED_6, ...SEED_7, ...SEED_8, ...SEED_9];
 const today = () => new Date().toISOString().slice(0, 10);
 
 /** Bundled seed events (fallback + used to pre-seed the database). */

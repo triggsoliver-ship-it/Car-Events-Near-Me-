@@ -71,7 +71,31 @@ export async function GET(request: Request) {
       if (error) errors.push("upsert: " + error.message);
       else upserted += batch.length;
     }
-    return NextResponse.json({ ok: true, imported: rows.length, seeded: seedRows().length, upserted, errors });
+
+    // Prune seed rows that no longer exist in the bundled seed set, so that
+    // removing an event from lib/seed*.ts also removes it from the live
+    // database — upsert alone only ever adds or updates. Only rows with
+    // source = "seed" are considered; feed imports and public submissions are
+    // never touched here. (Note: seed external_ids are "seed-<id>", so keep
+    // seed ids stable — renumbering a seed recreates its rows under new ids.)
+    let pruned = 0;
+    const keep = new Set(all.map((r) => r.external_id));
+    const sel = await sb.from("events").select("id,external_id").eq("source", "seed");
+    if (sel.error) {
+      errors.push("prune-select: " + sel.error.message);
+    } else {
+      const stale = (sel.data ?? [])
+        .filter((r: { external_id: string | null }) => !r.external_id || !keep.has(r.external_id))
+        .map((r: { id: number }) => r.id);
+      for (let i = 0; i < stale.length; i += 200) {
+        const chunk = stale.slice(i, i + 200);
+        const del = await sb.from("events").delete().in("id", chunk);
+        if (del.error) { errors.push("prune-delete: " + del.error.message); break; }
+        pruned += chunk.length;
+      }
+    }
+
+    return NextResponse.json({ ok: true, imported: rows.length, seeded: seedRows().length, upserted, pruned, errors });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message || "Import failed" }, { status: 500 });
   }
