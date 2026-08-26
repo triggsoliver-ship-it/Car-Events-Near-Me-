@@ -70,5 +70,6 @@ export function rowToEvent(r: EventRow): CarEvent {
     tiers: r.tiers && r.tiers.length ? r.tiers : [{ name: "Entry", price: 0 }],
     free: r.free ?? undefined,
     bookingUrl: r.booking_url || undefined,
+    status: r.status,
   };
 }
