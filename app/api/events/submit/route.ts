@@ -50,7 +50,7 @@ export async function POST(request: Request) {
 
   const sb = getClient(true);
   if (!sb) return NextResponse.json({ error: "Server not configured" }, { status: 503 });
-  const { error } = await sb.from("events").insert(row);
+  const { data, error } = await sb.from("events").insert(row).select("id").single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, id: data?.id });
 }
