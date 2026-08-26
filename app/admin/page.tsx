@@ -8,6 +8,8 @@ export default function AdminPage() {
   const [events, setEvents] = useState<any[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [msg, setMsg] = useState("");
+  const [edits, setEdits] = useState<Record<number, { description?: string; img_url?: string }>>({});
+  const [saving, setSaving] = useState<number | null>(null);
 
   function auth(): Record<string, string> {
     return { Authorization: "Bearer " + token };
@@ -32,6 +34,27 @@ export default function AdminPage() {
     setEvents((ev) => ev.filter((e) => e.id !== id));
   }
 
+  function editField(id: number, field: "description" | "img_url", value: string) {
+    setEdits((e) => ({ ...e, [id]: { ...e[id], [field]: value } }));
+  }
+
+  async function save(id: number) {
+    const patch = edits[id];
+    if (!patch || (!patch.description && !patch.img_url)) return;
+    setSaving(id);
+    const res = await fetch("/api/admin/events", {
+      method: "POST",
+      headers: { ...auth(), "Content-Type": "application/json" },
+      body: JSON.stringify({ id, action: "update", ...patch }),
+    });
+    const d = await res.json();
+    setSaving(null);
+    if (!res.ok) { setMsg(d.error || "Save failed"); return; }
+    setEvents((ev) => ev.map((e) => (e.id === id ? { ...e, ...patch } : e)));
+    setEdits((e) => ({ ...e, [id]: {} }));
+    setMsg("Saved.");
+  }
+
   return (
     <main className="detail">
       <h1 style={{ fontSize: 30, marginBottom: 14 }}>Moderation queue</h1>
@@ -44,14 +67,37 @@ export default function AdminPage() {
       <div style={{ marginTop: 16, display: "grid", gap: 12 }}>
         {events.map((e) => (
           <div key={e.id} className="bookbox" style={{ position: "static" }}>
-            <div style={{ fontWeight: 800, fontSize: 17 }}>{e.name}</div>
+            <div style={{ fontWeight: 800, fontSize: 17 }}>{e.name} <span style={{ opacity: 0.5, fontWeight: 400, fontSize: 13 }}>#{e.id}</span></div>
             <p className="desc" style={{ margin: "6px 0" }}>
               {e.type} · {e.town}{e.county ? ", " + e.county : ""} · {e.region} · {e.start_date}
               {e.venue ? " · " + e.venue : ""}
             </p>
             {e.description && <p className="desc">{e.description}</p>}
+            {e.img_url && <p className="desc" style={{ fontSize: 12, opacity: 0.7 }}>Photo: {e.img_url}</p>}
             <p className="desc" style={{ fontSize: 13 }}>By {e.organiser}{e.contact_email ? " · " + e.contact_email : ""}{e.booking_url ? " · " + e.booking_url : ""}</p>
-            <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+
+            <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
+              <label style={{ fontSize: 12, opacity: 0.7 }}>Edit description</label>
+              <textarea
+                rows={3}
+                placeholder={e.description || "Description"}
+                value={edits[e.id]?.description ?? ""}
+                onChange={(ev) => editField(e.id, "description", ev.target.value)}
+                style={{ width: "100%", fontFamily: "inherit" }}
+              />
+              <label style={{ fontSize: 12, opacity: 0.7 }}>Edit photo URL</label>
+              <input
+                placeholder={e.img_url || "https://..."}
+                value={edits[e.id]?.img_url ?? ""}
+                onChange={(ev) => editField(e.id, "img_url", ev.target.value)}
+                style={{ width: "100%" }}
+              />
+              <button className="btn" onClick={() => save(e.id)} disabled={saving === e.id} style={{ justifySelf: "start" }}>
+                {saving === e.id ? "Saving…" : "Save edits"}
+              </button>
+            </div>
+
+            <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
               <button className="btn" onClick={() => act(e.id, "approve")}>Approve</button>
               <button className="clear" onClick={() => act(e.id, "reject")}>Reject</button>
             </div>
