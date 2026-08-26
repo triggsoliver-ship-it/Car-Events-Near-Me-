@@ -14,12 +14,19 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   if (!e) return { title: "Event not found" };
   const image = eventImg(e, 1200, 630);
   const past = e.end < new Date().toISOString().slice(0, 10);
+  // A pending/rejected event is only reachable via its exact direct link
+  // (see getEventById) — keep it out of search entirely, and don't let
+  // crawlers follow out from it either, until it's actually approved.
+  const notApproved = Boolean(e.status && e.status !== "approved");
   return {
     title: e.name,
     description: e.desc,
     alternates: { canonical: `/events/${e.id}` },
-    // Ended events stay reachable as an archive but drop out of search indexes.
-    ...(past ? { robots: { index: false, follow: true } } : {}),
+    ...(notApproved
+      ? { robots: { index: false, follow: false } }
+      : past
+      ? { robots: { index: false, follow: true } } // Ended events stay reachable as an archive but drop out of search indexes.
+      : {}),
     openGraph: {
       type: "website",
       title: `${e.name} — Car Events Near Me`,
@@ -41,6 +48,7 @@ export default async function EventPage({ params }: { params: { id: string } }) 
   if (!e) notFound();
   const grad = GRAD[(e.id - 1) % GRAD.length];
   const past = e.end < new Date().toISOString().slice(0, 10);
+  const notApproved = Boolean(e.status && e.status !== "approved");
 
   const startsFrom = Math.min(...e.tiers.map((t) => t.price));
   const jsonLd = {
@@ -83,11 +91,28 @@ export default async function EventPage({ params }: { params: { id: string } }) 
 
   return (
     <main className="detail" id="main-content">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {!notApproved && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
       <Link className="back" href="/#events">← Back to events</Link>
+      {notApproved && (
+        <div
+          style={{
+            background: "#2a1c10",
+            border: "1px solid #7f4d1d",
+            color: "#fde3c1",
+            borderRadius: 10,
+            padding: "10px 14px",
+            margin: "0 0 16px",
+            fontSize: 13.5,
+          }}
+        >
+          Preview only — this listing is still pending approval and isn&rsquo;t shown in search, browse, or listings yet.
+        </div>
+      )}
       <div className="dbanner" style={{ background: grad }}>
         <img className="photo" src={eventImg(e, 1400, 800)} alt={e.name} />
         <div className="scrim" />
