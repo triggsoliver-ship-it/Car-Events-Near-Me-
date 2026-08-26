@@ -21,4 +21,5 @@ export type CarEvent = {
   tiers: Tier[];
   free?: boolean;
   bookingUrl?: string;
+  status?: string; // pending | approved | rejected — undefined for bundled seed events (always treated as approved)
 };
