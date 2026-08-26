@@ -65,6 +65,18 @@ export async function getUpcomingEvents(): Promise<CarEvent[]> {
   return SEED.filter((e) => e.end >= today()).sort((a, b) => a.start.localeCompare(b.start));
 }
 
+/**
+ * A single event by id, for the /events/[id] detail page.
+ *
+ * Deliberately NOT filtered by status: this is what makes a direct link to a
+ * pending event work as a private preview (e.g. sending an organiser a link
+ * to check their listing before it's published) while getUpcomingEvents()
+ * above — which powers browse, search and the sitemap — stays approved-only.
+ * A pending event is reachable only by someone who already has the exact
+ * URL; it is not listed, searched, or indexed anywhere (see generateMetadata
+ * in app/events/[id]/page.tsx, which sets noindex/nofollow for non-approved
+ * events).
+ */
 export async function getEventById(id: number): Promise<CarEvent | undefined> {
   if (dbEnabled) {
     try {
@@ -74,7 +86,6 @@ export async function getEventById(id: number): Promise<CarEvent | undefined> {
           .from("events")
           .select("*")
           .eq("id", id)
-          .eq("status", "approved")
           .maybeSingle();
         if (data) return rowToEvent(data as EventRow);
       }
