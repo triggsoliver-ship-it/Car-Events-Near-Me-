@@ -55,6 +55,20 @@ export async function POST(request: Request) {
   } else if (b.action === "reject") {
     const { error } = await sb.from("events").update({ status: "rejected" }).eq("id", b.id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  } else if (b.action === "update") {
+    // Edit fields on a listing (e.g. organiser-supplied wording, a hosted
+    // photo URL) without changing its status. Only touches fields present
+    // in the request so a partial edit (just img_url, say) can't blank
+    // out other fields.
+    const patch: Record<string, unknown> = {};
+    if (typeof b.description === "string") patch.description = b.description;
+    if (typeof b.img_url === "string") patch.img_url = b.img_url;
+    if (typeof b.venue === "string") patch.venue = b.venue;
+    if (Object.keys(patch).length === 0) {
+      return NextResponse.json({ error: "No editable fields provided" }, { status: 400 });
+    }
+    const { error } = await sb.from("events").update(patch).eq("id", b.id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   } else {
     return NextResponse.json({ error: "Unknown action" }, { status: 400 });
   }
