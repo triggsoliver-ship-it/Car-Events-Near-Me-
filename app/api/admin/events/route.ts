@@ -32,12 +32,14 @@ export async function GET(request: Request) {
   if (!dbEnabled) return NextResponse.json({ error: "DB not enabled" }, { status: 503 });
   const sb = getClient(true);
   if (!sb) return NextResponse.json({ error: "Server not configured" }, { status: 503 });
-  const { data, error } = await sb
-    .from("events")
-    .select("*")
-    .eq("status", "pending")
-    .order("created_at", { ascending: false })
-    .limit(500);
+  const { searchParams } = new URL(request.url);
+  // Default view is "recent" (everything, most recently created first) so an
+  // already-approved or already-rejected listing can still be found and
+  // edited. Pass ?status=pending to filter back down to just the queue.
+  const status = searchParams.get("status");
+  let q = sb.from("events").select("*").order("created_at", { ascending: false }).limit(500);
+  if (status) q = q.eq("status", status);
+  const { data, error } = await q;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ events: data });
 }
@@ -55,11 +57,12 @@ export async function POST(request: Request) {
   } else if (b.action === "reject") {
     const { error } = await sb.from("events").update({ status: "rejected" }).eq("id", b.id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  } else if (b.action === "unpublish") {
+    // Send an already-approved listing back to pending — used when it went
+    // live before its content was finalised.
+    const { error } = await sb.from("events").update({ status: "pending" }).eq("id", b.id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   } else if (b.action === "update") {
-    // Edit fields on a listing (e.g. organiser-supplied wording, a hosted
-    // photo URL) without changing its status. Only touches fields present
-    // in the request so a partial edit (just img_url, say) can't blank
-    // out other fields.
     const patch: Record<string, unknown> = {};
     if (typeof b.description === "string") patch.description = b.description;
     if (typeof b.img_url === "string") patch.img_url = b.img_url;
