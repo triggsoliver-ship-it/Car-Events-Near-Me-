@@ -1,4 +1,5 @@
 "use client";
+import { track } from "@vercel/analytics";
 import type { CarEvent } from "@/lib/types";
 import { fmtPrice } from "@/lib/util";
 
@@ -11,6 +12,22 @@ import { fmtPrice } from "@/lib/util";
 // at all, so they must never show "Book" wording or a booking button — organisers
 // get enquiries asking how to book. For those we show a plain "Free entry" box
 // and, if a URL is known, a neutral link to the organiser's own website.
+//
+// Every outbound click is recorded as a Vercel Analytics custom event so we can
+// report referral traffic back to organisers (event id, name, organiser, kind).
+function recordOutbound(event: CarEvent, kind: "booking" | "find_tickets" | "organiser_site") {
+  try {
+    track("outbound_click", {
+      kind,
+      eventId: event.id,
+      event: event.name.slice(0, 80),
+      organiser: (event.organiser || "").slice(0, 80),
+    });
+  } catch {
+    /* analytics must never block navigation */
+  }
+}
+
 export default function BookingBox({ event }: { event: CarEvent }) {
   if (event.free) {
     return (
@@ -30,6 +47,7 @@ export default function BookingBox({ event }: { event: CarEvent }) {
             href={event.bookingUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => recordOutbound(event, "organiser_site")}
           >
             Organiser&apos;s website →
           </a>
@@ -60,6 +78,7 @@ export default function BookingBox({ event }: { event: CarEvent }) {
         href={href}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => recordOutbound(event, direct ? "booking" : "find_tickets")}
       >
         {direct ? "Book on official site →" : "Find official tickets →"}
       </a>
