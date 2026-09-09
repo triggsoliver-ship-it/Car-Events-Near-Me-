@@ -133,7 +133,11 @@ export default async function EventPage({ params }: { params: { id: string } }) 
           <h3 className="sub">Organiser</h3>
           <p className="desc">{e.organiser}</p>
           <h3 className="sub">Good to know</h3>
-          <p className="desc">Secure booking · Past events drop off automatically · Found something wrong? Let us know.</p>
+          <p className="desc">
+            {e.free
+              ? "Free entry, no booking needed · Past events drop off automatically · Found something wrong? Let us know."
+              : "Secure booking · Past events drop off automatically · Found something wrong? Let us know."}
+          </p>
         </div>
         {past ? (
           <div className="bookbox">
