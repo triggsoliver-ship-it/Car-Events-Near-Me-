@@ -6,7 +6,38 @@ import { fmtPrice } from "@/lib/util";
 // owner's / organiser's OWN website. We never take payment on-site. If a direct
 // booking URL is known we link straight to it; otherwise we send the visitor to
 // find the organiser's official tickets.
+//
+// Free, turn-up-on-the-day events (event.free === true) have NO booking system
+// at all, so they must never show "Book" wording or a booking button — organisers
+// get enquiries asking how to book. For those we show a plain "Free entry" box
+// and, if a URL is known, a neutral link to the organiser's own website.
 export default function BookingBox({ event }: { event: CarEvent }) {
+  if (event.free) {
+    return (
+      <div className="bookbox">
+        <div className="bh">Free entry</div>
+        <div className="tier">
+          <span>Entry</span>
+          <span className="tp">Free</span>
+        </div>
+        <p className="desc" style={{ margin: "8px 0 0" }}>
+          No booking needed — just turn up on the day.
+        </p>
+        {event.bookingUrl && (
+          <a
+            className="btn block lg"
+            style={{ marginTop: 8 }}
+            href={event.bookingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Organiser&apos;s website →
+          </a>
+        )}
+      </div>
+    );
+  }
+
   const direct = !!event.bookingUrl;
   const href =
     event.bookingUrl ||
