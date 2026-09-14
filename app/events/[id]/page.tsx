@@ -9,8 +9,10 @@ export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 export const revalidate = 0;
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const e = await getEventById(Number(params.id));
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  // Next 15: params is a Promise.
+  const { id } = await params;
+  const e = await getEventById(Number(id));
   if (!e) return { title: "Event not found" };
   const image = eventImg(e, 1200, 630);
   const past = e.end < new Date().toISOString().slice(0, 10);
@@ -43,8 +45,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default async function EventPage({ params }: { params: { id: string } }) {
-  const e = await getEventById(Number(params.id));
+export default async function EventPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const e = await getEventById(Number(id));
   if (!e) notFound();
   const grad = GRAD[(e.id - 1) % GRAD.length];
   const past = e.end < new Date().toISOString().slice(0, 10);
