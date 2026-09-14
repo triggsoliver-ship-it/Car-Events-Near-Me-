@@ -17,9 +17,9 @@ const ALLOW = new Set([
   "www.concoursofelegance.co.uk",
   // Bonhams Cars / "THE MARKET" (MPH, Bicester) hero imagery CDN.
   "cdn.themarket.co.uk",
-  // The British Motor Show.
-  "www.thebritishmotorshow.live",
-  "thebritishmotorshow.live",
+  // NOTE: thebritishmotorshow.live was removed from this list in September
+  // 2026 at the organisers' request — they had not granted permission for
+  // their photography to be used. Do not re-add it without written consent.
   // National Motor Museum, Beaulieu.
   "www.beaulieu.co.uk",
   "beaulieu.co.uk",

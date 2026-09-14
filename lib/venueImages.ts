@@ -19,6 +19,12 @@ import type { CarEvent, EventType } from "@/lib/types";
  * exist and was chosen because its description genuinely matches the event
  * (a cars-and-coffee meet, a classic show, a JDM gathering, etc.).
  *
+ * IMPORTANT — permission: only map a brand's own photography here if we have
+ * that brand's permission to use it. In September 2026 the organisers of The
+ * British Motor Show asked us to stop using one of their photos; that rule has
+ * been removed (see the note in VENUE_IMAGE_RULES) and their host dropped from
+ * the /img allow-list. If in doubt, use a licence-free Pexels image instead.
+ *
  * This module is intentionally plain TypeScript data plus one pure function so
  * it can be imported by client components (e.g. components/Explore.tsx) as well
  * as server components. No server-only APIs, no new dependencies.
@@ -61,6 +67,9 @@ export type VenueImageRule = { test: RegExp; url: string };
  * short-circuit and before MARQUE_RULES — so they always take precedence over
  * the generic JDM / VW / marque photos for these series.
  *
+ * Scope each pattern to the ONE show the photo actually depicts. A photo of
+ * show A must never illustrate show B, even a similar one by another organiser.
+ *
  * The Beaulieu block below gives each Beaulieu / National Motor Museum event
  * its OWN dedicated photo from the official Beaulieu events listing
  * (beaulieu.co.uk/events), instead of every Beaulieu event sharing the single
@@ -74,8 +83,11 @@ export const EVENT_PHOTO_RULES: VenueImageRule[] = [
   { test: /japfest/, url: proxy("https://www.carevents.com/uk/wp-content/uploads/sites/3/2024/11/japfest3-1024x684.jpg") },
   // CarFest — real photo of cars at the festival (CarEvents.com gallery).
   { test: /carfest/, url: proxy("https://www.carevents.com/uk/wp-content/uploads/sites/3/2025/10/CarFest_Sunday_53583_websize-1024x683.jpg") },
-  // Ultimate Dubs (and Dubshed) — real photo of VWs at the indoor show.
-  { test: /ultimate dubs|dubshed/, url: proxy("https://www.cumbriavag.co.uk/wp-content/uploads/2016/03/IMG_2260-6-1024x654.jpg") },
+  // Ultimate Dubs — real photo of VWs at that show. Scoped to Ultimate Dubs
+  // ONLY: this photo is of Ultimate Dubs, so it must not be used to illustrate
+  // Dubshed, which is a different show by a different organiser. Dubshed falls
+  // through to the licence-free VW photo in MARQUE_RULES instead.
+  { test: /ultimate dubs/, url: proxy("https://www.cumbriavag.co.uk/wp-content/uploads/2016/03/IMG_2260-6-1024x654.jpg") },
   // Podium Place — real photo of supercars at the Podium Place venue.
   { test: /podium place/, url: proxy("https://visitnewbury.org.uk/wp-content/uploads/2021/04/Podium-Place-Super-Cars-scaled.jpg") },
 
@@ -165,8 +177,21 @@ export const MARQUE_RULES: VenueImageRule[] = [
  * Ordered list of rules. The first rule whose `test` matches the combined
  * lowercased `${name} ${venue} ${organiser}` string wins, so put more specific
  * patterns before broader ones.
+ *
+ * Because the haystack includes `organiser`, a rule naming one company's event
+ * WILL also capture a different organiser whose name contains that string, and
+ * a venue rule WILL capture every promoter who hires that venue. Where a rule
+ * points at a brand's own photography, any event run by somebody else must be
+ * matched by an earlier, narrower rule — see the Players and Iconic
+ * Auctioneers entries below, both of which are deliberately hoisted.
  */
 export const VENUE_IMAGE_RULES: VenueImageRule[] = [
+  // Players (Players Classic / Players Show) — modified/stance cars in a park.
+  // MUST stay ABOVE the Goodwood rules: Players events are held at Goodwood
+  // Motor Circuit but are run by a different promoter, so the venue rule would
+  // otherwise brand them with Goodwood's own commissioned photography.
+  { test: /\bplayers\b/, url: pex(29013423) },
+
   // ── Goodwood (FoS / Revival / Members' Meeting / Breakfast Club) ──────────
   // Real Goodwood hero photography (Jayson Fong) pulled from goodwood.com via
   // an in-browser DOM read, served through /img. Breakfast Club reuses the real
@@ -177,11 +202,27 @@ export const VENUE_IMAGE_RULES: VenueImageRule[] = [
 
   // ── Venues / shows (real photo from each event's own official site) ───────
   { test: /beaulieu|national motor museum/, url: "https://www.beaulieu.co.uk/wp-content/uploads/2016/11/2-e1740762014153.jpg" },
+  // Iconic Auctioneers — real classic-car photo from their official site
+  // (og:image). MUST stay ABOVE the NEC rule: their sales are held AT the NEC,
+  // so the venue rule would otherwise put the NEC Classic Motor Show's own
+  // promotional artwork on this auction house's listings.
+  { test: /iconic auctioneers|iconic auction/, url: proxy("https://www.iconicauctioneers.com/images/2023/08/09/ia002_brochure_2023_02_dg-pt-amends_page_10_image_0001.jpg") },
   // NEC Classic Motor Show — real hero of classic cars from the official site's
   // ASP Events CDN, served via /img.
   { test: /\bnec\b|necbirmingham|birmingham nec/, url: proxy("https://cdn.asp.events/CLIENT_CL_EE_9A415A31_C601_41ED_1AF7C7E527DCB474/sites/classic-motor-show-2025/media/graphics/CMS-DYNAMIC-BACKGROUND-2026-3-main-cars.png") },
-  // The British Motor Show — real crowd photo from their official site.
-  { test: /farnborough|british motor show/, url: proxy("https://www.thebritishmotorshow.live/wp-content/uploads/2026/02/Crowd-1.png") },
+  // The British Motor Show (Farnborough International) — DELIBERATELY NOT
+  // MAPPED. We previously served a crowd photo from thebritishmotorshow.live
+  // here. The show's organisers (Automotion Events / Farnborough
+  // International) contacted us in September 2026: they had not given
+  // permission for that photo to be used, and the rule was matching on the
+  // substring "british motor show", so it also branded an UNRELATED event —
+  // the Yorkshire Classic & Performance Motor Show, whose organiser is
+  // "Great British Motor Shows" — with their photography, implying an
+  // association that does not exist.
+  //
+  // Both problems are fixed by not using their image at all: these events now
+  // fall through to the licence-free CATEGORY_IMAGES pool. Do not re-add a
+  // rule for their photography without written permission.
   { test: /blenheim|salon priv/, url: "https://www.salonpriveconcours.com/wp-content/uploads/2021/03/salonprive-facebook-blue.jpg" },
   // Concours of Elegance (Hampton Court Palace) — real car photo from the
   // official concoursofelegance.co.uk media library, served via /img.
@@ -193,9 +234,6 @@ export const VENUE_IMAGE_RULES: VenueImageRule[] = [
   // Race Retro (Stoneleigh Park) — real event photo from the official site's
   // ASP Events CDN, served via /img.
   { test: /stoneleigh|race retro/, url: proxy("https://cdn.asp.events/CLIENT_CL_EE_9A415A31_C601_41ED_1AF7C7E527DCB474/sites/race-retro-2026/media/pages/welcome/220225_RAC_0939.jpg/fit-in/1920x9999/filters:no_upscale()") },
-  // Iconic Auctioneers — real classic-car photo from their official site
-  // (og:image). Served directly; host is allow-listed in /img anyway.
-  { test: /iconic auctioneers|iconic auction/, url: proxy("https://www.iconicauctioneers.com/images/2023/08/09/ia002_brochure_2023_02_dg-pt-amends_page_10_image_0001.jpg") },
   { test: /telford/, url: pex(20406502) },
   { test: /eikon/, url: pex(20406502) },
   { test: /olympia/, url: "https://www.thelondonclassiccarshow.co.uk/wp-content/uploads/Main-Slider-shots-1-1.jpg" },
@@ -226,8 +264,6 @@ export const VENUE_IMAGE_RULES: VenueImageRule[] = [
   { test: /newcastle quayside/, url: pex(9331880) },
   // CarFest — vibrant gathering of classic cars with enthusiastic crowds.
   { test: /carfest/, url: pex(9545305) },
-  // Players (Players Classic / Players Show) — modified/stance cars in a park.
-  { test: /\bplayers\b/, url: pex(29013423) },
   // Ultimate Dubs — VW Beetles on display at an urban classic-car show.
   { test: /ultimate dubs/, url: pex(15241077) },
   // JapFest — lineup of classic JDM cars incl. Nissan Skyline R32.
@@ -279,8 +315,8 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
 /**
  * Resolve a real, relevant image URL for an event.
  *
- * 0. The EVENT_PHOTO_RULES series (Japfest, CarFest, Ultimate Dubs / Dubshed,
- *    Podium Place, and the per-event Beaulieu photos) get their genuine event
+ * 0. The EVENT_PHOTO_RULES series (Japfest, CarFest, Ultimate Dubs, Podium
+ *    Place, and the per-event Beaulieu photos) get their genuine event
  *    photo — checked FIRST so these always win over the track-day short-circuit
  *    and the JDM/VW/marque photos. The dedicated Beaulieu "Simply [Marque]"
  *    photos therefore beat the generic MARQUE_RULES photos.
@@ -291,6 +327,11 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
  * 3. Otherwise the first VENUE_IMAGE_RULES rule whose `test` matches wins.
  * 4. Otherwise pick from CATEGORY_IMAGES[e.type] using a stable id-based index.
  * 5. Returns undefined if nothing applies (caller falls back to the Pexels id).
+ *
+ * NOTE: lib/util.ts resolves `e.imgUrl || resolveEventImage(e) || px(e.img)`,
+ * so a per-row `imgUrl` (seeded, or submitted through /api/events/submit)
+ * OVERRIDES everything here. Removing a photo from this file is therefore not
+ * enough on its own — check the seed rows and the stored img_url too.
  */
 export function resolveEventImage(e: CarEvent): string | undefined {
   // Real photos for the specific event series take precedence over
