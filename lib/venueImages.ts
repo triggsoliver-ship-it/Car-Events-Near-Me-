@@ -70,6 +70,11 @@ export type VenueImageRule = { test: RegExp; url: string };
  * Scope each pattern to the ONE show the photo actually depicts. A photo of
  * show A must never illustrate show B, even a similar one by another organiser.
  *
+ * An entry here may also be a licence-free Pexels photo rather than a real
+ * event photo, where its job is to STOP a later rule firing wrongly — see the
+ * Hills Ford Stages entry, which exists because that rally's title sponsor is a
+ * Ford dealer group and would otherwise be matched by the \bford\b marque rule.
+ *
  * The Beaulieu block below gives each Beaulieu / National Motor Museum event
  * its OWN dedicated photo from the official Beaulieu events listing
  * (beaulieu.co.uk/events), instead of every Beaulieu event sharing the single
@@ -79,6 +84,20 @@ export type VenueImageRule = { test: RegExp; url: string };
  * don't collide (e.g. /simply japanese/ vs /simply jaguar/, /simply italian/).
  */
 export const EVENT_PHOTO_RULES: VenueImageRule[] = [
+  // Hills Ford Stages (Cheltenham Motor Club, Shropshire) — licence-free photo
+  // of a rally car on a gravel stage (Pexels 832542, Liis Saar; free for
+  // commercial use, no attribution required).
+  //
+  // This entry exists for two reasons, so do not delete it as redundant:
+  //  1. "Hills Ford" is the rally's title SPONSOR — a Ford dealer group — not a
+  //     marque theme. Without a rule here the \bford\b rule in MARQUE_RULES
+  //     matches the title and illustrates a Shropshire closed-road stage rally
+  //     with a 1966 Mustang. Sponsor names in event titles are a general trap
+  //     for MARQUE_RULES; check for one before adding any marque-named event.
+  //  2. It is the slot for the organiser's own photography. Hills Ford Stages
+  //     offered us images in September 2026 — once we have one we are licensed
+  //     to host, swap the URL here and keep this comment.
+  { test: /hills ford stages/, url: pex(832542) },
   // Japfest — real photo of JDM cars at the show (CarEvents.com gallery).
   { test: /japfest/, url: proxy("https://www.carevents.com/uk/wp-content/uploads/sites/3/2024/11/japfest3-1024x684.jpg") },
   // CarFest — real photo of cars at the festival (CarEvents.com gallery).
@@ -131,6 +150,11 @@ export const EVENT_PHOTO_RULES: VenueImageRule[] = [
  * "Bedford Autodrome", and \bmini\b must not fire on "minimum". Every Pexels id
  * below was searched for that marque, picked because its ALT text clearly shows
  * the right make/type, and verified to load at the hero crop.
+ *
+ * Word boundaries are not enough on their own: a TITLE SPONSOR can put a marque
+ * name in the title of an event that has nothing to do with that make ("Hills
+ * Ford Stages Rally"). Those need an earlier EVENT_PHOTO_RULES entry — see the
+ * one at the top of that list.
  */
 export const MARQUE_RULES: VenueImageRule[] = [
   // Jaguar — black Jaguar XK convertible sports car in an outdoor setting.
@@ -163,7 +187,8 @@ export const MARQUE_RULES: VenueImageRule[] = [
   { test: /\bmini\b/, url: pex(15274844) },
   // Swedish (Volvo / Saab) — black Volvo V60 parked on a winter city street.
   { test: /\bvolvo\b|\bsaab\b|swedish/, url: pex(15941295) },
-  // Ford — classic white 1966 Ford Mustang (\bford\b so it never matches Bedford).
+  // Ford — classic white 1966 Ford Mustang (\bford\b so it never matches
+  // Bedford; sponsor-named events are headed off in EVENT_PHOTO_RULES).
   { test: /\bford\b/, url: pex(32957941) },
   // Lotus — sleek Lotus Evora 400 parked on a suburban street.
   { test: /\blotus\b/, url: pex(9805735) },

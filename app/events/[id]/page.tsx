@@ -87,7 +87,11 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
             price: startsFrom,
             priceCurrency: "GBP",
             availability: "https://schema.org/InStock",
-            url: `https://careventsnearme.uk/events/${e.id}`,
+            // The offer URL must be where the ticket is actually sold, not this
+            // page. We take no part in ticket sales, so publishing our own URL
+            // as the Offer url told search engines we were the seller. Falls
+            // back to this page only when no official link is known.
+            url: e.bookingUrl || `https://careventsnearme.uk/events/${e.id}`,
           },
         }),
   };
@@ -139,7 +143,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           <p className="desc">
             {e.free
               ? "Free entry, no booking needed · Past events drop off automatically · Found something wrong? Let us know."
-              : "Secure booking · Past events drop off automatically · Found something wrong? Let us know."}
+              : "Tickets are bought from the event's own seller · Past events drop off automatically · Found something wrong? Let us know."}
           </p>
         </div>
         {past ? (
