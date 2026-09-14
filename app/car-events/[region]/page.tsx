@@ -49,13 +49,15 @@ function regionFromParams(slug: string): string | undefined {
 }
 
 export async function generateMetadata(
-  { params }: { params: { region: string } }
+  { params }: { params: Promise<{ region: string }> }
 ): Promise<Metadata> {
-  const region = regionFromParams(params.region);
+  // Next 15: params is a Promise.
+  const { region: regionSlug } = await params;
+  const region = regionFromParams(regionSlug);
   if (!region) return { title: "Region not found" };
   const title = `Car Events in ${region} (${YEAR}) — Shows, Meets & Track Days`;
   const description = `Find and book car events in ${region} — car shows, classic meets, track days, auctions and motorsport near you. Browse upcoming ${region} car events by county, date and price.`;
-  const canonical = `/car-events/${params.region}`;
+  const canonical = `/car-events/${regionSlug}`;
   return {
     title,
     description,
@@ -76,9 +78,10 @@ export async function generateMetadata(
 }
 
 export default async function RegionPage(
-  { params }: { params: { region: string } }
+  { params }: { params: Promise<{ region: string }> }
 ) {
-  const region = regionFromParams(params.region);
+  const { region: regionSlug } = await params;
+  const region = regionFromParams(regionSlug);
   if (!region) notFound();
 
   const today = TODAY();
@@ -91,14 +94,14 @@ export default async function RegionPage(
   const intro =
     INTROS[region] ||
     `${region} is packed with car events year-round — find and book car shows, classic meets, track days, auctions and motorsport near you.`;
-  const canonical = `/car-events/${params.region}`;
+  const canonical = `/car-events/${regionSlug}`;
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Car events", item: `${SITE_URL}/car-events/${params.region}` },
+      { "@type": "ListItem", position: 2, name: "Car events", item: `${SITE_URL}/car-events/${regionSlug}` },
       { "@type": "ListItem", position: 3, name: region, item: `${SITE_URL}${canonical}` },
     ],
   };
@@ -124,7 +127,7 @@ export default async function RegionPage(
       <section className="block">
         <div className="wrap">
           <nav className="loc" aria-label="Breadcrumb" style={{ marginBottom: 14 }}>
-            <Link href="/">Home</Link> · <Link href={`/car-events/${params.region}`}>Car events</Link> · <span>{region}</span>
+            <Link href="/">Home</Link> · <Link href={`/car-events/${regionSlug}`}>Car events</Link> · <span>{region}</span>
           </nav>
           <div className="shead">
             <div>

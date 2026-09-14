@@ -25,14 +25,16 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  { params }: { params: { county: string } }
+  { params }: { params: Promise<{ county: string }> }
 ): Promise<Metadata> {
+  // Next 15: params is a Promise.
+  const { county: countySlug } = await params;
   const events = await upcomingByCounty();
-  const county = nameFromSlug(params.county, countiesFromEvents(events));
+  const county = nameFromSlug(countySlug, countiesFromEvents(events));
   if (!county) return { title: "County not found" };
   const title = `Car Events in ${county} (${YEAR})`;
   const description = `Upcoming car events in ${county} — car shows, classic meets, track days, auctions and motorsport near you. Find and book ${county} car events by date and price.`;
-  const canonical = `/car-events/county/${params.county}`;
+  const canonical = `/car-events/county/${countySlug}`;
   return {
     title,
     description,
@@ -53,11 +55,12 @@ export async function generateMetadata(
 }
 
 export default async function CountyPage(
-  { params }: { params: { county: string } }
+  { params }: { params: Promise<{ county: string }> }
 ) {
+  const { county: countySlug } = await params;
   const today = TODAY();
   const all = await upcomingByCounty();
-  const county = nameFromSlug(params.county, countiesFromEvents(all));
+  const county = nameFromSlug(countySlug, countiesFromEvents(all));
   if (!county) notFound();
 
   const events = all
@@ -66,14 +69,14 @@ export default async function CountyPage(
 
   const region = events[0]?.region;
   const intro = `Discover upcoming car events in ${county}${region ? `, ${region}` : ""} — find and book car shows, classic meets, track days, auctions and motorsport near you.`;
-  const canonical = `/car-events/county/${params.county}`;
+  const canonical = `/car-events/county/${countySlug}`;
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Car events", item: `${SITE_URL}/car-events/county/${params.county}` },
+      { "@type": "ListItem", position: 2, name: "Car events", item: `${SITE_URL}/car-events/county/${countySlug}` },
       { "@type": "ListItem", position: 3, name: county, item: `${SITE_URL}${canonical}` },
     ],
   };
@@ -99,7 +102,7 @@ export default async function CountyPage(
       <section className="block">
         <div className="wrap">
           <nav className="loc" aria-label="Breadcrumb" style={{ marginBottom: 14 }}>
-            <Link href="/">Home</Link> · <Link href={`/car-events/county/${params.county}`}>Car events</Link> · <span>{county}</span>
+            <Link href="/">Home</Link> · <Link href={`/car-events/county/${countySlug}`}>Car events</Link> · <span>{county}</span>
           </nav>
           <div className="shead">
             <div>
