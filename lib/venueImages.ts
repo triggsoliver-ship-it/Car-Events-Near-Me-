@@ -46,14 +46,14 @@ const GOODWOOD_HERO = proxy(
   "https://www.goodwood.com/bynderassets/5498/Website-FOS2022_JaysonFong_0292.jpg",
 );
 
-// Genuine track-day photography from trackdays.co.uk — the booking partner most
-// track days link to. Their CDN blocks cross-origin hotlinking, so these are
-// served via the /img proxy. Rotated per event so they don't all look identical.
-export const TRACKDAY_PHOTOS = [
-  proxy("https://cdn.trackdays.co.uk/cdn-cgi/image/format=auto,fit=cover,width=1200,height=800/imgs/book-car-trackday.jpg"),
-  proxy("https://cdn.trackdays.co.uk/cdn-cgi/image/format=auto,fit=cover,width=1200,height=800/imgs/book-driving-experience.jpg"),
-  proxy("https://cdn.trackdays.co.uk/cdn-cgi/image/format=auto,fit=cover,width=1200,height=800/imgs/driving-experiences/driving-experience-calendar.jpg"),
-];
+// NOTE: track days previously rotated through three photos from
+// cdn.trackdays.co.uk. Those were that company's own marketing images, and we
+// were applying them to track days run by nine different operators (MSV,
+// BookaTrack, Javelin, Open Track, Goldtrack, No Limits, Circuit Days, Santa
+// Pod, TrackDays UK). Replaced in September 2026 with the licence-free pool in
+// CATEGORY_IMAGES["track day"] — see the short-circuit in resolveEventImage.
+// trackdays.co.uk remains a booking partner (lib/importers.ts reads their RSS
+// feed and seed4 links bookings to them); only their imagery is no longer used.
 
 export type VenueImageRule = { test: RegExp; url: string };
 
@@ -302,7 +302,8 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
   modified: [pex(22039970), pex(26448051), pex(29236908), pex(34388184)],
   // Vintage / classic cars.
   classic: [pex(31114473), pex(33419702), pex(37958112), pex(33924797)],
-  // Cars on track (left as-is — already genuine track imagery).
+  // Cars on track. Also used directly by the track-day short-circuit in
+  // resolveEventImage, so every id here must be genuine on-track imagery.
   "track day": [pex(15155737), pex(11488012), pex(12789344), pex(3354648)],
   // Classic cars lined up in indoor halls / showrooms.
   auction: [pex(29831803), pex(14065436), pex(12203663), pex(18435526)],
@@ -320,7 +321,8 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
  *    photo — checked FIRST so these always win over the track-day short-circuit
  *    and the JDM/VW/marque photos. The dedicated Beaulieu "Simply [Marque]"
  *    photos therefore beat the generic MARQUE_RULES photos.
- * 1. Track-day events get a genuine trackdays.co.uk photo (rotated by id).
+ * 1. Track-day events get a licence-free cars-on-track photo (rotated by id),
+ *    ahead of the venue rules so a branded venue never lends its own photo.
  * 2. Otherwise, if the event TITLE names a marque / car type (Simply Jaguar,
  *    Auto Italia, Japfest, …), the first matching MARQUE_RULES rule wins so the
  *    photo shows that make rather than the generic venue photo.
@@ -331,7 +333,8 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
  * NOTE: lib/util.ts resolves `e.imgUrl || resolveEventImage(e) || px(e.img)`,
  * so a per-row `imgUrl` (seeded, or submitted through /api/events/submit)
  * OVERRIDES everything here. Removing a photo from this file is therefore not
- * enough on its own — check the seed rows and the stored img_url too.
+ * enough on its own — check the seed rows and the stored img_url too, and add
+ * the host to BLOCKED_IMAGE_HOSTS in lib/util.ts to cover all routes at once.
  */
 export function resolveEventImage(e: CarEvent): string | undefined {
   // Real photos for the specific event series take precedence over
@@ -340,9 +343,17 @@ export function resolveEventImage(e: CarEvent): string | undefined {
   for (const rule of EVENT_PHOTO_RULES) {
     if (rule.test.test(name)) return rule.url;
   }
+  // Track days short-circuit to the licence-free track pool BEFORE the venue
+  // rules run. That ordering is load-bearing, not redundant: without it a track
+  // day held at a venue with its own branded rule (Goodwood, Bicester, the NEC,
+  // Telford…) would match that rule and be illustrated with the VENUE's
+  // commissioned photography, even though the day is run by an independent
+  // operator. Imported events (TrackDays RSS, ids 1000+) can be at any circuit,
+  // so this must stay ahead of VENUE_IMAGE_RULES.
   if (e.type === "track day") {
-    const i = ((e.id % TRACKDAY_PHOTOS.length) + TRACKDAY_PHOTOS.length) % TRACKDAY_PHOTOS.length;
-    return TRACKDAY_PHOTOS[i];
+    const pool = CATEGORY_IMAGES["track day"];
+    const i = ((e.id % pool.length) + pool.length) % pool.length;
+    return pool[i];
   }
   // Marque rules run on the TITLE only, before venue/series rules, so an event
   // that names a make wins over its (generic) venue photo.

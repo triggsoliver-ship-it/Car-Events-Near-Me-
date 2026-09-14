@@ -1,7 +1,7 @@
 // Image proxy: fetches an allow-listed external image server-side and re-serves
-// it from our own origin. Needed because some booking partners (e.g.
-// trackdays.co.uk's Cloudflare CDN) block cross-origin hotlinking by referrer,
-// so the browser can't load their images directly — but a server fetch can.
+// it from our own origin. Needed because some event sites (e.g. Beaulieu, or
+// the ASP Events CDN) block cross-origin hotlinking by referrer, so the browser
+// can't load their images directly — but a server fetch can.
 export const runtime = "nodejs";
 export const revalidate = 604800; // cache the proxied image for a week
 
@@ -9,9 +9,9 @@ export const revalidate = 604800; // cache the proxied image for a week
 // site or the CDN their og:image / hero photos actually live on. Keep this list
 // in sync with the proxy(...) URLs used in lib/venueImages.ts.
 const ALLOW = new Set([
-  // Track-day booking partner CDN.
-  "cdn.trackdays.co.uk",
-  "www.trackdays.co.uk",
+  // NOTE: cdn.trackdays.co.uk / www.trackdays.co.uk were removed in September
+  // 2026 when track-day listings moved to licence-free imagery. They remain a
+  // booking partner, but we no longer serve their photos.
   // Concours of Elegance (Hampton Court Palace) — photos live on the bare host.
   "concoursofelegance.co.uk",
   "www.concoursofelegance.co.uk",
