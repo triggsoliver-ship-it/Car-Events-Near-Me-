@@ -5,14 +5,68 @@ import type { CarEvent } from "@/lib/types";
 export const px = (id: number, w = 900, h = 600) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=${w}&h=${h}`;
 
+/**
+ * Hosts whose images must never be served by this site.
+ *
+ * This is the backstop for a rights-holder asking us to stop using their
+ * photography. Removing a rule from lib/venueImages.ts and an imgUrl from a
+ * seed row is NOT sufficient on its own, because `imgUrl` also arrives from:
+ *   - the stored Supabase `img_url` column, which is only rewritten when
+ *     /api/import next runs (so a removed image stays live until the cron), and
+ *   - POST /api/events/submit, which lets a member of the public attach any
+ *     image URL to an event.
+ *
+ * Any host listed here is stripped at render time regardless of where the URL
+ * came from, so the image stops being served on the next deploy and cannot be
+ * reintroduced later. Also remove the host from the ALLOW set in
+ * app/img/route.ts so the proxy cannot re-serve it either.
+ *
+ * thebritishmotorshow.live — added September 2026. The show's organisers
+ * (Automotion Events / Farnborough International) told us they had not given
+ * permission for their photography to be used. Do not remove without their
+ * written consent.
+ */
+export const BLOCKED_IMAGE_HOSTS = new Set([
+  "thebritishmotorshow.live",
+  "www.thebritishmotorshow.live",
+]);
+
+/** True if `url` points at a host we have been asked not to serve. */
+export function isBlockedImage(url: string | undefined | null): boolean {
+  if (!url) return false;
+  // Unwrap our own /img?u=<encoded> proxy so a blocked host cannot slip
+  // through by being wrapped.
+  let candidate = url;
+  const proxied = /^\/img\?u=(.+)$/.exec(url);
+  if (proxied) {
+    try {
+      candidate = decodeURIComponent(proxied[1]);
+    } catch {
+      return false;
+    }
+  }
+  try {
+    return BLOCKED_IMAGE_HOSTS.has(new URL(candidate).hostname.toLowerCase());
+  } catch {
+    return false; // relative or unparseable URLs are not host-blocked
+  }
+}
+
 // Prefer an event's real official OG share image when present, then a
 // code-level venue/organiser/category match (covers DB events that only carry
 // a Pexels id), otherwise fall back to the licence-free Pexels photo.
+//
+// An imgUrl on a blocked host is ignored entirely (see BLOCKED_IMAGE_HOSTS) so
+// it can never be rendered, whatever wrote it.
 export const eventImg = (
   e: CarEvent,
   w = 900,
   h = 600
-) => e.imgUrl || resolveEventImage(e) || px(e.img, w, h);
+) => {
+  const own = isBlockedImage(e.imgUrl) ? undefined : e.imgUrl;
+  const resolved = own || resolveEventImage(e);
+  return (isBlockedImage(resolved) ? undefined : resolved) || px(e.img, w, h);
+};
 
 export const GRAD = [
   "linear-gradient(135deg,#ff5118,#ffb800)",
