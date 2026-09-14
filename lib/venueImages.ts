@@ -46,6 +46,12 @@ const GOODWOOD_HERO = proxy(
   "https://www.goodwood.com/bynderassets/5498/Website-FOS2022_JaysonFong_0292.jpg",
 );
 
+// Organiser-supplied photography that WE host, in public/photos. Absolute URL
+// so it also works as an og:image / twitter:image. Anything added here needs a
+// row in public/photos/README.md and an IMAGE_CREDITS entry below.
+const HILLS_FORD_PHOTO =
+  "https://careventsnearme.uk/photos/hills-ford-stages-water-splash.jpg";
+
 // NOTE: track days previously rotated through three photos from
 // cdn.trackdays.co.uk. Those were that company's own marketing images, and we
 // were applying them to track days run by nine different operators (MSV,
@@ -84,20 +90,21 @@ export type VenueImageRule = { test: RegExp; url: string };
  * don't collide (e.g. /simply japanese/ vs /simply jaguar/, /simply italian/).
  */
 export const EVENT_PHOTO_RULES: VenueImageRule[] = [
-  // Hills Ford Stages (Cheltenham Motor Club, Shropshire) — licence-free photo
-  // of a rally car on a gravel stage (Pexels 832542, Liis Saar; free for
-  // commercial use, no attribution required).
+  // Hills Ford Stages (Cheltenham Motor Club, Shropshire) — the organiser's own
+  // photo, given to us by their media officer on 14 Sep 2026 and served from
+  // our own origin. Credited via IMAGE_CREDITS below. See public/photos/README.md.
   //
-  // This entry exists for two reasons, so do not delete it as redundant:
-  //  1. "Hills Ford" is the rally's title SPONSOR — a Ford dealer group — not a
-  //     marque theme. Without a rule here the \bford\b rule in MARQUE_RULES
-  //     matches the title and illustrates a Shropshire closed-road stage rally
-  //     with a 1966 Mustang. Sponsor names in event titles are a general trap
-  //     for MARQUE_RULES; check for one before adding any marque-named event.
-  //  2. It is the slot for the organiser's own photography. Hills Ford Stages
-  //     offered us images in September 2026 — once we have one we are licensed
-  //     to host, swap the URL here and keep this comment.
-  { test: /hills ford stages/, url: pex(832542) },
+  // This entry also does a second job, so do not delete it as redundant:
+  // "Hills Ford" is the rally's title SPONSOR — a Ford dealer group — not a
+  // marque theme. Without a rule here the \bford\b rule in MARQUE_RULES matches
+  // the title and illustrates a Shropshire closed-road stage rally with a 1966
+  // Mustang. Sponsor names in event titles are a general trap for MARQUE_RULES;
+  // check for one before adding any marque-named event.
+  //
+  // (It briefly held a licence-free Pexels photo of a gravel rally. Their media
+  // officer spotted it immediately — theirs is a closed-TARMAC rally. Stock is
+  // safe, but a wrong-surface photo is obvious to the people who run the event.)
+  { test: /hills ford stages/, url: HILLS_FORD_PHOTO },
   // Japfest — real photo of JDM cars at the show (CarEvents.com gallery).
   { test: /japfest/, url: proxy("https://www.carevents.com/uk/wp-content/uploads/sites/3/2024/11/japfest3-1024x684.jpg") },
   // CarFest — real photo of cars at the festival (CarEvents.com gallery).
@@ -336,6 +343,24 @@ export const CATEGORY_IMAGES: Record<EventType, string[]> = {
   autojumble: [pex(11456554), pex(13690605), pex(6517339), pex(19499386)],
   // Historic / vintage motor racing.
   motorsport: [pex(13602135), pex(34214809), pex(33184111), pex(6134249)],
+};
+
+/**
+ * Photo credits, keyed on the exact image URL that ends up on the page.
+ *
+ * Keyed on the URL rather than the event name on purpose: `eventImg()` can
+ * return a stored Supabase `img_url` or a stock photo instead of the one this
+ * module picked, and a credit line under somebody else's photograph is worse
+ * than no credit at all. Keying on the result means the credit appears only
+ * when that exact image is the one being shown.
+ *
+ * Add an entry whenever an organiser gives us a photo. Several of them have
+ * asked to be credited a particular way — use their wording, not ours.
+ */
+export const IMAGE_CREDITS: Record<string, string> = {
+  // Given by Steve Andrews, Media Officer, Hills Ford Stages, 14 Sep 2026:
+  // "Just credit images to Hills ford Stages for now."
+  [HILLS_FORD_PHOTO]: "Hills Ford Stages",
 };
 
 /**

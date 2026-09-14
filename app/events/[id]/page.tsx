@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getEventById } from "@/lib/events";
-import { eventImg, dateRange, GRAD } from "@/lib/util";
+import { eventImg, eventImgCredit, dateRange, GRAD } from "@/lib/util";
 import BookingBox from "@/components/BookingBox";
 
 export const dynamic = "force-dynamic";
@@ -52,6 +52,9 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   const grad = GRAD[(e.id - 1) % GRAD.length];
   const past = e.end < new Date().toISOString().slice(0, 10);
   const notApproved = Boolean(e.status && e.status !== "approved");
+
+  // Set only where an organiser gave us the photo and asked to be credited.
+  const imgCredit = eventImgCredit(e);
 
   const startsFrom = Math.min(...e.tiers.map((t) => t.price));
   const jsonLd = {
@@ -128,6 +131,18 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           <h1>{e.name}</h1>
         </div>
       </div>
+      {imgCredit && (
+        <p
+          style={{
+            margin: "6px 2px 0",
+            fontSize: 12,
+            color: "var(--muted)",
+            textAlign: "right",
+          }}
+        >
+          Photo: {imgCredit}
+        </p>
+      )}
       <div className="cols">
         <div>
           <div className="chips">

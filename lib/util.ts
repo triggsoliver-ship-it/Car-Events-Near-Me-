@@ -1,4 +1,4 @@
-import { resolveEventImage } from "@/lib/venueImages";
+import { resolveEventImage, IMAGE_CREDITS } from "@/lib/venueImages";
 import type { CarEvent } from "@/lib/types";
 
 // Pexels image helper (license-free; commercial use OK)
@@ -67,6 +67,15 @@ export const eventImg = (
   const resolved = own || resolveEventImage(e);
   return (isBlockedImage(resolved) ? undefined : resolved) || px(e.img, w, h);
 };
+
+/**
+ * The credit line for whatever photo `eventImg` actually returned, or undefined
+ * when the image needs no credit (licence-free stock, or a brand's own og:image
+ * we are hotlinking). Looked up on the resolved URL, so it can never end up
+ * under the wrong photograph — see IMAGE_CREDITS in lib/venueImages.ts.
+ */
+export const eventImgCredit = (e: CarEvent): string | undefined =>
+  IMAGE_CREDITS[eventImg(e)];
 
 export const GRAD = [
   "linear-gradient(135deg,#ff5118,#ffb800)",

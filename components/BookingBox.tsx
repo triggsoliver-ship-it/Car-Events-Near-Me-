@@ -18,6 +18,10 @@ import { fmtPrice } from "@/lib/util";
 // and local charities collected the spectator fees; the old sentence would have
 // misrepresented both them and us. The wording below is true for every event.
 //
+// Keep it to one clause. The same organiser, once he understood how the site
+// works, said he did not need a disclaimer at all — so this should read as a
+// plain statement of what we are, not as a legal notice.
+//
 // Free, turn-up-on-the-day events (event.free === true) have NO booking system
 // at all, so they must never show "Book" wording or a booking button — organisers
 // get enquiries asking how to book. For those we show a plain "Free entry" box
@@ -95,9 +99,8 @@ export default function BookingBox({ event }: { event: CarEvent }) {
         {direct ? "Tickets on the official site →" : "Find official tickets →"}
       </a>
       <div className="secure">
-        &#128274; Car Events Near Me doesn&apos;t sell tickets and takes no commission.
-        Prices are listed for reference — booking is handled entirely by the
-        event&apos;s own ticket seller.
+        &#128274; We don&apos;t sell tickets or take a commission — booking is handled
+        on the event&apos;s own ticket site.
       </div>
     </div>
   );

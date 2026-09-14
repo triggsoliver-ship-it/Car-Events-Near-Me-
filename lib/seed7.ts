@@ -5,11 +5,15 @@ import type { CarEvent } from "@/lib/types";
 // NOTE ON IMAGES: several organisers (Beaulieu included) redirect direct image requests
 // to their homepage (anti-hotlinking), so imgUrl is omitted and the stock category photo
 // is used. When an organiser replies, ask them for a photo we can host ourselves — better
-// looking and properly licensed. (Hills Ford Stages offered us images on
-// 14 Sep 2026 — one of the three sent was a Weston Park "BOOK YOUR TICKETS
-// TODAY" promo carrying a See Tickets QR code, which we must not publish: it
-// would make the site look like part of the ticket chain, the one thing the
-// organiser asked us to stay clear of. Ask for a plain action photo instead.)
+// looking and properly licensed — host it in public/photos and add a credit, as
+// Hills Ford Stages did on 14 Sep 2026 (see public/photos/README.md).
+//
+// Two things that cost us a round trip there, worth repeating: one of the three
+// images they first sent was a Weston Park "BOOK YOUR TICKETS TODAY" promo with
+// a See Tickets QR code on it — we list events, we don't sell tickets, and that
+// image would have said otherwise. And the licence-free stock photo we used in
+// the meantime was of a GRAVEL rally; theirs runs on closed tarmac, which their
+// media officer spotted straight away. Match the surface, not just the sport.
 
 // CBS Automotive — Cars and Coffee Cambridge.
 // Permission given by CBS Automotive (Saffan Ltd) 28 Jul 2026: "please proceed with listing
@@ -69,11 +73,17 @@ export const SEED_7: CarEvent[] = [
   // ticket sales as Weston Park owns the rights there and spectator areas are
   // fees collected by local charities".
   //
-  // That constraint shapes this row, so keep it intact:
-  //  - bookingUrl points at the ORGANISER'S OWN page. Do not "improve" it by
-  //    deep-linking See Tickets or weston-park.com — those are the sellers, and
-  //    linking straight into a checkout is exactly what we agreed not to do.
-  //  - the description names who actually takes the money for each day.
+  // He wrote again the same day to say he had been "covering my back on the
+  // officials stuff more than legal", that linking See Tickets or Weston Park
+  // directly is fine, and that we needn't carry a disclaimer. So the on-page
+  // disclaimer came out of the description below. The rest of the row stands,
+  // because it is simply accurate:
+  //  - bookingUrl points at the ORGANISER'S OWN page even though we may now link
+  //    the sellers. It carries both ticket routes plus the timings and spectator
+  //    information, and it sends the click to the people whose event it is.
+  //  - the description still names who takes the money on each day — Saturday's
+  //    tickets are Weston Park's, and Sunday's spectator areas are collected by
+  //    local charities. Visitors need to know that; it isn't a disclaimer.
   //  - the tiers deliberately omit the free under-16 ticket: priceFrom() takes
   //    the MINIMUM tier, so a £0 tier would show the whole rally as "Free" on
   //    cards and sweep it into the free-only filter.
@@ -94,7 +104,7 @@ export const SEED_7: CarEvent[] = [
     img: 10373678,
     organiser: "Cheltenham Motor Club",
     desc:
-      "Cheltenham Motor Club's closed-road stage rally, spread across Shropshire over two days. Saturday opens with a free ceremonial start on Claremont Street in Shrewsbury town centre from 1pm, where around 150 crews are flagged away, before the competition moves to Weston Park — gates from midday, stages past the famous water splash, trade stands, the PATHWAYS motorsport careers zone, the DriveWise road-safety zone, and food and family entertainment until late. Sunday takes the rally onto closed public roads in South Shropshire, with spectator areas at Clee Hill (Ditton Priors), Linley J4, Linley-Kinnerton and Lawley-Gretton. Under 16s go free at Weston Park; adult entry is £10 in advance or £15 on the gate, sold by See Tickets and weston-park.com, and the official spectator programme is £5. Sunday's spectator areas charge £10 per car, with the proceeds going to local groups and charities — the rally supports Midlands Air Ambulance, Wales Air Ambulance and Shropshire Rural Support. Car Events Near Me lists this event free of charge and takes no part in ticket sales.",
+      "Cheltenham Motor Club's closed-road stage rally, spread across Shropshire over two days. Saturday opens with a free ceremonial start on Claremont Street in Shrewsbury town centre from 1pm, where around 150 crews are flagged away, before the competition moves to Weston Park — gates from midday, stages past the famous water splash, trade stands, the PATHWAYS motorsport careers zone, the DriveWise road-safety zone, and food and family entertainment until late. Sunday takes the rally onto closed public roads in South Shropshire, with spectator areas at Clee Hill (Ditton Priors), Linley J4, Linley-Kinnerton and Lawley-Gretton. Under 16s go free at Weston Park; adult entry is £10 in advance or £15 on the gate, sold by See Tickets and weston-park.com, and the official spectator programme is £5. Sunday's spectator areas are separate, and charge £10 per car with the proceeds going to local groups and charities — the rally supports Midlands Air Ambulance, Wales Air Ambulance and Shropshire Rural Support.",
     tiers: [
       { name: "Weston Park adult (advance)", price: 10 },
       { name: "Weston Park adult (on the gate)", price: 15 },
