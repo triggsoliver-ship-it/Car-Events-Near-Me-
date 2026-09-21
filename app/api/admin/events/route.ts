@@ -67,11 +67,47 @@ export async function POST(request: Request) {
     if (typeof b.description === "string") patch.description = b.description;
     if (typeof b.img_url === "string") patch.img_url = b.img_url;
     if (typeof b.venue === "string") patch.venue = b.venue;
+    if (typeof b.booking_url === "string") patch.booking_url = b.booking_url;
     if (Object.keys(patch).length === 0) {
       return NextResponse.json({ error: "No editable fields provided" }, { status: 400 });
     }
     const { error } = await sb.from("events").update(patch).eq("id", b.id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  } else if (b.action === "create") {
+    // Admin-authored listing, inserted straight to "approved" — used when an
+    // organiser has already agreed by email/phone, so there is no pending
+    // moderation step to go through. Mirrors the row /api/events/submit
+    // builds, but trusts the caller (already authenticated as admin) for the
+    // full field set, including multi-tier pricing and region/county/town.
+    const required = ["name", "type", "region", "town", "start", "organiser"];
+    for (const k of required) {
+      if (!b[k] || String(b[k]).trim() === "") {
+        return NextResponse.json({ error: `Missing field: ${k}` }, { status: 400 });
+      }
+    }
+    const row = {
+      name: String(b.name).slice(0, 200),
+      type: String(b.type),
+      region: String(b.region),
+      county: b.county ? String(b.county) : null,
+      town: String(b.town),
+      venue: b.venue ? String(b.venue) : null,
+      start_date: String(b.start),
+      end_date: b.end ? String(b.end) : String(b.start),
+      img_url: b.imgUrl ? String(b.imgUrl).slice(0, 500) : null,
+      organiser: String(b.organiser),
+      description: b.description ? String(b.description).slice(0, 500) : null,
+      booking_url: b.bookingUrl ? String(b.bookingUrl) : null,
+      tiers: Array.isArray(b.tiers) && b.tiers.length ? b.tiers : [{ name: "Entry", price: 0 }],
+      free: typeof b.free === "boolean" ? b.free : undefined,
+      contact_email: b.contactEmail ? String(b.contactEmail) : null,
+      status: "approved",
+      source: "admin",
+      external_id: b.externalId ? String(b.externalId) : "admin-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8),
+    };
+    const { data, error } = await sb.from("events").insert(row).select("id").single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true, id: data?.id });
   } else {
     return NextResponse.json({ error: "Unknown action" }, { status: 400 });
   }
