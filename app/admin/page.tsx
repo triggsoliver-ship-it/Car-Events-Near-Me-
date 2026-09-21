@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +10,8 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 const EVENT_TYPES = ["show", "meet", "modified", "classic", "track day", "auction", "autojumble", "motorsport"];
+
+const TOKEN_STORAGE_KEY = "cenm_admin_token";
 
 type NewListing = {
   name: string; type: string; region: string; county: string; town: string; venue: string;
@@ -25,6 +27,7 @@ const BLANK_LISTING: NewListing = {
 
 export default function AdminPage() {
   const [token, setToken] = useState("");
+  const [tokenRemembered, setTokenRemembered] = useState(false);
   const [events, setEvents] = useState<any[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [msg, setMsg] = useState("");
@@ -34,6 +37,42 @@ export default function AdminPage() {
   const [newListing, setNewListing] = useState<NewListing>(BLANK_LISTING);
   const [creating, setCreating] = useState(false);
   const [showNewForm, setShowNewForm] = useState(false);
+
+  // Remember the token in this browser only (localStorage never leaves the
+  // device), so it doesn't need retyping on every visit. Loaded once on
+  // mount, and kept in sync whenever it changes.
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(TOKEN_STORAGE_KEY);
+      if (saved) {
+        setToken(saved);
+        setTokenRemembered(true);
+      }
+    } catch {
+      // localStorage unavailable (private browsing etc) — just skip remembering.
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (token) {
+        window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
+        setTokenRemembered(true);
+      }
+    } catch {
+      // ignore
+    }
+  }, [token]);
+
+  function forgetToken() {
+    try {
+      window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
+    setToken("");
+    setTokenRemembered(false);
+  }
 
   function auth(): Record<string, string> {
     return { Authorization: "Bearer " + token };
@@ -125,6 +164,11 @@ export default function AdminPage() {
         <div className="formrow"><label>Admin token</label><input value={token} onChange={(e) => setToken(e.target.value)} placeholder="ADMIN_TOKEN" /></div>
         <div className="formrow"><label>&nbsp;</label><button className="btn" onClick={load}>Load events</button></div>
       </div>
+      {tokenRemembered && (
+        <p className="desc" style={{ fontSize: 12, marginTop: 4 }}>
+          Remembered in this browser, so you won't need to type it in again next time. <a href="#" onClick={(ev) => { ev.preventDefault(); forgetToken(); }}>Forget it</a>
+        </p>
+      )}
       {msg && <p style={{ color: "#ff6b6b" }}>{msg}</p>}
 
       <div style={{ marginTop: 20 }}>
