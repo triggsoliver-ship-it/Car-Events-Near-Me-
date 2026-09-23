@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { CarEvent } from "@/lib/types";
 import { CATEGORIES, REGIONS, TYPES } from "@/lib/events";
-import { px, eventImg, fmtPrice, dateRange, priceFrom, GRAD } from "@/lib/util";
+import { px, eventImg, fmtPrice, dateRange, priceFrom, priceBadge, GRAD } from "@/lib/util";
 
 const TODAY = new Date().toISOString().slice(0, 10);
 
@@ -27,11 +27,14 @@ export default function Explore({ events }: { events: CarEvent[] }) {
       if (type && e.type !== type) return false;
       if (dateFrom && e.end < dateFrom) return false;
       if (freeOnly && priceFrom(e) !== 0) return false;
-      if (maxPrice !== "" && priceFrom(e) > parseFloat(maxPrice)) return false;
+      if (maxPrice !== "") {
+        const pf = priceFrom(e);
+        if (pf === null || pf > parseFloat(maxPrice)) return false;
+      }
       return true;
     });
     return l.sort((a, b) =>
-      sort === "price" ? priceFrom(a) - priceFrom(b)
+      sort === "price" ? (priceFrom(a) ?? Infinity) - (priceFrom(b) ?? Infinity)
       : sort === "name" ? a.name.localeCompare(b.name)
       : a.start.localeCompare(b.start)
     );
@@ -108,7 +111,7 @@ export default function Explore({ events }: { events: CarEvent[] }) {
                   </div>
                   <div className="scrim" />
                   <span className="tag">{e.type}</span>
-                  <span className={pf === 0 ? "price free" : "price"}>{pf === 0 ? "Free" : "from " + fmtPrice(pf)}</span>
+                  <span className={pf === 0 ? "price free" : "price"}>{priceBadge(pf)}</span>
                   <span className="date">📅 {dateRange(e.start, e.end)}</span>
                 </div>
                 <div className="body">

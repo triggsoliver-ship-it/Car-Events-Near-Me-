@@ -6,6 +6,7 @@ export default function SubmitForm() {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
+  const [entry, setEntry] = useState("");
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -22,6 +23,7 @@ export default function SubmitForm() {
       const d = await res.json();
       if (!res.ok) throw new Error(d.error || "Something went wrong");
       setDone(true);
+      setEntry("");
     } catch (err: any) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -69,8 +71,23 @@ export default function SubmitForm() {
       </div>
       <div className="two">
         <div className="formrow"><label>Organiser *</label><input name="organiser" required placeholder="Who runs it?" /></div>
-        <div className="formrow"><label>From price (£, blank = free)</label><input name="priceFrom" type="number" min="0" step="0.01" placeholder="0" /></div>
+        <div className="formrow"><label>Entry *</label>
+          {/* An explicit choice: a blank price used to be saved as "Free entry",
+              which put ticket-only events on the site as free. */}
+          <select name="entry" required value={entry} onChange={(ev) => setEntry(ev.target.value)} style={{ width: "100%", background: "var(--panel2)", border: "1px solid var(--line)", color: "var(--text)", padding: "12px 13px", borderRadius: 11 }}>
+            <option value="" disabled>Free or ticketed?</option>
+            <option value="free">Free — just turn up</option>
+            <option value="paid">Paid / ticketed</option>
+            <option value="unsure">Not decided yet</option>
+          </select>
+        </div>
       </div>
+      {entry === "paid" && (
+        <div className="formrow">
+          <label>Ticket prices * — one per line</label>
+          <textarea name="prices" required rows={3} placeholder={"Adult weekend £55\nChild (5–16) £10\nUnder 5s free"} style={{ width: "100%", fontFamily: "inherit", background: "var(--panel2)", border: "1px solid var(--line)", color: "var(--text)", padding: "12px 13px", borderRadius: 11 }} />
+        </div>
+      )}
       <div className="formrow"><label>Booking / info link</label><input name="bookingUrl" type="url" placeholder="https://…" /></div>
       <div className="formrow">
         <label>Event photo (link)</label>
