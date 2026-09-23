@@ -96,13 +96,16 @@ export function lowestPrice(e: { free?: boolean | null; tiers: Tier[] }): number
 const TICKET_HOSTS = [
   "ticketsource", "eventbrite", "skiddle", "ticketmaster", "seetickets", "ticketlab",
   "tickettailor", "fatsoma", "ticketweb", "gigantic", "trybooking", "billetto",
-  "ticketbud", "ents24", "wegottickets", "yourticketbooking", "designmynight",
+  "ticketbud", "ents24", "wegottickets", "yourticketbooking", "designmynight", "ticketsrv",
 ];
 
 export function looksLikeTicketSite(url?: string | null) {
   if (!url) return false;
   const u = url.toLowerCase();
-  return TICKET_HOSTS.some((h) => u.includes(h)) || /\/(tickets?|book(ing)?)\b/.test(u);
+  // A "/tickets" path counts too (e.g. glosvintageextravaganza.ticketsrv.co.uk/tickets/Admission).
+  // "/book..." deliberately doesn't: Caffeine & Machine's free meets link to
+  // "book-a-table", which is a café booking, not an entry ticket.
+  return TICKET_HOSTS.some((h) => u.includes(h)) || /\/tickets?(\/|$|\?)/.test(u);
 }
 
 /** Why a listing's price needs a human look, or null if it looks fine. */
