@@ -25,13 +25,53 @@ const BLANK_LISTING: NewListing = {
   contactEmail: "", tier1Name: "Entry", tier1Price: "0", tier2Name: "", tier2Price: "",
 };
 
+type Tier = { name: string; price: number };
+
+// Pending edits for one listing. `prices` is the raw textarea (one
+// "name | amount" per line); `entry` is "", "free" or "ticketed".
+type EditDraft = {
+  description?: string;
+  img_url?: string;
+  booking_url?: string;
+  prices?: string;
+  entry?: string;
+};
+type EditField = keyof EditDraft;
+
+const tiersToText = (tiers: Tier[] | null | undefined) =>
+  (tiers || []).map((t) => `${t.name} | ${t.price}`).join("\n");
+
+const tiersSummary = (tiers: Tier[] | null | undefined) =>
+  (tiers || []).map((t) => `${t.name} ${t.price === 0 ? "Free" : "£" + t.price}`).join(" · ");
+
+// "Adult weekend (16+) | 55" per line -> [{ name, price }]. Returns an error
+// instead when any line can't be read, so nothing half-parsed gets saved.
+function parsePrices(text: string): { tiers: Tier[] } | { error: string } {
+  const tiers: Tier[] = [];
+  for (const raw of text.split("\n")) {
+    const line = raw.trim();
+    if (!line) continue;
+    const cut = line.lastIndexOf("|");
+    if (cut < 1) return { error: `Price lines need "name | amount" — couldn't read: ${line}` };
+    const name = line.slice(0, cut).trim();
+    const amount = line.slice(cut + 1).trim().replace(/^£/, "");
+    const price = /^free$/i.test(amount) ? 0 : Number(amount);
+    if (!name || amount === "" || !Number.isFinite(price) || price < 0) {
+      return { error: `Couldn't read the amount on: ${line}` };
+    }
+    tiers.push({ name, price });
+  }
+  if (tiers.length === 0) return { error: "Add at least one price line" };
+  return { tiers };
+}
+
 export default function AdminPage() {
   const [token, setToken] = useState("");
   const [tokenRemembered, setTokenRemembered] = useState(false);
   const [events, setEvents] = useState<any[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [msg, setMsg] = useState("");
-  const [edits, setEdits] = useState<Record<number, { description?: string; img_url?: string; booking_url?: string }>>({});
+  const [edits, setEdits] = useState<Record<number, EditDraft>>({});
   const [saving, setSaving] = useState<number | null>(null);
   const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected">("all");
   const [newListing, setNewListing] = useState<NewListing>(BLANK_LISTING);
@@ -98,13 +138,27 @@ export default function AdminPage() {
     setMsg("Updated.");
   }
 
-  function editField(id: number, field: "description" | "img_url" | "booking_url", value: string) {
+  function editField(id: number, field: EditField, value: string) {
     setEdits((e) => ({ ...e, [id]: { ...e[id], [field]: value } }));
   }
 
   async function save(id: number) {
-    const patch = edits[id];
-    if (!patch || (!patch.description && !patch.img_url && !patch.booking_url)) return;
+    const draft: EditDraft = edits[id] || {};
+    const patch: Record<string, unknown> = {};
+    if (draft.description) patch.description = draft.description;
+    if (draft.img_url) patch.img_url = draft.img_url;
+    if (draft.booking_url) patch.booking_url = draft.booking_url;
+    let tiers: Tier[] | undefined;
+    if (draft.prices && draft.prices.trim()) {
+      const parsed = parsePrices(draft.prices);
+      if ("error" in parsed) { setMsg(parsed.error); return; }
+      tiers = parsed.tiers;
+      patch.tiers = tiers;
+    }
+    if (draft.entry === "free") patch.free = true;
+    else if (draft.entry === "ticketed") patch.free = false;
+    else if (tiers) patch.free = tiers.every((t) => t.price === 0);
+    if (Object.keys(patch).length === 0) return;
     setSaving(id);
     const res = await fetch("/api/admin/events", {
       method: "POST",
@@ -250,6 +304,9 @@ export default function AdminPage() {
             {e.description && <p className="desc">{e.description}</p>}
             {e.img_url && <p className="desc" style={{ fontSize: 12, opacity: 0.7 }}>Photo: {e.img_url}</p>}
             <p className="desc" style={{ fontSize: 13 }}>By {e.organiser}{e.contact_email ? " · " + e.contact_email : ""}{e.booking_url ? " · " + e.booking_url : ""}</p>
+            <p className="desc" style={{ fontSize: 13 }}>
+              {e.free ? "Entry: Free — turn up, no booking" : "Tickets: " + (tiersSummary(e.tiers) || "no prices set")}
+            </p>
 
             <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
               <label style={{ fontSize: 12, opacity: 0.7 }}>Edit description</label>
@@ -274,6 +331,24 @@ export default function AdminPage() {
                 onChange={(ev) => editField(e.id, "booking_url", ev.target.value)}
                 style={{ width: "100%" }}
               />
+              <label style={{ fontSize: 12, opacity: 0.7 }}>Edit prices — one per line, name | amount (0 = free)</label>
+              <textarea
+                rows={3}
+                placeholder={tiersToText(e.tiers) || "Adult | 12\nChild | 5"}
+                value={edits[e.id]?.prices ?? ""}
+                onChange={(ev) => editField(e.id, "prices", ev.target.value)}
+                style={{ width: "100%", fontFamily: "inherit" }}
+              />
+              <label style={{ fontSize: 12, opacity: 0.7 }}>Entry type</label>
+              <select
+                value={edits[e.id]?.entry ?? ""}
+                onChange={(ev) => editField(e.id, "entry", ev.target.value)}
+                style={{ width: "100%" }}
+              >
+                <option value="">{`Unchanged (now: ${e.free ? "free" : "ticketed"})`}</option>
+                <option value="free">Free — turn up on the day, no tickets</option>
+                <option value="ticketed">Ticketed — show prices and the ticket link</option>
+              </select>
               <button className="btn" onClick={() => save(e.id)} disabled={saving === e.id} style={{ justifySelf: "start" }}>
                 {saving === e.id ? "Saving…" : "Save edits"}
               </button>
