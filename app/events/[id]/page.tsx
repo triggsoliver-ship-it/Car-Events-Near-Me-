@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getEventById } from "@/lib/events";
-import { eventImg, eventImgCredit, dateRange, GRAD } from "@/lib/util";
+import { eventImg, eventImgCredit, dateRange, GRAD, priceFrom } from "@/lib/util";
 import BookingBox from "@/components/BookingBox";
 
 export const dynamic = "force-dynamic";
@@ -56,7 +56,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   // Set only where an organiser gave us the photo and asked to be credited.
   const imgCredit = eventImgCredit(e);
 
-  const startsFrom = Math.min(...e.tiers.map((t) => t.price));
+  const startsFrom = priceFrom(e);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Event",
@@ -82,7 +82,9 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
       "@type": "Organization",
       name: e.organiser,
     },
-    ...(past
+    // No Offer at all when the price isn't known — publishing £0 would tell
+    // search engines the event is free.
+    ...(past || startsFrom === null
       ? {}
       : {
           offers: {
@@ -157,8 +159,16 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           <h3 className="sub">Good to know</h3>
           <p className="desc">
             {e.free
-              ? "Free entry, no booking needed · Past events drop off automatically · Found something wrong? Let us know."
-              : "Tickets are bought from the event's own seller · Past events drop off automatically · Found something wrong? Let us know."}
+              ? "Free entry, no booking needed · Past events drop off automatically · "
+              : "Tickets are bought from the event's own seller · Past events drop off automatically · "}
+            {/* Corrections come to us by email with the listing number in the
+                subject, so the listing can be found by "#id" in /admin at once. */}
+            <a
+              href={`mailto:info@careventsnearme.uk?subject=${encodeURIComponent(`Correction for listing #${e.id} — ${e.name}`)}&body=${encodeURIComponent(`What needs changing (prices, dates, ticket link, anything else):\n\n\nhttps://careventsnearme.uk/events/${e.id}`)}`}
+            >
+              Wrong price or details? Tell us
+            </a>{" "}
+            <span style={{ opacity: 0.7 }}>(info@careventsnearme.uk)</span>
           </p>
         </div>
         {past ? (

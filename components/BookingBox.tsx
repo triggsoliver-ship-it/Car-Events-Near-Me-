@@ -79,15 +79,25 @@ export default function BookingBox({ event }: { event: CarEvent }) {
       `${event.name} ${event.organiser || ""} tickets`.trim()
     )}`;
 
+  // Prices not known yet (see lib/prices.ts): say so plainly rather than
+  // showing £0 or "Free", and send people to the official site to check.
+  const unknown = event.tiers.length === 0;
+
   return (
     <div className="bookbox">
       <div className="bh">Tickets</div>
-      {event.tiers.map((t, i) => (
-        <div key={i} className="tier">
-          <span>{t.name}</span>
-          <span className="tp">{fmtPrice(t.price)}</span>
-        </div>
-      ))}
+      {unknown ? (
+        <p className="desc" style={{ margin: "4px 0 0" }}>
+          Prices not confirmed yet — check the official site before you go.
+        </p>
+      ) : (
+        event.tiers.map((t, i) => (
+          <div key={i} className="tier">
+            <span>{t.name}</span>
+            <span className="tp">{fmtPrice(t.price)}</span>
+          </div>
+        ))
+      )}
       <a
         className="btn block lg"
         style={{ marginTop: 8 }}

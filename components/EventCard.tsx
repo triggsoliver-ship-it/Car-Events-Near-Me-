@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { CarEvent } from "@/lib/types";
-import { eventImg, fmtPrice, dateRange, priceFrom, GRAD } from "@/lib/util";
+import { eventImg, fmtPrice, dateRange, priceFrom, priceBadge, GRAD } from "@/lib/util";
 
 /**
  * Server-rendered event card. Mirrors the card markup and classNames used
@@ -28,7 +28,7 @@ export default function EventCard({ e }: { e: CarEvent }) {
         <div className="scrim" />
         <span className="tag">{e.type}</span>
         <span className={pf === 0 ? "price free" : "price"}>
-          {pf === 0 ? "Free" : "from " + fmtPrice(pf)}
+          {priceBadge(pf)}
         </span>
         <span className="date">📅 {dateRange(e.start, e.end)}</span>
       </div>

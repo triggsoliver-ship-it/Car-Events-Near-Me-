@@ -1,3 +1,4 @@
+import { lowestPrice } from "./prices";
 import { resolveEventImage, IMAGE_CREDITS } from "@/lib/venueImages";
 import type { CarEvent } from "@/lib/types";
 
@@ -118,5 +119,10 @@ export function dateRange(start: string, end: string) {
   return `${wd(s, "short")} ${ordinal(s.getDate())} ${mo(s, "short")} – ${wd(e, "short")} ${ordinal(e.getDate())} ${mo(e, "short")} ${e.getFullYear()}`;
 }
 
-export const priceFrom = (e: { tiers: { price: number }[] }) =>
-  Math.min(...e.tiers.map((t) => t.price));
+/** Lowest price, 0 for free entry, or null when prices aren't known yet. */
+export const priceFrom = (e: { free?: boolean; tiers: { name: string; price: number }[] }): number | null =>
+  lowestPrice(e);
+
+/** The price badge on an event card: "Free", "from £12", or "See prices". */
+export const priceBadge = (pf: number | null) =>
+  pf === null ? "See prices" : pf === 0 ? "Free" : "from " + fmtPrice(pf);

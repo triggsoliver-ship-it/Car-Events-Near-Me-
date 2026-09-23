@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { getClient, dbEnabled } from "@/lib/db";
+import { parsePriceLines } from "@/lib/prices";
+import type { Tier } from "@/lib/types";
 
 export const runtime = "nodejs";
 
@@ -26,7 +28,22 @@ export async function POST(request: Request) {
     imgUrl = String(b.imgUrl).trim().slice(0, 500);
   }
 
-  const priceFrom = b.priceFrom ? parseFloat(b.priceFrom) : 0;
+  // Entry is an explicit choice. A missing price means "not known yet", never
+  // "free" (see lib/prices.ts).
+  let tiers: Tier[] = [];
+  let free = false;
+  if (b.entry === "free") {
+    tiers = [{ name: "Free entry", price: 0 }];
+    free = true;
+  } else if (b.entry === "paid") {
+    const parsed = parsePriceLines(String(b.prices || ""));
+    if ("error" in parsed) return NextResponse.json({ error: parsed.error }, { status: 400 });
+    tiers = parsed.tiers;
+  } else if (b.priceFrom) {
+    // Older form: a single "from" price.
+    const p = parseFloat(b.priceFrom);
+    if (Number.isFinite(p) && p > 0) tiers = [{ name: "Entry", price: Math.round(p * 100) / 100 }];
+  }
   const row = {
     name: String(b.name).slice(0, 200),
     type: String(b.type),
@@ -40,8 +57,8 @@ export async function POST(request: Request) {
     organiser: String(b.organiser),
     description: b.description ? String(b.description).slice(0, 500) : null,
     booking_url: b.bookingUrl ? String(b.bookingUrl) : null,
-    tiers: [{ name: priceFrom > 0 ? "Entry" : "Free Entry", price: isNaN(priceFrom) ? 0 : priceFrom }],
-    free: !priceFrom,
+    tiers,
+    free,
     contact_email: b.contactEmail ? String(b.contactEmail) : null,
     status: "pending",
     source: "submission",

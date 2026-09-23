@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getUpcomingEvents } from "@/lib/events";
-import { px, GRAD, fmtPrice, dateRange, priceFrom } from "@/lib/util";
+import { px, GRAD, fmtPrice, dateRange, priceFrom, priceBadge } from "@/lib/util";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +44,7 @@ export default async function TrackDaysPage() {
                 </div>
                 <div className="scrim" />
                 <span className="tag">{e.type}</span>
-                <span className={pf === 0 ? "price free" : "price"}>{pf === 0 ? "Free" : "from " + fmtPrice(pf)}</span>
+                <span className={pf === 0 ? "price free" : "price"}>{priceBadge(pf)}</span>
                 <span className="date">📅 {dateRange(e.start, e.end)}</span>
               </div>
               <div className="body">
