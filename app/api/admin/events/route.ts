@@ -68,6 +68,29 @@ export async function POST(request: Request) {
     if (typeof b.img_url === "string") patch.img_url = b.img_url;
     if (typeof b.venue === "string") patch.venue = b.venue;
     if (typeof b.booking_url === "string") patch.booking_url = b.booking_url;
+    // Price tiers and the free flag. A listing can go live as "Free entry —
+    // just turn up" when the event is actually ticket-only (Dubs at the Lakes,
+    // Sep 2026, whose organiser had already been sent the link). It has to be
+    // corrected in place so that link keeps working, not deleted and re-created.
+    if (b.tiers !== undefined) {
+      if (!Array.isArray(b.tiers)) {
+        return NextResponse.json({ error: "tiers must be a list" }, { status: 400 });
+      }
+      const tiers: { name: string; price: number }[] = [];
+      for (const t of b.tiers.slice(0, 10)) {
+        const name = t && typeof t.name === "string" ? t.name.trim().slice(0, 80) : "";
+        const price = t ? Number(t.price) : NaN;
+        if (!name || !Number.isFinite(price) || price < 0) {
+          return NextResponse.json({ error: "Each price needs a name and an amount of 0 or more" }, { status: 400 });
+        }
+        tiers.push({ name, price: Math.round(price * 100) / 100 });
+      }
+      if (tiers.length === 0) {
+        return NextResponse.json({ error: "At least one price is needed" }, { status: 400 });
+      }
+      patch.tiers = tiers;
+    }
+    if (typeof b.free === "boolean") patch.free = b.free;
     if (Object.keys(patch).length === 0) {
       return NextResponse.json({ error: "No editable fields provided" }, { status: 400 });
     }
