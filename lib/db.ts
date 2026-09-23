@@ -67,7 +67,8 @@ export function rowToEvent(r: EventRow): CarEvent {
     imgUrl: r.img_url || undefined,
     organiser: r.organiser || "",
     desc: r.description || "",
-    tiers: r.tiers && r.tiers.length ? r.tiers : [{ name: "Entry", price: 0 }],
+    // No prices stored means "not known yet" (see lib/prices.ts) — never invent a £0 "Entry" tier.
+    tiers: r.tiers && r.tiers.length ? r.tiers : [],
     free: r.free ?? undefined,
     bookingUrl: r.booking_url || undefined,
     status: r.status,
