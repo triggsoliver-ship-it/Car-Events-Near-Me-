@@ -37,8 +37,26 @@ export async function GET(request: Request) {
   // already-approved or already-rejected listing can still be found and
   // edited. Pass ?status=pending to filter back down to just the queue.
   const status = searchParams.get("status");
+  // ?q= finds one listing fast: "36554", "#36554", a pasted
+  // careventsnearme.uk/events/36554 link, or words from the name, town,
+  // organiser or contact email. Without it only the 500 newest rows come back,
+  // so an older listing could not be found at all.
+  const search = (searchParams.get("q") || "").trim();
   let q = sb.from("events").select("*").order("created_at", { ascending: false }).limit(500);
   if (status) q = q.eq("status", status);
+  if (search) {
+    const idMatch = search.match(/^#?(\d{1,9})$/) || search.match(/events\/(\d{1,9})/);
+    if (idMatch) {
+      q = q.eq("id", Number(idMatch[1]));
+    } else {
+      // Strip characters that have meaning inside a PostgREST or() filter.
+      const s = search.replace(/[%,()*\\]/g, " ").trim().slice(0, 80);
+      if (s) {
+        const like = `%${s}%`;
+        q = q.or(`name.ilike.${like},town.ilike.${like},organiser.ilike.${like},contact_email.ilike.${like},venue.ilike.${like}`);
+      }
+    }
+  }
   const { data, error } = await q;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ events: data });
@@ -72,6 +90,8 @@ export async function POST(request: Request) {
     // just turn up" when the event is actually ticket-only (Dubs at the Lakes,
     // Sep 2026, whose organiser had already been sent the link). It has to be
     // corrected in place so that link keeps working, not deleted and re-created.
+    // An empty list is allowed: it means "prices not confirmed yet", which the
+    // site shows as "check the official site" (see lib/prices.ts).
     if (b.tiers !== undefined) {
       if (!Array.isArray(b.tiers)) {
         return NextResponse.json({ error: "tiers must be a list" }, { status: 400 });
@@ -85,17 +105,20 @@ export async function POST(request: Request) {
         }
         tiers.push({ name, price: Math.round(price * 100) / 100 });
       }
-      if (tiers.length === 0) {
-        return NextResponse.json({ error: "At least one price is needed" }, { status: 400 });
-      }
       patch.tiers = tiers;
     }
     if (typeof b.free === "boolean") patch.free = b.free;
     if (Object.keys(patch).length === 0) {
       return NextResponse.json({ error: "No editable fields provided" }, { status: 400 });
     }
+    // Seed listings are re-written from lib/seed*.ts by the nightly import, which
+    // would silently undo this edit by the next morning. Re-labelling the row
+    // "seed-edited" makes the import leave it alone (see app/api/import).
+    const { data: current } = await sb.from("events").select("source").eq("id", b.id).single();
+    if (current?.source === "seed") patch.source = "seed-edited";
     const { error } = await sb.from("events").update(patch).eq("id", b.id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true, source: patch.source ?? current?.source });
   } else if (b.action === "create") {
     // Admin-authored listing, inserted straight to "approved" — used when an
     // organiser has already agreed by email/phone, so there is no pending
@@ -121,8 +144,9 @@ export async function POST(request: Request) {
       organiser: String(b.organiser),
       description: b.description ? String(b.description).slice(0, 500) : null,
       booking_url: b.bookingUrl ? String(b.bookingUrl) : null,
-      tiers: Array.isArray(b.tiers) && b.tiers.length ? b.tiers : [{ name: "Entry", price: 0 }],
-      free: typeof b.free === "boolean" ? b.free : undefined,
+      // No prices given = "not confirmed yet", never a made-up £0 entry.
+      tiers: Array.isArray(b.tiers) ? b.tiers : [],
+      free: b.free === true,
       contact_email: b.contactEmail ? String(b.contactEmail) : null,
       status: "approved",
       source: "admin",

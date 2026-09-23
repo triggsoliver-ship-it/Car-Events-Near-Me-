@@ -62,7 +62,12 @@ export async function GET(request: Request) {
       return new Response("DRY RUN (nothing written)\nimported rows: " + rows.length + "\nerrors: " + JSON.stringify(errors) + "\n\n" + sample, { headers: { "content-type": "text/plain" } });
     }
 
-    const all = [...seedRows(), ...rows];
+    // Seed rows that have been corrected in /admin are marked source =
+    // "seed-edited". Upserting the bundled copy over them would undo the fix
+    // (wrong prices came back every night at 05:00), so skip those.
+    const { data: edited } = await sb.from("events").select("external_id").eq("source", "seed-edited");
+    const editedIds = new Set((edited || []).map((r: any) => r.external_id));
+    const all = [...seedRows(), ...rows].filter((r) => !editedIds.has(r.external_id));
 
     let upserted = 0;
     for (let i = 0; i < all.length; i += 500) {
