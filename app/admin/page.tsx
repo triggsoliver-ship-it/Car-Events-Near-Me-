@@ -87,6 +87,17 @@ export default function AdminPage() {
   const [newListing, setNewListing] = useState<NewListing>(BLANK_LISTING);
   const [creating, setCreating] = useState(false);
   const [showNewForm, setShowNewForm] = useState(false);
+  // Reject and Unpublish take a listing off the live site, and nothing warns
+  // you afterwards. They also sit directly under "Save edits", so a click that
+  // misses by a few pixels silently unpublishes something — which is exactly
+  // what happened to the Godalming listing in September 2026. Both are now
+  // two-step: the first click arms the button, the second does it.
+  //
+  // Deliberately NOT window.confirm(): a native modal blocks the whole page
+  // until it is dismissed, and a dialog you see every time gets clicked
+  // through on autopilot. A button that changes to "Click again to reject"
+  // makes the stray FIRST click harmless, which is the actual failure here.
+  const [armed, setArmed] = useState<{ id: number; action: string } | null>(null);
 
   // Remember the token in this browser only (localStorage never leaves the
   // device), so it doesn't need retyping on every visit.
@@ -147,6 +158,27 @@ export default function AdminPage() {
     }
   }
 
+  // Forget an armed button after a few seconds, so a click now can never be
+  // completed by an unrelated click a minute later.
+  useEffect(() => {
+    if (!armed) return;
+    const t = setTimeout(() => setArmed(null), 5000);
+    return () => clearTimeout(t);
+  }, [armed]);
+
+  const isArmed = (id: number, action: string) =>
+    !!armed && armed.id === id && armed.action === action;
+
+  /** First click arms a destructive button; the second one carries it out. */
+  function armOrAct(id: number, action: string) {
+    if (isArmed(id, action)) {
+      setArmed(null);
+      act(id, action);
+    } else {
+      setArmed({ id, action });
+    }
+  }
+
   async function act(id: number, action: string) {
     await fetch("/api/admin/events", {
       method: "POST",
@@ -154,7 +186,16 @@ export default function AdminPage() {
       body: JSON.stringify({ id, action }),
     });
     setEvents((ev) => ev.map((e) => (e.id === id ? { ...e, status: action === "unpublish" ? "pending" : action === "approve" ? "approved" : "rejected" } : e)));
-    setMsg("Updated.");
+    // Say what actually happened. The old message was "Updated." for all
+    // three, which tells you nothing about whether a listing just went live or
+    // just came down.
+    setMsg(
+      action === "approve"
+        ? `Approved #${id} — live now.`
+        : action === "unpublish"
+        ? `Unpublished #${id} — back to pending, no longer listed.`
+        : `Rejected #${id} — no longer listed.`
+    );
   }
 
   function editField(id: number, field: EditField, value: string) {
@@ -277,7 +318,10 @@ export default function AdminPage() {
         {lastSearch && <button className="clear" type="button" onClick={() => { setSearch(""); load(); }}>Clear</button>}
       </form>
 
-      {msg && <p style={{ color: msg.startsWith("Saved") || msg.startsWith("Created") || msg === "Updated." ? "#4ade80" : "#ff6b6b" }}>{msg}</p>}
+      {/* Green only when something went live or was saved. A listing coming
+          DOWN (rejected, unpublished) reads red on purpose — it is the same
+          colour as an error because it is the same kind of surprise. */}
+      {msg && <p style={{ color: /^(Saved|Created|Approved)/.test(msg) ? "#4ade80" : "#ff6b6b" }}>{msg}</p>}
 
       <div style={{ marginTop: 20 }}>
         <button className="btn" onClick={() => setShowNewForm((s) => !s)}>
@@ -444,10 +488,36 @@ export default function AdminPage() {
                 </div>
               </details>
 
-              <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+              {/* Separated from "Save edits" above by a rule and real space:
+                  these two take a listing off the site, that one does not. */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 10,
+                  marginTop: 18,
+                  paddingTop: 14,
+                  borderTop: "1px solid var(--line)",
+                }}
+              >
                 {e.status !== "approved" && <button className="btn" onClick={() => act(e.id, "approve")}>Approve</button>}
-                {e.status !== "rejected" && <button className="clear" onClick={() => act(e.id, "reject")}>Reject</button>}
-                {e.status === "approved" && <button className="clear" onClick={() => act(e.id, "unpublish")}>Unpublish (back to pending)</button>}
+                {e.status !== "rejected" && (
+                  <button
+                    className="clear"
+                    style={isArmed(e.id, "reject") ? { borderColor: "#ff6b6b", color: "#ff6b6b" } : undefined}
+                    onClick={() => armOrAct(e.id, "reject")}
+                  >
+                    {isArmed(e.id, "reject") ? "Click again to reject" : "Reject"}
+                  </button>
+                )}
+                {e.status === "approved" && (
+                  <button
+                    className="clear"
+                    style={isArmed(e.id, "unpublish") ? { borderColor: "#f5a623", color: "#f5a623" } : undefined}
+                    onClick={() => armOrAct(e.id, "unpublish")}
+                  >
+                    {isArmed(e.id, "unpublish") ? "Click again to unpublish" : "Unpublish (back to pending)"}
+                  </button>
+                )}
               </div>
             </div>
           );
