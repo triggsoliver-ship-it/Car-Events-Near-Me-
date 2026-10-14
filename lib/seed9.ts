@@ -51,4 +51,29 @@ export const SEED_9: CarEvent[] = [
     free: false,
     bookingUrl: "https://www.brandshatch.co.uk/2026/october/kwik-fit-british-touring-car-championship",
   },
+  // Three Castles Trial — added 14 Oct 2026. Organiser (Ian Crammond, Event
+  // Director) confirmed by email reply the same day that a free listing was
+  // welcome, with one correction: this is a limited-entry historic road
+  // rally for competing crews, NOT a public ticketed spectator event like
+  // Goodwood — so no tiers/bookingUrl are set. Dates, history and hero image
+  // verified directly against three-castles.co.uk on 14 Oct 2026.
+  {
+    id: 1703,
+    name: "Three Castles Trial",
+    type: "motorsport",
+    region: "Wales",
+    county: "Conwy",
+    town: "Llandudno",
+    venue: "Llandudno",
+    start: "2027-06-08",
+    end: "2027-06-11",
+    img: 10373678,
+    imgUrl:
+      "https://www.three-castles.co.uk/media/up0lfac4/threecastlesday426wa-7119.jpg",
+    organiser: "Three Castles Classic Rallies",
+    desc:
+      "A historic regularity rally across North Wales's mountains and historic houses, run by Three Castles Classic Rallies since 2002 — 2027 marks the 25th running. Entry is limited to competing crews rather than open to public ticket sales. Spectators can watch each day's start for free in Llandudno, with limited viewing details published roughly a week before the event; the private venues used along the route are not open to the public.",
+    tiers: [],
+    free: true,
+  },
 ];
