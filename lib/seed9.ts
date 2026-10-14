@@ -79,4 +79,32 @@ export const SEED_9: CarEvent[] = [
     tiers: [],
     free: true,
   },
+  // Fowey Classic Car Show — added 14 Oct 2026. Organiser (Dennis Espley,
+  // Fowey Classic Car Show chair) replied to prospecting email with the
+  // 2027 running-order and a poster confirming Thursday 19 Aug 2027; venue
+  // and "no dogs" rule cross-checked against foweyclassiccar.com the same
+  // day (site still shows 2026 info but venue matches exactly). Eligibility
+  // taken from the organiser's own 2027 poster, which supersedes the site's
+  // older/inconsistent wording. Vehicle registration opens March 2027 — no
+  // price published for spectators or entrants, so tiers left empty and no
+  // bookingUrl set (nothing to book yet).
+  {
+    id: 1704,
+    name: "Fowey Classic Car Show & Parade",
+    type: "show",
+    region: "South West",
+    county: "Cornwall",
+    town: "Fowey",
+    venue: "Fowey River Academy, Windmill, Fowey, PL23 1HE",
+    start: "2027-08-19",
+    end: "2027-08-19",
+    img: 10373678,
+    imgUrl:
+      "https://usercontent.one/wp/www.foweyclassiccar.com/wp-content/uploads/elementor/thumbs/FRG9073-scaled-rbbnvqf9ijnuw19v0va8gydt775hswapogmptk8s5k.jpg",
+    organiser: "Fowey Classic Car Show",
+    desc:
+      "Cornwall's largest combined classic car show and parade returns to Fowey River Academy on Thursday 19 August 2027. Eligible vehicles: pre-1990 cars and bikes, and all sports cars of any era. On the day: cars arrive 11.30am-1pm, the show opens to the public 1.30pm, awards are at 4pm, and the parade through town sets off at 5pm. No dogs allowed on site. 2026 sold out its 550+ car registration within weeks — vehicle registration for 2027 opens March 2027 at foweyclassiccar.com.",
+    tiers: [],
+    free: true,
+  },
 ];
