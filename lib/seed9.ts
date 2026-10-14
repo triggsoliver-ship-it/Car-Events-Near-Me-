@@ -56,7 +56,10 @@ export const SEED_9: CarEvent[] = [
   // welcome, with one correction: this is a limited-entry historic road
   // rally for competing crews, NOT a public ticketed spectator event like
   // Goodwood — so no tiers/bookingUrl are set. Dates, history and hero image
-  // verified directly against three-castles.co.uk on 14 Oct 2026.
+  // verified directly against three-castles.co.uk on 14 Oct 2026. The
+  // Llandudno Promenade / Prologue Day spectating detail is Ian's own
+  // wording, sent by a second email the same day asking for it to avoid
+  // confusion.
   {
     id: 1703,
     name: "Three Castles Trial",
@@ -72,7 +75,7 @@ export const SEED_9: CarEvent[] = [
       "https://www.three-castles.co.uk/media/up0lfac4/threecastlesday426wa-7119.jpg",
     organiser: "Three Castles Classic Rallies",
     desc:
-      "A historic regularity rally across North Wales's mountains and historic houses, run by Three Castles Classic Rallies since 2002 — 2027 marks the 25th running. Entry is limited to competing crews rather than open to public ticket sales. Spectators can watch each day's start for free in Llandudno, with limited viewing details published roughly a week before the event; the private venues used along the route are not open to the public.",
+      "A historic regularity rally across North Wales's mountains and historic houses, run by Three Castles Classic Rallies since 2002 — 2027 marks the 25th running. Entry is limited to competing crews rather than open to public ticket sales. No booking is needed to spectate free on Llandudno Promenade, which the event uses extensively on Prologue Day, Tuesday 8 June. The private venues used along the rest of the route are not open to the public.",
     tiers: [],
     free: true,
   },
