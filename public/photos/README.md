@@ -46,6 +46,9 @@ The GitHub API path we normally commit with mangles binaries, so use the GitHub
 web UI: `https://github.com/<owner>/<repo>/upload/main/public/photos`. Then set
 the listing's photo URL to `https://careventsnearme.uk/photos/<file>` — in
 `/admin` for a database listing, or `imgUrl` in `lib/seed*.ts` for a seed one.
+**Check the filename it actually lands under after upload** before wiring it
+into a listing — GitHub's web UI doesn't always keep the exact name a file was
+staged under locally (this tripped us up with the Aynho photos on 15 Oct 2026).
 
 ## Photos
 
@@ -57,6 +60,6 @@ the listing's photo URL to `https://careventsnearme.uk/photos/<file>` — in
 | `ThreeCastles26WA-7665.jpeg` | Three Castles Trial (events/1703) — spare, not currently used | Ian Crammond, Event Director, Three Castles (ian@three-castles.co.uk) | 15 Oct 2026 | Three Castles / Will Aron |
 | `ThreeCastles26WA-3117.jpeg` | Three Castles Trial (events/1703) — spare, not currently used | Ian Crammond, Event Director, Three Castles (ian@three-castles.co.uk) | 15 Oct 2026 | Three Castles / Will Aron |
 | `ThreeCastles26WA-3584.jpeg` | Three Castles Trial (events/1703) — spare, not currently used | Ian Crammond, Event Director, Three Castles (ian@three-castles.co.uk) | 15 Oct 2026 | Three Castles / Will Aron |
-| `aynho-classic-car-show-austin-jaguar-lineup.jpg` | Aynho Classic Car Show (events/1705) — in use as `imgUrl` | Jerry Stephenson (Jerry.stephenson@aynho-pc.gov.uk) | 15 Oct 2026 | — (no credit asked for or needed) |
-| `aynho-classic-car-show-minis-lineup.jpg` | Aynho Classic Car Show (events/1705) — spare, not currently used | Jerry Stephenson (Jerry.stephenson@aynho-pc.gov.uk) | 15 Oct 2026 | — (no credit asked for or needed) |
-| `aynho-classic-car-show-mga-roadster.jpg` | Aynho Classic Car Show (events/1705) — spare, not currently used | Jerry Stephenson (Jerry.stephenson@aynho-pc.gov.uk) | 15 Oct 2026 | — (no credit asked for or needed) |
+| `AynhoClassicCarShow26-2.jpeg` | Aynho Classic Car Show (events/1705) — in use as `imgUrl` | Jerry Stephenson (Jerry.stephenson@aynho-pc.gov.uk) | 15 Oct 2026 | — (no credit asked for or needed) |
+| `AynhoClassicCarShow26-1.jpeg` | Aynho Classic Car Show (events/1705) — spare, not currently used | Jerry Stephenson (Jerry.stephenson@aynho-pc.gov.uk) | 15 Oct 2026 | — (no credit asked for or needed) |
+| `AynhoClassicCarShow26-3.jpeg` | Aynho Classic Car Show (events/1705) — spare, not currently used | Jerry Stephenson (Jerry.stephenson@aynho-pc.gov.uk) | 15 Oct 2026 | — (no credit asked for or needed) |
