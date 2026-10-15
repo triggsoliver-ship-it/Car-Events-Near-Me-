@@ -64,11 +64,15 @@ export const SEED_9: CarEvent[] = [
   // equally welcome at the Finish, also on the Promenade, from around 4pm on
   // the final day. imgUrl now points at that photo, hosted at /photos/ per
   // the project's organiser-photo convention — see public/photos/README.md
-  // and the IMAGE_CREDITS entry in lib/venueImages.ts.
+  // and the IMAGE_CREDITS entry in lib/venueImages.ts. He also asked to be
+  // listed under both Motorsport and Classic — `type` stays "motorsport"
+  // (the accurate primary category — this is a competitive rally, not a
+  // static show) and `categories` adds "classic" so it's also found there.
   {
     id: 1703,
     name: "Three Castles Trial",
     type: "motorsport",
+    categories: ["classic"],
     region: "Wales",
     county: "Conwy",
     town: "Llandudno",
