@@ -34,6 +34,7 @@ export type EventRow = {
   id: number;
   name: string;
   type: string;
+  categories: string[] | null;
   region: string | null;
   county: string | null;
   town: string | null;
@@ -57,6 +58,7 @@ export function rowToEvent(r: EventRow): CarEvent {
     id: r.id,
     name: r.name,
     type: r.type as CarEvent["type"],
+    categories: r.categories && r.categories.length ? (r.categories as CarEvent["type"][]) : undefined,
     region: r.region || "Other",
     county: r.county || "",
     town: r.town || "",
