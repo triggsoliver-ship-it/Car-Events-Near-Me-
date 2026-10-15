@@ -57,3 +57,6 @@ the listing's photo URL to `https://careventsnearme.uk/photos/<file>` — in
 | `ThreeCastles26WA-7665.jpeg` | Three Castles Trial (events/1703) — spare, not currently used | Ian Crammond, Event Director, Three Castles (ian@three-castles.co.uk) | 15 Oct 2026 | Three Castles / Will Aron |
 | `ThreeCastles26WA-3117.jpeg` | Three Castles Trial (events/1703) — spare, not currently used | Ian Crammond, Event Director, Three Castles (ian@three-castles.co.uk) | 15 Oct 2026 | Three Castles / Will Aron |
 | `ThreeCastles26WA-3584.jpeg` | Three Castles Trial (events/1703) — spare, not currently used | Ian Crammond, Event Director, Three Castles (ian@three-castles.co.uk) | 15 Oct 2026 | Three Castles / Will Aron |
+| `aynho-classic-car-show-austin-jaguar-lineup.jpg` | Aynho Classic Car Show (events/1705) — in use as `imgUrl` | Jerry Stephenson (Jerry.stephenson@aynho-pc.gov.uk) | 15 Oct 2026 | — (no credit asked for or needed) |
+| `aynho-classic-car-show-minis-lineup.jpg` | Aynho Classic Car Show (events/1705) — spare, not currently used | Jerry Stephenson (Jerry.stephenson@aynho-pc.gov.uk) | 15 Oct 2026 | — (no credit asked for or needed) |
+| `aynho-classic-car-show-mga-roadster.jpg` | Aynho Classic Car Show (events/1705) — spare, not currently used | Jerry Stephenson (Jerry.stephenson@aynho-pc.gov.uk) | 15 Oct 2026 | — (no credit asked for or needed) |
