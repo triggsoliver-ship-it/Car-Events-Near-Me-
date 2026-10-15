@@ -29,9 +29,18 @@ create table if not exists public.events (
 -- Safe to re-run on an existing database: adds the event-photo column if missing.
 alter table public.events add column if not exists img_url text;
 
+-- Extra categories an event should ALSO be found under, besides `type` (the
+-- single "primary" category). e.g. a historic road rally is primarily
+-- `motorsport` but an organiser may reasonably also want it listed under
+-- `classic`. Empty array for the vast majority of events. See
+-- lib/util.ts matchesCategory() and components/Explore.tsx for how this is
+-- applied when filtering by category.
+alter table public.events add column if not exists categories text[] default '{}'::text[];
+
 create index if not exists events_status_end_idx on public.events (status, end_date);
 create index if not exists events_region_idx on public.events (region);
 create index if not exists events_type_idx on public.events (type);
+create index if not exists events_categories_idx on public.events using gin (categories);
 
 -- Row Level Security: the public (anon key) may only read approved events.
 -- All writes happen via the service-role key on the server, which bypasses RLS.
