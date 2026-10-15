@@ -8,6 +8,13 @@ export type CarEvent = {
   id: number;
   name: string;
   type: EventType;
+  // Extra categories this event should ALSO be found under, besides `type`
+  // (which stays the single "primary" category shown as the card/banner
+  // badge). e.g. a historic road rally is primarily `motorsport` but an
+  // organiser may reasonably also want it listed under `classic`. Optional,
+  // and empty/absent for the vast majority of events. See
+  // lib/util.ts matchesCategory() for how this is applied when filtering.
+  categories?: EventType[];
   region: string;
   county: string;
   town: string;
