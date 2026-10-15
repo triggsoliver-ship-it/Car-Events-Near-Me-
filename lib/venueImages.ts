@@ -52,6 +52,14 @@ const GOODWOOD_HERO = proxy(
 const HILLS_FORD_PHOTO =
   "https://careventsnearme.uk/photos/hills-ford-stages-water-splash.jpg";
 
+// Three Castles Trial — given by Ian Crammond, Event Director, 15 Oct 2026
+// ("those images are all ours, taken on the 2026 event, copyright Three
+// Castles/Will Aron — we don't use stock photography or AI"). Used directly as
+// the seed row's `imgUrl` in lib/seed9.ts (id 1703), not via a rule below —
+// this constant exists so IMAGE_CREDITS can key on the exact same string.
+const THREE_CASTLES_PHOTO =
+  "https://careventsnearme.uk/photos/ThreeCastles26WA-7807.jpeg";
+
 // NOTE: track days previously rotated through three photos from
 // cdn.trackdays.co.uk. Those were that company's own marketing images, and we
 // were applying them to track days run by nine different operators (MSV,
@@ -361,6 +369,9 @@ export const IMAGE_CREDITS: Record<string, string> = {
   // Given by Steve Andrews, Media Officer, Hills Ford Stages, 14 Sep 2026:
   // "Just credit images to Hills ford Stages for now."
   [HILLS_FORD_PHOTO]: "Hills Ford Stages",
+  // Given by Ian Crammond, Event Director, Three Castles, 15 Oct 2026:
+  // "copyright Three Castles/Will Aron... Same credits" (for all photos sent).
+  [THREE_CASTLES_PHOTO]: "Three Castles / Will Aron",
 };
 
 /**
