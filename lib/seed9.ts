@@ -120,4 +120,37 @@ export const SEED_9: CarEvent[] = [
     tiers: [{ name: "Car entry (small donation, online registration)", price: 5 }],
     free: false,
   },
+  // Aynho Classic Car Show — added 15 Oct 2026. Returning prospect (tracker
+  // row 82): warm-contacted 23 Sep 2026, when Jerry Stephenson said no 2027
+  // date was fixed yet and asked to be re-contacted once it was set. He
+  // emailed back 15 Oct 2026 with the date — Sunday 12 September 2027, 10am
+  // start, per the organiser's own flyer (contact carshow@aynho-pc.gov.uk) —
+  // plus genuine photos from the 2026 show. No photo credit was requested,
+  // so none is shown (same approach as godalming-classic-car-show.jpg).
+  // Venue and pricing are NOT stated on the flyer or in Jerry's email — the
+  // earlier tracker note ("£1 gate entry, Aynho Sports Field") is unconfirmed
+  // 2026-era research, not reconfirmed for 2027, so neither is used here;
+  // both are being asked for in the reply, and `venue` is left at town level
+  // until confirmed rather than guessed. `categories` adds "classic"
+  // alongside the primary "show" type, per the convention set for Three
+  // Castles.
+  {
+    id: 1705,
+    name: "Aynho Classic Car Show",
+    type: "show",
+    categories: ["classic"],
+    region: "South East",
+    county: "Oxfordshire",
+    town: "Aynho",
+    venue: "Aynho, Oxfordshire",
+    start: "2027-09-12",
+    end: "2027-09-12",
+    img: 10373678,
+    imgUrl:
+      "https://careventsnearme.uk/photos/aynho-classic-car-show-austin-jaguar-lineup.jpg",
+    organiser: "Aynho Classic Car Show",
+    desc:
+      "Aynho's classic car show returns to the village on Sunday 12 September 2027, opening to visitors at 10am — an annual event that also welcomed entries in 2026. Exact venue, entry pricing and vehicle categories for 2027 hadn't been confirmed by the organiser as this listing went live; contact the show directly at carshow@aynho-pc.gov.uk, or check back here nearer the date.",
+    tiers: [],
+  },
 ];
