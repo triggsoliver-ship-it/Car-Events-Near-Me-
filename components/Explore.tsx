@@ -7,6 +7,14 @@ import { px, eventImg, fmtPrice, dateRange, priceFrom, priceBadge, GRAD } from "
 
 const TODAY = new Date().toISOString().slice(0, 10);
 
+// True if `e` belongs to category `t` — either as its primary `type`, or as
+// one of its extra `categories` (e.g. a rally that's primarily `motorsport`
+// but was also asked to be listed under `classic`). Keeping this in one place
+// means the card badge, the filter dropdown and the "Browse by type" tiles
+// all agree on what counts as a match.
+const matchesCategory = (e: CarEvent, t: string) =>
+  e.type === t || Boolean(e.categories && e.categories.includes(t as CarEvent["type"]));
+
 export default function Explore({ events }: { events: CarEvent[] }) {
   const [q, setQ] = useState("");
   const [region, setRegion] = useState("");
@@ -24,7 +32,7 @@ export default function Explore({ events }: { events: CarEvent[] }) {
         if (!(e.name + e.town + e.county + e.venue + e.region).toLowerCase().includes(s)) return false;
       }
       if (region && e.region !== region) return false;
-      if (type && e.type !== type) return false;
+      if (type && !matchesCategory(e, type)) return false;
       if (dateFrom && e.end < dateFrom) return false;
       if (freeOnly && priceFrom(e) !== 0) return false;
       if (maxPrice !== "") {
