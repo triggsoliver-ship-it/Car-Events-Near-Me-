@@ -85,9 +85,11 @@ export const SEED_9: CarEvent[] = [
   // and "no dogs" rule cross-checked against foweyclassiccar.com the same
   // day (site still shows 2026 info but venue matches exactly). Eligibility
   // taken from the organiser's own 2027 poster, which supersedes the site's
-  // older/inconsistent wording. Vehicle registration opens March 2027 — no
-  // price published for spectators or entrants, so tiers left empty and no
-  // bookingUrl set (nothing to book yet).
+  // older/inconsistent wording.
+  // Pricing updated 15 Oct 2026: Dennis confirmed by email that cars pay a
+  // minimum £5 donation at online registration (to speed up entry on the
+  // day), while visitors remain free, with cash donations welcomed at the
+  // entrance. No bookingUrl yet — registration itself opens March 2027.
   {
     id: 1704,
     name: "Fowey Classic Car Show & Parade",
@@ -103,8 +105,8 @@ export const SEED_9: CarEvent[] = [
       "https://usercontent.one/wp/www.foweyclassiccar.com/wp-content/uploads/elementor/thumbs/FRG9073-scaled-rbbnvqf9ijnuw19v0va8gydt775hswapogmptk8s5k.jpg",
     organiser: "Fowey Classic Car Show",
     desc:
-      "Cornwall's largest combined classic car show and parade returns to Fowey River Academy on Thursday 19 August 2027. Eligible vehicles: pre-1990 cars and bikes, and all sports cars of any era. On the day: cars arrive 11.30am-1pm, the show opens to the public 1.30pm, awards are at 4pm, and the parade through town sets off at 5pm. No dogs allowed on site. 2026 sold out its 550+ car registration within weeks — vehicle registration for 2027 opens March 2027 at foweyclassiccar.com.",
-    tiers: [],
-    free: true,
+      "Cornwall's largest combined classic car show and parade returns to Fowey River Academy on Thursday 19 August 2027. Eligible vehicles: pre-1990 cars and bikes, and all sports cars of any era. On the day: cars arrive 11.30am-1pm, the show opens to the public 1.30pm, awards are at 4pm, and the parade through town sets off at 5pm. Visitor entry is free, with cash donations warmly welcomed at the entrance; cars entering pay a minimum £5 donation at online registration. No dogs allowed on site. 2026 sold out its 550+ car registration within weeks — vehicle registration for 2027 opens March 2027 at foweyclassiccar.com.",
+    tiers: [{ name: "Car entry (minimum donation, online registration)", price: 5 }],
+    free: false,
   },
 ];
