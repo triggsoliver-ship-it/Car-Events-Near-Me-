@@ -133,7 +133,9 @@ export const SEED_9: CarEvent[] = [
   // both are being asked for in the reply, and `venue` is left at town level
   // until confirmed rather than guessed. `categories` adds "classic"
   // alongside the primary "show" type, per the convention set for Three
-  // Castles.
+  // Castles. imgUrl uses the filenames Oli actually uploaded via the GitHub
+  // web UI on 15 Oct 2026 (AynhoClassicCarShow26-1/2/3.jpeg) — corrected
+  // here after the first commit pointed at different, never-uploaded names.
   {
     id: 1705,
     name: "Aynho Classic Car Show",
@@ -147,7 +149,7 @@ export const SEED_9: CarEvent[] = [
     end: "2027-09-12",
     img: 10373678,
     imgUrl:
-      "https://careventsnearme.uk/photos/aynho-classic-car-show-austin-jaguar-lineup.jpg",
+      "https://careventsnearme.uk/photos/AynhoClassicCarShow26-2.jpeg",
     organiser: "Aynho Classic Car Show",
     desc:
       "Aynho's classic car show returns to the village on Sunday 12 September 2027, opening to visitors at 10am — an annual event that also welcomed entries in 2026. Exact venue, entry pricing and vehicle categories for 2027 hadn't been confirmed by the organiser as this listing went live; contact the show directly at carshow@aynho-pc.gov.uk, or check back here nearer the date.",
