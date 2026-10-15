@@ -53,3 +53,7 @@ the listing's photo URL to `https://careventsnearme.uk/photos/<file>` — in
 | --- | --- | --- | --- | --- |
 | `hills-ford-stages-water-splash.jpg` | Hills Ford Stages Rally | Steve Andrews, Media Officer, Hills Ford Stages (media@hillsfordstages.co.uk) | 14 Sep 2026 | Hills Ford Stages |
 | `godalming-classic-car-show.jpg` | Godalming Classic Car Show (events/45467) | Stefan Reynolds (stef.reynolds@gmail.com) | 26 Sep 2026 | — (their own 2027 logo; no credit asked for or needed) |
+| `ThreeCastles26WA-7807.jpeg` | Three Castles Trial (events/1703) — in use as `imgUrl` | Ian Crammond, Event Director, Three Castles (ian@three-castles.co.uk) | 15 Oct 2026 | Three Castles / Will Aron |
+| `ThreeCastles26WA-7665.jpeg` | Three Castles Trial (events/1703) — spare, not currently used | Ian Crammond, Event Director, Three Castles (ian@three-castles.co.uk) | 15 Oct 2026 | Three Castles / Will Aron |
+| `ThreeCastles26WA-3117.jpeg` | Three Castles Trial (events/1703) — spare, not currently used | Ian Crammond, Event Director, Three Castles (ian@three-castles.co.uk) | 15 Oct 2026 | Three Castles / Will Aron |
+| `ThreeCastles26WA-3584.jpeg` | Three Castles Trial (events/1703) — spare, not currently used | Ian Crammond, Event Director, Three Castles (ian@three-castles.co.uk) | 15 Oct 2026 | Three Castles / Will Aron |
