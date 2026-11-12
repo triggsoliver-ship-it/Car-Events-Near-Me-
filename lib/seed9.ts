@@ -157,4 +157,181 @@ export const SEED_9: CarEvent[] = [
     tiers: [{ name: "General public (cash on the gate)", price: 2 }],
     free: false,
   },
+  // Pitlane Shows — added 12 Nov 2026. Oli emailed Pitlane Shows
+  // (hello@pitlaneshows.co.uk) offering a free permanent listing; Bradley
+  // replied the same day: "we would love for you to list our shows on your
+  // events website." Oli then asked, live in chat, to build the listings.
+  //
+  // All 8 shows below are Pitlane Shows' full 2027 calendar, verified
+  // directly against pitlaneshows.co.uk (own events page) AND Pitlane
+  // Shows' Eventbrite organiser page
+  // (eventbrite.co.uk/o/pitlane-shows-121727978642) on 12 Nov 2026 — names,
+  // dates, venues/towns and each event's own Eventbrite URL all cross-check
+  // between the two sources. These are "Pitlane Card & Car Show" events: a
+  // trading card show inside a supercar showroom, ~100 trading card
+  // vendors, ~40 cars on display, live auction, guest signings, kids zone,
+  // food & coffee. Per Pitlane's own site, every show runs 09:30-16:00
+  // (VIP from 09:00, early access from 09:30, standard entry from 11:00,
+  // free entry 14:00-16:00).
+  //
+  // No adult/VIP/early-access price is published yet — the Eventbrite
+  // organiser page marks all 8 as "Not Yet On Sale" (only the Colchester
+  // 21 Feb 2027 show has a live "Get tickets" link; the rest say "Tickets
+  // soon"). The only confirmed price point is the child (5-14) rate, £4 at
+  // any paid entry time, with under-5s free — but per lib/db.ts, a single
+  // partial tier isn't stored when the main adult price isn't known yet, so
+  // tiers are left empty rather than invented or guessed. bookingUrl points
+  // at each show's own verified Eventbrite event page (real, specific URLs
+  // — not a generic search link) so visitors can check back for on-sale
+  // dates. imgUrl uses the Colchester show's own Eventbrite share image
+  // (the only one confirmed so far); the others fall back to the site's
+  // standard "show" stock photo until Pitlane send real photography for
+  // each showroom, per Oli's reply to Bradley asking if more assets are
+  // available.
+  {
+    id: 1706,
+    name: "Pitlane Card & Car Show — Colchester",
+    type: "show",
+    region: "East of England",
+    county: "Essex",
+    town: "Colchester",
+    venue: "Pitlane Shows Showroom, 3 Severalls Lane, Highwoods, Colchester, CO4 9HA",
+    start: "2027-02-21",
+    end: "2027-02-21",
+    img: 29831803,
+    imgUrl:
+      "https://www.eventbrite.co.uk/_next/image?url=https%3A%2F%2Fimg.evbuc.com%2Fhttps%253A%252F%252Fcdn.evbuc.com%252Fimages%252F1194185748%252F3013559030285%252F1%252Foriginal.20260923-123541%3Fcrop%3Dfocalpoint%26fit%3Dcrop%26w%3D940%26auto%3Dformat%252Ccompress%26q%3D75%26sharp%3D10%26fp-x%3D0.506%26fp-y%3D0.619%26s%3Da6dd12c49d597413a3a1dab6b965da7c&w=940&q=75",
+    organiser: "Pitlane Shows",
+    desc:
+      "Pitlane Shows' trading card show inside a supercar showroom — over 100 trading card vendors (TCG singles, graded cards, sealed product, on-site grading), around 40 cars on display inside and on the forecourt, a live auction, guest signings, a kids zone and food & coffee. Every show runs 09:30-16:00: VIP entry from 09:00, early access from 09:30, standard entry from 11:00, and free entry from 14:00-16:00. Children 5-14 are £4 at any paid entry time; under-5s go free. Listed directly with organiser Pitlane Shows (hello@pitlaneshows.co.uk).",
+    tiers: [],
+    free: false,
+    bookingUrl: "https://www.eventbrite.co.uk/e/pitlane-card-car-show-colchester-sun-21-feb-2027-tickets-2000320333966",
+  },
+  {
+    id: 1707,
+    name: "Pitlane Card & Car Show — Cambridge",
+    type: "show",
+    region: "East of England",
+    county: "Cambridgeshire",
+    town: "Cambridge",
+    venue: "John Banks Alpine Showroom, 13 Swanns Road, Cambridge",
+    start: "2027-04-25",
+    end: "2027-04-25",
+    img: 29831803,
+    organiser: "Pitlane Shows",
+    desc:
+      "Pitlane Shows' trading card show inside a supercar showroom — over 100 trading card vendors (TCG singles, graded cards, sealed product, on-site grading), around 40 cars on display inside and on the forecourt, a live auction, guest signings, a kids zone and food & coffee. Every show runs 09:30-16:00: VIP entry from 09:00, early access from 09:30, standard entry from 11:00, and free entry from 14:00-16:00. Children 5-14 are £4 at any paid entry time; under-5s go free. Listed directly with organiser Pitlane Shows (hello@pitlaneshows.co.uk).",
+    tiers: [],
+    free: false,
+    bookingUrl: "https://www.eventbrite.co.uk/e/pitlane-card-car-show-cambridge-sun-25-apr-2027-tickets-2000322987904",
+  },
+  {
+    id: 1708,
+    name: "Pitlane Card & Car Show — Bury St Edmunds",
+    type: "show",
+    region: "East of England",
+    county: "Suffolk",
+    town: "Bury St Edmunds",
+    venue: "John Banks Honda Showroom, Kempson Way, Moreton Hall, Bury St Edmunds",
+    start: "2027-06-06",
+    end: "2027-06-06",
+    img: 29831803,
+    organiser: "Pitlane Shows",
+    desc:
+      "Pitlane Shows' trading card show inside a supercar showroom — over 100 trading card vendors (TCG singles, graded cards, sealed product, on-site grading), around 40 cars on display inside and on the forecourt, a live auction, guest signings, a kids zone and food & coffee. Every show runs 09:30-16:00: VIP entry from 09:00, early access from 09:30, standard entry from 11:00, and free entry from 14:00-16:00. Children 5-14 are £4 at any paid entry time; under-5s go free. Listed directly with organiser Pitlane Shows (hello@pitlaneshows.co.uk).",
+    tiers: [],
+    free: false,
+    bookingUrl: "https://www.eventbrite.co.uk/e/pitlane-card-car-show-bury-st-edmunds-sun-6-jun-2027-tickets-2000323284792",
+  },
+  {
+    id: 1709,
+    name: "Pitlane Card & Car Show — Colchester (Summer)",
+    type: "show",
+    region: "East of England",
+    county: "Essex",
+    town: "Colchester",
+    venue: "Pitlane Shows Showroom, 3 Severalls Lane, Highwoods, Colchester, CO4 9HA",
+    start: "2027-07-18",
+    end: "2027-07-18",
+    img: 29831803,
+    organiser: "Pitlane Shows",
+    desc:
+      "Pitlane Shows' trading card show inside a supercar showroom — over 100 trading card vendors (TCG singles, graded cards, sealed product, on-site grading), around 40 cars on display inside and on the forecourt, a live auction, guest signings, a kids zone and food & coffee. Every show runs 09:30-16:00: VIP entry from 09:00, early access from 09:30, standard entry from 11:00, and free entry from 14:00-16:00. Children 5-14 are £4 at any paid entry time; under-5s go free. Listed directly with organiser Pitlane Shows (hello@pitlaneshows.co.uk).",
+    tiers: [],
+    free: false,
+    bookingUrl: "https://www.eventbrite.co.uk/e/pitlane-card-car-show-colchester-sun-18-jul-2027-tickets-2000322532542",
+  },
+  {
+    id: 1710,
+    name: "Pitlane Card & Car Show — Cambridge (Summer)",
+    type: "show",
+    region: "East of England",
+    county: "Cambridgeshire",
+    town: "Cambridge",
+    venue: "John Banks Alpine Showroom, 13 Swanns Road, Cambridge",
+    start: "2027-08-22",
+    end: "2027-08-22",
+    img: 29831803,
+    organiser: "Pitlane Shows",
+    desc:
+      "Pitlane Shows' trading card show inside a supercar showroom — over 100 trading card vendors (TCG singles, graded cards, sealed product, on-site grading), around 40 cars on display inside and on the forecourt, a live auction, guest signings, a kids zone and food & coffee. Every show runs 09:30-16:00: VIP entry from 09:00, early access from 09:30, standard entry from 11:00, and free entry from 14:00-16:00. Children 5-14 are £4 at any paid entry time; under-5s go free. Listed directly with organiser Pitlane Shows (hello@pitlaneshows.co.uk).",
+    tiers: [],
+    free: false,
+    bookingUrl: "https://www.eventbrite.co.uk/e/pitlane-card-car-show-cambridge-sun-22-aug-2027-tickets-2000323134342",
+  },
+  {
+    id: 1711,
+    name: "Pitlane Card & Car Show — Ipswich",
+    type: "show",
+    region: "East of England",
+    county: "Suffolk",
+    town: "Ipswich",
+    venue: "Honda House Showroom, Felixstowe Road, Nacton, Ipswich",
+    start: "2027-10-10",
+    end: "2027-10-10",
+    img: 29831803,
+    organiser: "Pitlane Shows",
+    desc:
+      "Pitlane Shows' trading card show inside a supercar showroom — over 100 trading card vendors (TCG singles, graded cards, sealed product, on-site grading), around 40 cars on display inside and on the forecourt, a live auction, guest signings, a kids zone and food & coffee. Every show runs 09:30-16:00: VIP entry from 09:00, early access from 09:30, standard entry from 11:00, and free entry from 14:00-16:00. Children 5-14 are £4 at any paid entry time; under-5s go free. Listed directly with organiser Pitlane Shows (hello@pitlaneshows.co.uk).",
+    tiers: [],
+    free: false,
+    bookingUrl: "https://www.eventbrite.co.uk/e/pitlane-card-car-show-ipswich-sun-10-oct-2027-tickets-2000323677968",
+  },
+  {
+    id: 1712,
+    name: "Pitlane Card & Car Show — Colchester (Autumn)",
+    type: "show",
+    region: "East of England",
+    county: "Essex",
+    town: "Colchester",
+    venue: "Pitlane Shows Showroom, 3 Severalls Lane, Highwoods, Colchester, CO4 9HA",
+    start: "2027-11-14",
+    end: "2027-11-14",
+    img: 29831803,
+    organiser: "Pitlane Shows",
+    desc:
+      "Pitlane Shows' trading card show inside a supercar showroom — over 100 trading card vendors (TCG singles, graded cards, sealed product, on-site grading), around 40 cars on display inside and on the forecourt, a live auction, guest signings, a kids zone and food & coffee. Every show runs 09:30-16:00: VIP entry from 09:00, early access from 09:30, standard entry from 11:00, and free entry from 14:00-16:00. Children 5-14 are £4 at any paid entry time; under-5s go free. Listed directly with organiser Pitlane Shows (hello@pitlaneshows.co.uk).",
+    tiers: [],
+    free: false,
+    bookingUrl: "https://www.eventbrite.co.uk/e/pitlane-card-car-show-colchester-sun-14-nov-2027-tickets-2000322809370",
+  },
+  {
+    id: 1713,
+    name: "Pitlane Card & Car Show — Bury St Edmunds (Winter)",
+    type: "show",
+    region: "East of England",
+    county: "Suffolk",
+    town: "Bury St Edmunds",
+    venue: "John Banks Honda Showroom, Kempson Way, Moreton Hall, Bury St Edmunds",
+    start: "2027-12-12",
+    end: "2027-12-12",
+    img: 29831803,
+    organiser: "Pitlane Shows",
+    desc:
+      "Pitlane Shows' trading card show inside a supercar showroom — over 100 trading card vendors (TCG singles, graded cards, sealed product, on-site grading), around 40 cars on display inside and on the forecourt, a live auction, guest signings, a kids zone and food & coffee. Every show runs 09:30-16:00: VIP entry from 09:00, early access from 09:30, standard entry from 11:00, and free entry from 14:00-16:00. Children 5-14 are £4 at any paid entry time; under-5s go free. Listed directly with organiser Pitlane Shows (hello@pitlaneshows.co.uk).",
+    tiers: [],
+    free: false,
+    bookingUrl: "https://www.eventbrite.co.uk/e/pitlane-card-car-show-bury-st-edmunds-sun-12-dec-2027-tickets-2000323596725",
+  },
 ];
