@@ -18,11 +18,15 @@ export const SEED_10: CarEvent[] = [
   //   page (sites.google.com/view/clwydpracticalclassics/annual-show).
   // - Autojumble, food & drink, cars/motorbikes/tractors: FBHVC entry.
   //
-  // Deliberately left out until Barry confirms: visitor admission price
-  // (not published anywhere — so tiers are empty, free: false, badge reads
-  // "See prices"), and the postcode (club page says CH7 5BH, FBHVC says
-  // CH7 5BA). No organiser photo yet — stock fallback until he sends one;
-  // the club site's photos are not used without permission.
+  // Updated 17 Nov 2026 13:55 from Barry's second reply:
+  // - Visitor entry is £5 ("currently £5 and has been since pre Covid. A
+  //   decision has not as yet been taken on any increase.") — so the tier
+  //   name says it is the current price and the description flags that 2027
+  //   may differ.
+  // - Postcode is CH7 5BH (the club page was right; FBHVC's CH7 5BA is not).
+  // - Photos: Barry pointed us at the club website and Facebook page for
+  //   photos. None wired in yet — the Pexels classic fallback stays until
+  //   one is uploaded to public/photos/ (see that folder's README).
   {
     id: 1714,
     name: "Caerwys Classic Car Show",
@@ -31,14 +35,14 @@ export const SEED_10: CarEvent[] = [
     region: "Wales",
     county: "Flintshire",
     town: "Caerwys",
-    venue: "Barlows Caravan Park, Caerwys, nr Mold, Flintshire",
+    venue: "Barlows Caravan Park, Caerwys, nr Mold, Flintshire, CH7 5BH",
     start: "2027-07-11",
     end: "2027-07-11",
     img: 2272281,
     organiser: "Clwyd Practical Classics",
     desc:
-      "Clwyd Practical Classics' annual Caerwys Classic Car Show returns to Barlows Caravan Park, near Mold, on Sunday 11 July 2027, 10am-4pm. Expect classic cars, motorbikes and tractors on show, plus food and drink, an autojumble and other stands. Entry is free for exhibitors. The volunteer-run show has raised money for local charities every year since 1990 — £143,231.60 in total, including £10,600 from the 2026 show, shared between Wales Air Ambulance and St Kentigern Hospice.",
-    tiers: [],
+      "Clwyd Practical Classics' annual Caerwys Classic Car Show returns to Barlows Caravan Park, near Mold, on Sunday 11 July 2027, 10am-4pm. Expect classic cars, motorbikes and tractors on show, plus food and drink, an autojumble and other stands. Visitor entry is currently £5 (the 2027 price hasn't been set yet), and entry is free for exhibitors. The volunteer-run show has raised money for local charities every year since 1990 — £143,231.60 in total, including £10,600 from the 2026 show, shared between Wales Air Ambulance and St Kentigern Hospice.",
+    tiers: [{ name: "Visitor entry (current price; 2027 price not yet set)", price: 5 }],
     free: false,
     bookingUrl: "https://sites.google.com/view/clwydpracticalclassics/annual-show",
   },
