@@ -93,4 +93,49 @@ export const SEED_10: CarEvent[] = [
     free: false,
     bookingUrl: "https://www.hebdenbridge-vintageweekend.org.uk",
   },
+
+  // Vintage Transport Day, Northampton & Lamport Railway — added 18 Nov 2026.
+  // Dan Callis (event organiser, daniel.callis@hotmail.co.uk) replied at
+  // 13:41 to that morning's free-listing outreach (sent to
+  // enquiries@nlr.org.uk and forwarded to him): "Next year's event is due to
+  // take place on Sun 9th May 2027. If you could list us now it would be much
+  // appreciated. Exhibitors should email webteam@nlr.org.uk, please, to book
+  // their place. Other details are same as last year, as set out on the
+  // website post here: nlr.org.uk/exhibitors/".
+  //
+  // Verified 18 Nov 2026 on nlr.org.uk:
+  // - Steam train rides plus classic cars and camper vans, vintage buses
+  //   (with short circular bus trips by Northampton Heritage Transport) and
+  //   vintage fire engines; exhibits at least 30 years old; free entry for
+  //   exhibitors plus a companion; exhibits in place before 9.30am and stay
+  //   until at least 4pm: /exhibitors/ (2026 text, which Dan says still holds).
+  //   That page still reads "FULLY BOOKED" from 2026 — booking for 2027 is by
+  //   email to webteam@nlr.org.uk per Dan, so the description says that.
+  // - Pitsford & Brampton Station, Pitsford Road, Chapel Brampton, NN6 8BA,
+  //   about 5 miles north of Northampton: /how-to-find-us/.
+  // - Run entirely by volunteers: site footer. 30th anniversary of opening
+  //   (March 1996) in 2026: /celebrating-30-years/.
+  // - Visitor prices for the day are NOT published (the standard 2026 train
+  //   fares on /whats-on/ are not stated to apply to this event), so tiers is
+  //   empty and the page shows "See prices" rather than an invented figure.
+  // - Photos: Dan attached four ("in case useful"). Not yet uploaded to
+  //   public/photos/ — Pexels classic fallback until they are.
+  {
+    id: 1716,
+    name: "Vintage Transport Day at the Northampton & Lamport Railway",
+    type: "show",
+    categories: ["classic"],
+    region: "East Midlands",
+    county: "Northamptonshire",
+    town: "Chapel Brampton",
+    venue: "Pitsford & Brampton Station, Pitsford Road, Chapel Brampton, Northampton, NN6 8BA",
+    start: "2027-05-09",
+    end: "2027-05-09",
+    img: 2272281,
+    organiser: "Northampton & Lamport Railway",
+    desc:
+      "The Northampton & Lamport Railway's Vintage Transport Day returns on Sunday 9 May 2027 at Pitsford & Brampton Station, about five miles north of Northampton. It brings together steam train rides and an eclectic mix of vintage vehicles: classic cars and camper vans, vintage buses (with short circular bus trips run by Northampton Heritage Transport) and vintage fire engines. Exhibits must be at least 30 years old, and entry is free for exhibitors plus a companion, with exhibits in place before 9.30am and on show until at least 4pm. Exhibitors book their place by emailing webteam@nlr.org.uk. The railway is run entirely by volunteers and marked 30 years since its official opening in 2026. Visitor ticket prices for the day haven't been published yet; check the railway's website for details.",
+    tiers: [],
+    bookingUrl: "https://nlr.org.uk/exhibitors/",
+  },
 ];
