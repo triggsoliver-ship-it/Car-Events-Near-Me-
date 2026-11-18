@@ -54,6 +54,7 @@ staged under locally (this tripped us up with the Aynho photos on 15 Oct 2026).
 
 | File | Event | Given by | Date | Credit as |
 | --- | --- | --- | --- | --- |
+| `hebden-bridge-vintage-weekend.jpg` | Hebden Bridge Vintage Weekend (events/1715) — in use as `imgUrl` | Neil, Rotary Club of Hebden Bridge (rotaryclubofhebdenbridge@gmail.com) — his "2026_Vintage_Weekend-Sunday_1.jpg", resized to 1200x798. He also sent a Saturday Triumph line-up photo and the event logo, kept in Oli's files, not uploaded | 18 Nov 2026 | — ("Feel free to use them as you see fit"; no credit asked for) |
 | `dorset-blind-association-motor-show.jpg` | Dorset Blind Association Motor Show (events/57200) — in use as `imgUrl` | Sam Baker, Community Relations Officer, Dorset Blind Association (communityrelations@dorsetblind.org.uk) | 16 Nov 2026 | — (no credit asked for or needed) |
 | `hills-ford-stages-water-splash.jpg` | Hills Ford Stages Rally | Steve Andrews, Media Officer, Hills Ford Stages (media@hillsfordstages.co.uk) | 14 Sep 2026 | Hills Ford Stages |
 | `godalming-classic-car-show.jpg` | Godalming Classic Car Show (events/45467) | Stefan Reynolds (stef.reynolds@gmail.com) | 26 Sep 2026 | — (their own 2027 logo; no credit asked for or needed) |
@@ -66,3 +67,5 @@ staged under locally (this tripped us up with the Aynho photos on 15 Oct 2026).
 | `AynhoClassicCarShow26-3.jpeg` | Aynho Classic Car Show (events/1705) — spare, not currently used | Jerry Stephenson (Jerry.stephenson@aynho-pc.gov.uk) | 15 Oct 2026 | — (no credit asked for or needed) |
 
 **Note on `dorset-blind-association-motor-show.jpg`:** added via the `file_upload` route (an attachment forwarded through Claude in chat), not a local drag-and-drop, so the usual "resize before uploading" step in rule 5 wasn't available — only the exact attachment file could be uploaded, not a recompressed copy. It landed at ~1.19 MB, well over the 40–280 KB guideline. Works fine, just heavier than it should be. Worth swapping for a resized version (≈1200×800, optimised JPEG) next time anyone's in there.
+
+**Note on `hebden-bridge-vintage-weekend.jpg`:** also added via the Chrome `file_upload` route, but this time the attachment was resized in the cloud workspace first and the resized copy uploaded, so it lands at ~221 KB. That is the way to do it.
