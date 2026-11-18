@@ -65,8 +65,14 @@ export const SEED_10: CarEvent[] = [
   //   confirmed 2027 ones — the tier name and description say so.
   // - Run by the Rotary Club of Hebden Bridge for its Trust Fund (registered
   //   charity 513898), over £500K donated since 2007: home and /about.
-  // - No photo supplied yet: Pexels classic fallback until one is uploaded
-  //   to public/photos/.
+  //
+  // Updated 18 Nov 2026 from Neil's second reply ("I have attached a couple
+  // of images from the event and a clipped logo. Feel free to use them as
+  // you see fit."):
+  // - Photo: his "2026_Vintage_Weekend-Sunday_1.jpg" (Calder Holmes Park,
+  //   Sunday 2026), resized to 1200x798, now public/photos/
+  //   hebden-bridge-vintage-weekend.jpg. No credit asked for.
+  // - "Since 1983": printed on the event logo he sent.
   {
     id: 1715,
     name: "Hebden Bridge Vintage Weekend",
@@ -79,9 +85,10 @@ export const SEED_10: CarEvent[] = [
     start: "2027-07-31",
     end: "2027-08-01",
     img: 2272281,
+    imgUrl: "https://careventsnearme.uk/photos/hebden-bridge-vintage-weekend.jpg",
     organiser: "Rotary Club of Hebden Bridge",
     desc:
-      "The Hebden Bridge Vintage Weekend returns to Calder Holmes Park on Saturday 31 July and Sunday 1 August 2027, organised and run by the Rotary Club of Hebden Bridge. Each day has different vehicles, with Saturday mainly classic and Sunday mainly vintage, alongside a food court, a music stage, a children's area and a wide range of stalls. The park is a short walk from Hebden Bridge railway station. Based on the currently published details (2027 to be confirmed), the site opens to the public at 10am, the vehicle display runs 11.30am-4.30pm, and adult entry is £9 per day, paid by cash or card at the gate, with up to three accompanied under-15s free. Vehicle and stall bookings open in January 2027. The weekend raises funds for the Rotary Club's Trust Fund (registered charity 513898), which has donated over £500K to good causes since 2007.",
+      "The Hebden Bridge Vintage Weekend, running since 1983, returns to Calder Holmes Park on Saturday 31 July and Sunday 1 August 2027, organised and run by the Rotary Club of Hebden Bridge. Each day has different vehicles, with Saturday mainly classic and Sunday mainly vintage, alongside a food court, a music stage, a children's area and a wide range of stalls. The park is a short walk from Hebden Bridge railway station. Based on the currently published details (2027 to be confirmed), the site opens to the public at 10am, the vehicle display runs 11.30am-4.30pm, and adult entry is £9 per day, paid by cash or card at the gate, with up to three accompanied under-15s free. Vehicle and stall bookings open in January 2027. The weekend raises funds for the Rotary Club's Trust Fund (registered charity 513898), which has donated over £500K to good causes since 2007.",
     tiers: [{ name: "Adult, per day (current price; 2027 price not yet confirmed)", price: 9 }],
     free: false,
     bookingUrl: "https://www.hebdenbridge-vintageweekend.org.uk",
