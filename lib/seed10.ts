@@ -118,8 +118,10 @@ export const SEED_10: CarEvent[] = [
   // - Visitor prices for the day are NOT published (the standard 2026 train
   //   fares on /whats-on/ are not stated to apply to this event), so tiers is
   //   empty and the page shows "See prices" rather than an invented figure.
-  // - Photos: Dan attached four ("in case useful"). Not yet uploaded to
-  //   public/photos/ — Pexels classic fallback until they are.
+  // - Photos: Dan attached four ("in case useful"), resized to 1200x900 and
+  //   uploaded as public/photos/nlr-vintage-transport-day-1..4.jpg. -1 (his
+  //   "2025_event_2.jpg": three cars by the platform) is the listing image;
+  //   2-4 (his 2026 shots) are spares. No credit asked for.
   {
     id: 1716,
     name: "Vintage Transport Day at the Northampton & Lamport Railway",
@@ -132,6 +134,7 @@ export const SEED_10: CarEvent[] = [
     start: "2027-05-09",
     end: "2027-05-09",
     img: 2272281,
+    imgUrl: "https://careventsnearme.uk/photos/nlr-vintage-transport-day-1.jpg",
     organiser: "Northampton & Lamport Railway",
     desc:
       "The Northampton & Lamport Railway's Vintage Transport Day returns on Sunday 9 May 2027 at Pitsford & Brampton Station, about five miles north of Northampton. It brings together steam train rides and an eclectic mix of vintage vehicles: classic cars and camper vans, vintage buses (with short circular bus trips run by Northampton Heritage Transport) and vintage fire engines. Exhibits must be at least 30 years old, and entry is free for exhibitors plus a companion, with exhibits in place before 9.30am and on show until at least 4pm. Exhibitors book their place by emailing webteam@nlr.org.uk. The railway is run entirely by volunteers and marked 30 years since its official opening in 2026. Visitor ticket prices for the day haven't been published yet; check the railway's website for details.",
