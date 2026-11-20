@@ -54,6 +54,9 @@ staged under locally (this tripped us up with the Aynho photos on 15 Oct 2026).
 
 | File | Event | Given by | Date | Credit as |
 | --- | --- | --- | --- | --- |
+| `wheelfest-27-banner.jpg` | Wheelfest 27, Pontefract (seed id 1717) — in use as `imgUrl` (car-and-bike artwork cropped from the Wheelfest 27 poster, 1400x800) | Karen, Wheelfest Team, Pontefract Civic Society (events@pontefractcivicsociety.org.uk) | 19 Nov 2026 | — (sent "our two posters for the event" with the listing request; no credit asked for) |
+| `wheelfest-27-poster.jpg` | Wheelfest 27 (seed id 1717) — full poster, 900px wide, spare | Karen (as above) | 19 Nov 2026 | — |
+| `wheelfest-27-1940s-ropergate-poster.jpg` | Wheelfest 27 (seed id 1717) — the 1940s Ropergate poster (same day), 900px wide, spare | Karen (as above) | 19 Nov 2026 | — |
 | `nlr-vintage-transport-day-1.jpg` | Vintage Transport Day, Northampton & Lamport Railway (events/1716) — in use as `imgUrl` (his "2025_event_2.jpg", three cars by the platform) | Dan Callis, event organiser, Northampton & Lamport Railway (daniel.callis@hotmail.co.uk) | 18 Nov 2026 | — ("in case useful"; no credit asked for) |
 | `nlr-vintage-transport-day-2.jpg` | Vintage Transport Day (events/1716) — spare, not currently used (his "2026_-_9.jpg") | Dan Callis (as above) | 18 Nov 2026 | — |
 | `nlr-vintage-transport-day-3.jpg` | Vintage Transport Day (events/1716) — spare, not currently used (his "2026_-_2.jpg") | Dan Callis (as above) | 18 Nov 2026 | — |

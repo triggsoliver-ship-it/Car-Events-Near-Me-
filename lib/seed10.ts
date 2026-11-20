@@ -152,4 +152,50 @@ export const SEED_10: CarEvent[] = [
     free: false,
     bookingUrl: "https://nlr.org.uk/exhibitors/",
   },
+
+  // Wheelfest 27, Pontefract — added 20 Nov 2026. Karen (Wheelfest Team,
+  // events@pontefractcivicsociety.org.uk, cc Phil Cook, Vice Chair,
+  // vicechair@pontefractcivicsociety.org.uk) replied at 19:29 on 19 Nov to
+  // the 16 Nov free-listing outreach: "Wheelfest 27 which takes place in
+  // Pontefract Town Centre on Saturday 12th June 2027. Yes we would like to be
+  // listed please", and attached the two event posters.
+  //
+  // Verified 20 Nov 2026 on pontefractcivicsociety.org.uk and the posters:
+  // - Sat 12 Jun 2027, "from 10am to 4pm in Pontefract Town Centre", over 100
+  //   vehicles (classic cars, performance cars, bikes, 999 and HGV), 1940s
+  //   Ropergate the same day, craft fair, children's rides, live music,
+  //   street entertainment, street food, face painting, Rhubarb Radio,
+  //   costumed character parade; promoted and organised by Pontefract Civic
+  //   Society and KLH Events; stall bookings klhevents@mail.co.uk; vehicles,
+  //   displays, artists and acts events@: /wheelfest-2027/ and both posters.
+  // - "Entry is FREE to all vehicle owners/exhibitors", online registration
+  //   form, exact location given after confirmation: /wheelfest-vehicle-registration/.
+  // - First car show "four years ago" (Phil Cook, /wheelfest-26-success/).
+  // - Not published anywhere: visitor admission price, street/postcode.
+  //   Description says so rather than guessing.
+  // - Photos: Karen's two posters (WF27.jpg, RGATE27.jpg). The Wheelfest
+  //   poster's car-and-bike artwork is cropped to 1400x800 as the banner
+  //   (public/photos/wheelfest-27-banner.jpg); both full posters, resized to
+  //   900px wide, are in public/photos as wheelfest-27-poster.jpg and
+  //   wheelfest-27-1940s-ropergate-poster.jpg.
+  {
+    id: 1717,
+    name: "Wheelfest 27",
+    type: "show",
+    categories: ["classic"],
+    region: "Yorkshire",
+    county: "West Yorkshire",
+    town: "Pontefract",
+    venue: "Pontefract Town Centre, Pontefract, West Yorkshire",
+    start: "2027-06-12",
+    end: "2027-06-12",
+    img: 2272281,
+    imgUrl: "https://careventsnearme.uk/photos/wheelfest-27-banner.jpg",
+    organiser: "Pontefract Civic Society and KLH Events",
+    desc:
+      "Wheelfest 27, \"a vehicle show with a difference\", takes over Pontefract Town Centre on Saturday 12 June 2027, 10am-4pm, promoted and organised by Pontefract Civic Society and KLH Events. Expect over 100 vehicles: classic cars, performance cars, bikes, 999 emergency vehicles and HGVs. 1940s Ropergate runs on the same day, with period vehicles, dancing and period food, and around the town there's an artisan craft fair, children's rides, live music, street entertainment, street food, face painting, Rhubarb Radio and a costumed character parade. Vehicle entry is free for all owners and exhibitors: register through the Civic Society's online form, and the exact display location is confirmed once your place is accepted. Stall bookings go to klhevents@mail.co.uk; vehicles, displays, artists and acts to events@pontefractcivicsociety.org.uk. The visitor admission price hasn't been published yet, so check the Civic Society's website before you go.",
+    tiers: [],
+    free: false,
+    bookingUrl: "https://www.pontefractcivicsociety.org.uk/wheelfest-2027/",
+  },
 ];
