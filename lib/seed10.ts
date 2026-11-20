@@ -178,6 +178,10 @@ export const SEED_10: CarEvent[] = [
   //   (public/photos/wheelfest-27-banner.jpg); both full posters, resized to
   //   900px wide, are in public/photos as wheelfest-27-poster.jpg and
   //   wheelfest-27-1940s-ropergate-poster.jpg.
+  //
+  // Updated 20 Nov 2026 from Phil Cook's reply (12:58): "The event is free
+  // to show a vehicle and free to attend." So `free: true`, and the
+  // description now says so instead of "visitor price not published".
   {
     id: 1717,
     name: "Wheelfest 27",
@@ -193,9 +197,9 @@ export const SEED_10: CarEvent[] = [
     imgUrl: "https://careventsnearme.uk/photos/wheelfest-27-banner.jpg",
     organiser: "Pontefract Civic Society and KLH Events",
     desc:
-      "Wheelfest 27, \"a vehicle show with a difference\", takes over Pontefract Town Centre on Saturday 12 June 2027, 10am-4pm, promoted and organised by Pontefract Civic Society and KLH Events. Expect over 100 vehicles: classic cars, performance cars, bikes, 999 emergency vehicles and HGVs. 1940s Ropergate runs on the same day, with period vehicles, dancing and period food, and around the town there's an artisan craft fair, children's rides, live music, street entertainment, street food, face painting, Rhubarb Radio and a costumed character parade. Vehicle entry is free for all owners and exhibitors: register through the Civic Society's online form, and the exact display location is confirmed once your place is accepted. Stall bookings go to klhevents@mail.co.uk; vehicles, displays, artists and acts to events@pontefractcivicsociety.org.uk. The visitor admission price hasn't been published yet, so check the Civic Society's website before you go.",
+      "Wheelfest 27, \"a vehicle show with a difference\", takes over Pontefract Town Centre on Saturday 12 June 2027, 10am-4pm, promoted and organised by Pontefract Civic Society and KLH Events. Expect over 100 vehicles: classic cars, performance cars, bikes, 999 emergency vehicles and HGVs. 1940s Ropergate runs on the same day, with period vehicles, dancing and period food, and around the town there's an artisan craft fair, children's rides, live music, street entertainment, street food, face painting, Rhubarb Radio and a costumed character parade. It's free to attend and free to show a vehicle: register your vehicle through the Civic Society's online form, and the exact display location is confirmed once your place is accepted. Stall bookings go to klhevents@mail.co.uk; vehicles, displays, artists and acts to events@pontefractcivicsociety.org.uk.",
     tiers: [],
-    free: false,
+    free: true,
     bookingUrl: "https://www.pontefractcivicsociety.org.uk/wheelfest-2027/",
   },
 ];
