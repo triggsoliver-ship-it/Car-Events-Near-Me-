@@ -202,4 +202,127 @@ export const SEED_10: CarEvent[] = [
     free: true,
     bookingUrl: "https://www.pontefractcivicsociety.org.uk/wheelfest-2027/",
   },
+
+  // Classic Car Display at the Bakewell Country Festival — added 23 Nov 2026.
+  // Andrew Harrison (bakewell.pudding@aol.com, who handles car applications)
+  // replied 22 Nov to the 18 Nov free-listing outreach: "The date fir next
+  // years show is Sunday 11th July."
+  //
+  // Verified 23 Nov 2026 on bakewellahs.co.uk (all pages still show 2026):
+  // - /classic-car-display: "It is free to enter your vehicle", "permitted
+  //   years up to and including 1978", spaces "first come, first served",
+  //   apply by emailing Andrew for the application form.
+  // - /bakewell-country-festival: Bakewell Showground, gates 9:30am-5pm,
+  //   run by Bakewell Agricultural & Horticultural Society (200 years old in
+  //   2019); advance tickets on bakewellahs.ticketsrv.co.uk.
+  // - /faqs: adult advance £14, on the day £20, children 15 and under free,
+  //   parking £5. Showground postcode not published, so none given.
+  // - /bakewell-country-festival-whats-on: heavy horses, sheep, dog shows,
+  //   vintage tractor parade, traction engines, fairground, live music etc.
+  {
+    id: 1718,
+    name: "Classic Car Display at the Bakewell Country Festival",
+    type: "show",
+    categories: ["classic"],
+    region: "East Midlands",
+    county: "Derbyshire",
+    town: "Bakewell",
+    venue: "Bakewell Showground, Bakewell, Derbyshire",
+    start: "2027-07-11",
+    end: "2027-07-11",
+    img: 2272281,
+    organiser: "Bakewell Agricultural & Horticultural Society",
+    desc:
+      "The classic car display returns to the Bakewell Country Festival at Bakewell Showground on Sunday 11 July 2027, organised by the Bakewell Agricultural & Horticultural Society. It is free to enter your vehicle, for cars from model years up to and including 1978, and spaces are limited and allocated first come, first served: to apply, email Andrew on bakewell.pudding@aol.com and he will send you the application form. Around the cars, the festival has heavy horse and sheep competitions, dog shows and flyball, a vintage tractor parade, traction engines, emergency services vehicles, falconry, a fairground, a culinary theatre, live music, rural crafts and local food and drink. Based on the currently published details (2027 to be confirmed), gates open 9.30am-5pm, adult tickets are £14 in advance or £20 on the day, children 15 and under go free, and parking is £5. Advance tickets are sold through the Society's own ticket site.",
+    tiers: [
+      { name: "Classic car display entry (vehicles up to 1978)", price: 0 },
+      { name: "Adult, advance (current price; 2027 price not yet confirmed)", price: 14 },
+      { name: "Adult, on the day (current price; 2027 price not yet confirmed)", price: 20 },
+      { name: "Children 15 and under", price: 0 },
+    ],
+    free: false,
+    bookingUrl: "https://www.bakewellahs.co.uk/classic-car-display",
+  },
+
+  // Toot Hill Country Show, Classic Car Show — added 23 Nov 2026. Richard
+  // (classiccars@toothillshow.co.uk) replied 20 Nov to the 12 Nov outreach:
+  // "Please do LIST ME. The show is 7 August 2027."
+  //
+  // Verified 23 Nov 2026 on toothillshow.co.uk (site still shows 2026):
+  // - /Classic-Car-Show: "free to enter the show ground for all classic and
+  //   sports cars, their driver and passengers", classic, American and
+  //   interesting sports cars, clubs or individuals, judged, winners parade
+  //   in the Main Ring; "no need to book but an indication of interest would
+  //   be appreciated" (classiccars@).
+  // - Homepage / Visitor-Info: Church Road, Stanford Rivers, CM5 9PW,
+  //   12pm-5pm, adults £4, children £3, free parking, "since 1953" (73rd show
+  //   in 2026), horticultural marquee, stalls, dog show, main-ring acts.
+  {
+    id: 1719,
+    name: "Toot Hill Country Show Classic Car Show",
+    type: "show",
+    categories: ["classic"],
+    region: "East of England",
+    county: "Essex",
+    town: "Stanford Rivers",
+    venue: "Toot Hill Show Ground, Church Road, Stanford Rivers, Essex, CM5 9PW",
+    start: "2027-08-07",
+    end: "2027-08-07",
+    img: 2272281,
+    organiser: "The Toot Hill Country Show",
+    desc:
+      "The Toot Hill Country Show, an annual celebration of horticulture, community and countryside since 1953, returns to Church Road, Stanford Rivers on Saturday 7 August 2027, with its classic car show as one of the highlights. Classic, American and interesting sports cars are welcome, as a club or individually, and it is free to enter the showground for all classic and sports cars, their driver and passengers. The cars are judged, and towards the end of the show the winners parade in the Main Ring. There's no need to book, but the organisers appreciate an indication of interest: email classiccars@toothillshow.co.uk. Around the cars there's a horticultural marquee of vegetables, flowers, cakes and crafts, market stalls, a dog show, main-ring entertainment, a BBQ and food stalls. Based on the currently published details (2027 to be confirmed), the show runs 12pm-5pm, entry is £4 for adults and £3 for children, and parking is free.",
+    tiers: [
+      { name: "Classic or sports car, driver and passengers", price: 0 },
+      { name: "Adult (current price; 2027 price not yet confirmed)", price: 4 },
+      { name: "Child (current price; 2027 price not yet confirmed)", price: 3 },
+    ],
+    free: false,
+    bookingUrl: "https://toothillshow.co.uk/Classic-Car-Show",
+  },
+
+  // Classics on the Common, Harpenden — added 23 Nov 2026. John Murray, for
+  // the Classics on the Common Committee of Rotary in Harpenden
+  // (classicsonthecommon@btinternet.com), replied 20 Nov to the 20 Nov
+  // outreach: "Rotary Classics on the Common will take place on Wednesday 21
+  // July 2027", and corrected our email: the first event was 1994, and Rotary
+  // did not take over running it until 2009 (NOT 1998). So the description
+  // says "first held in 1994, run by Rotary since 2009".
+  //
+  // Verified 23 Nov 2026 on classicsonthecommon.com (2026 details only):
+  // - Homepage: Harpenden Common, AL5 2JF, classic vehicle entrance opposite
+  //   the Silver Cup; Rotary in Harpenden CIO, charity 1163420; nearly 1,000
+  //   pre-booked cars, motorcycles and scooters in 2026; full 2027 details
+  //   "in the New Year".
+  // - /ticket-application (2026): Group A car £13 (entry from 1pm), Group B
+  //   car £19 (from 11am), cars 25+ years old; cars registered 1930 or earlier
+  //   free (by post); motorcycles/scooters £8; booked via TicketSource or by
+  //   post; sold out in 2026.
+  // - /guidance-notes-for-entrants: arrive by 4pm, stay until after 6pm;
+  //   spectators asked for a voluntary donation for charity.
+  // - /history: "£444,000 has been distributed" since 2009.
+  {
+    id: 1720,
+    name: "Classics on the Common",
+    type: "show",
+    categories: ["classic"],
+    region: "East of England",
+    county: "Hertfordshire",
+    town: "Harpenden",
+    venue: "Harpenden Common, Harpenden, Hertfordshire, AL5 2JF",
+    start: "2027-07-21",
+    end: "2027-07-21",
+    img: 2272281,
+    organiser: "Rotary in Harpenden CIO (registered charity 1163420)",
+    desc:
+      "Classics on the Common returns to Harpenden Common on Wednesday 21 July 2027. First held in 1994 and run by Rotary since 2009, it's now organised by the Classics on the Common Committee of Rotary in Harpenden, and nearly 1,000 pre-booked classic cars, motorcycles and scooters took part in 2026. Since 2009 the show has distributed £444,000 to charities and good causes, and spectators are asked for a voluntary donation for charity. Exhibitor places are pre-booked and sold out in 2026, so book early once the 2027 details are out in the New Year. Based on last year's terms (2027 to be confirmed): cars must be 25 years or older, with Group B cars entering from 11am and Group A cars from 1pm; cars registered in 1930 or earlier go free (apply by post); motorcycles and scooters of any age are Group B. Entrants arrive by 4pm and stay until after 6pm, and classic vehicles enter opposite the Silver Cup pub.",
+    tiers: [
+      { name: "Group A car, from 1pm (2026 price; 2027 not yet set)", price: 13 },
+      { name: "Group B car, from 11am (2026 price; 2027 not yet set)", price: 19 },
+      { name: "Group B motorcycle or scooter (2026 price; 2027 not yet set)", price: 8 },
+      { name: "Car registered 1930 or earlier (apply by post)", price: 0 },
+    ],
+    free: false,
+    bookingUrl: "https://www.classicsonthecommon.com/ticket-application",
+  },
 ];
