@@ -54,6 +54,10 @@ staged under locally (this tripped us up with the Aynho photos on 15 Oct 2026).
 
 | File | Event | Given by | Date | Credit as |
 | --- | --- | --- | --- | --- |
+| `cotc-2025-crowd.jpg` | Classics on the Common, Harpenden (events/1720) — in use as `imgUrl` (his "COTC2025_c_Steve_Collins-137.jpg", resized to 1200x799) | John Murray, for the Classics on the Common Committee of Rotary in Harpenden (classicsonthecommon@btinternet.com) | 24 Nov 2026 | Steve Collins Photography ("supplied FOC to us, providing we acknowledge the copyright") |
+| `cotc-2025-spitfire.jpg` | Classics on the Common (events/1720) — spare (his "COTC2025_c_Steve_Collins-119.jpg") | John Murray (as above) | 24 Nov 2026 | Steve Collins Photography |
+| `cotc-2025-marcos-mustang.jpg` | Classics on the Common (events/1720) — spare (his "COTC2025_c_Steve_Collins-20.jpg") | John Murray (as above) | 24 Nov 2026 | Steve Collins Photography |
+| `cotc-2025-aerial.jpg` | Classics on the Common (events/1720) — spare, portrait aerial with photographer's watermark (his "23July2025-015.jpg", 900x1200) | John Murray (as above) | 24 Nov 2026 | Richard Washbrooke |
 | `wheelfest-27-banner.jpg` | Wheelfest 27, Pontefract (seed id 1717) — in use as `imgUrl` (car-and-bike artwork cropped from the Wheelfest 27 poster, 1400x800) | Karen, Wheelfest Team, Pontefract Civic Society (events@pontefractcivicsociety.org.uk) | 19 Nov 2026 | — (sent "our two posters for the event" with the listing request; no credit asked for) |
 | `wheelfest-27-poster.jpg` | Wheelfest 27 (seed id 1717) — full poster, 900px wide, spare | Karen (as above) | 19 Nov 2026 | — |
 | `wheelfest-27-1940s-ropergate-poster.jpg` | Wheelfest 27 (seed id 1717) — the 1940s Ropergate poster (same day), 900px wide, spare | Karen (as above) | 19 Nov 2026 | — |
