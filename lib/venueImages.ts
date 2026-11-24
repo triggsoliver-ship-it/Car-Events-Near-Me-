@@ -60,6 +60,14 @@ const HILLS_FORD_PHOTO =
 const THREE_CASTLES_PHOTO =
   "https://careventsnearme.uk/photos/ThreeCastles26WA-7807.jpeg";
 
+// Classics on the Common, Harpenden — given by John Murray for the Classics on
+// the Common Committee of Rotary in Harpenden, 24 Nov 2026: photos "supplied
+// FOC to us, providing we acknowledge the copyright... Ground level: Steve
+// Collins Photography." Used as the seed row's `imgUrl` in lib/seed10.ts
+// (id 1720); this constant exists so IMAGE_CREDITS can key on the same string.
+const CLASSICS_ON_THE_COMMON_PHOTO =
+  "https://careventsnearme.uk/photos/cotc-2025-crowd.jpg";
+
 // NOTE: track days previously rotated through three photos from
 // cdn.trackdays.co.uk. Those were that company's own marketing images, and we
 // were applying them to track days run by nine different operators (MSV,
@@ -372,6 +380,9 @@ export const IMAGE_CREDITS: Record<string, string> = {
   // Given by Ian Crammond, Event Director, Three Castles, 15 Oct 2026:
   // "copyright Three Castles/Will Aron... Same credits" (for all photos sent).
   [THREE_CASTLES_PHOTO]: "Three Castles / Will Aron",
+  // Given by John Murray, Classics on the Common, 24 Nov 2026: copyright to be
+  // acknowledged; ground-level shots are Steve Collins Photography.
+  [CLASSICS_ON_THE_COMMON_PHOTO]: "Steve Collins Photography",
 };
 
 /**

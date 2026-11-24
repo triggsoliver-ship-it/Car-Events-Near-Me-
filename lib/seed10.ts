@@ -301,6 +301,16 @@ export const SEED_10: CarEvent[] = [
   // - /guidance-notes-for-entrants: arrive by 4pm, stay until after 6pm;
   //   spectators asked for a voluntary donation for charity.
   // - /history: "£444,000 has been distributed" since 2009.
+  //
+  // Updated 24 Nov 2026 from John's second reply: "There is no change to the
+  // ticket prices for 2027. 2026 prices will apply and online booking will
+  // open in April 2027." So the tiers are now 2027 prices (no TBC label) and
+  // the description says booking opens April 2027. He also sent four 2025
+  // photos "supplied FOC to us, providing we acknowledge the copyright.
+  // Aerial Picture: Richard Washbrooke. Ground level: Steve Collins
+  // Photography." Resized to 1200px (aerial 900px) in public/photos as
+  // cotc-2025-crowd/-spitfire/-marcos-mustang/-aerial.jpg; -crowd is the
+  // listing image, credited via IMAGE_CREDITS in lib/venueImages.ts.
   {
     id: 1720,
     name: "Classics on the Common",
@@ -313,13 +323,14 @@ export const SEED_10: CarEvent[] = [
     start: "2027-07-21",
     end: "2027-07-21",
     img: 2272281,
+    imgUrl: "https://careventsnearme.uk/photos/cotc-2025-crowd.jpg",
     organiser: "Rotary in Harpenden CIO (registered charity 1163420)",
     desc:
-      "Classics on the Common returns to Harpenden Common on Wednesday 21 July 2027. First held in 1994 and run by Rotary since 2009, it's now organised by the Classics on the Common Committee of Rotary in Harpenden, and nearly 1,000 pre-booked classic cars, motorcycles and scooters took part in 2026. Since 2009 the show has distributed £444,000 to charities and good causes, and spectators are asked for a voluntary donation for charity. Exhibitor places are pre-booked and sold out in 2026, so book early once the 2027 details are out in the New Year. Based on last year's terms (2027 to be confirmed): cars must be 25 years or older, with Group B cars entering from 11am and Group A cars from 1pm; cars registered in 1930 or earlier go free (apply by post); motorcycles and scooters of any age are Group B. Entrants arrive by 4pm and stay until after 6pm, and classic vehicles enter opposite the Silver Cup pub.",
+      "Classics on the Common returns to Harpenden Common on Wednesday 21 July 2027. First held in 1994 and run by Rotary since 2009, it's now organised by the Classics on the Common Committee of Rotary in Harpenden, and nearly 1,000 pre-booked classic cars, motorcycles and scooters took part in 2026. Since 2009 the show has distributed £444,000 to charities and good causes, and spectators are asked for a voluntary donation for charity. Exhibitor places are pre-booked and sold out in 2026, so book early: online booking for 2027 opens in April 2027, and prices are unchanged from 2026. Cars must be 25 years or older, with Group B cars entering from 11am and Group A cars from 1pm; cars registered in 1930 or earlier go free (apply by post); motorcycles and scooters of any age are Group B. Entrants arrive by 4pm and stay until after 6pm, and classic vehicles enter opposite the Silver Cup pub.",
     tiers: [
-      { name: "Group A car, from 1pm (2026 price; 2027 not yet set)", price: 13 },
-      { name: "Group B car, from 11am (2026 price; 2027 not yet set)", price: 19 },
-      { name: "Group B motorcycle or scooter (2026 price; 2027 not yet set)", price: 8 },
+      { name: "Group A car, from 1pm (booking opens April 2027)", price: 13 },
+      { name: "Group B car, from 11am (booking opens April 2027)", price: 19 },
+      { name: "Group B motorcycle or scooter (booking opens April 2027)", price: 8 },
       { name: "Car registered 1930 or earlier (apply by post)", price: 0 },
     ],
     free: false,
