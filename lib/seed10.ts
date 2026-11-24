@@ -336,4 +336,49 @@ export const SEED_10: CarEvent[] = [
     free: false,
     bookingUrl: "https://www.classicsonthecommon.com/ticket-application",
   },
+
+  // Swanage Carnival Classic Motor Show — added 24 Nov 2026. Kevin Langdon
+  // (Vice Chairman, vicechair@swanagecarnival.com) replied "List me !" at 08:47
+  // to the 18 Nov free-listing outreach (sent to secretary@), then at 14:17:
+  // "It's Sunday April 25th 2027. For more details please contact/email the
+  // event organiser Jeff Soulsby" (jjsoulsby@gmail.com, cc'd).
+  //
+  // Verified 24 Nov 2026:
+  // - swanage.events/carnival-classic-motor-show (2026 page): "The annual
+  //   Swanage Classic Motor Show ... run by the Swanage Carnival committee",
+  //   since 1996, Sun 26 Apr 2026, 11am-3pm, Main Beach Car Park, vehicles
+  //   mostly pre-2000 incl. cars, motorcycles and bicycles, "Online entry: £10",
+  //   "On the day: £12", form at swanagecarnival.com/car-show/, raises money
+  //   for local causes.
+  // - swanage.news, 27 Apr 2026: "around 140 entrants" (more than 2025), the
+  //   curtain raiser for Carnival week; Jeff Soulsby: "will definitely be back
+  //   for 2027".
+  // - swanagecarnival.com/car-show/ still reads "Entry fee -£5" and
+  //   "Restricted to 50 vehicles" (older text, contradicted by the 2026
+  //   figures above), so neither is used. Visitor admission isn't published
+  //   anywhere; the 2023 listing called it "a FREE family fun day out" but
+  //   that isn't confirmed for 2027, so the description doesn't claim it.
+  // - Times and fees are 2026's; flagged 2027 TBC until Jeff confirms.
+  {
+    id: 1721,
+    name: "Swanage Carnival Classic Motor Show",
+    type: "show",
+    categories: ["classic"],
+    region: "South West",
+    county: "Dorset",
+    town: "Swanage",
+    venue: "Main Beach Car Park, Swanage, Dorset",
+    start: "2027-04-25",
+    end: "2027-04-25",
+    img: 2272281,
+    organiser: "Swanage Carnival",
+    desc:
+      "Swanage Carnival's Classic Motor Show returns to the Main Beach Car Park on Sunday 25 April 2027, the curtain raiser for the town's carnival summer. Running since 1996 and now organised by the Swanage Carnival team, it drew around 140 entrants in 2026, mostly vehicles from before 2000: classic cars, motorcycles and even bicycles, with owners on hand to talk about their history and restoration. Money raised goes to local good causes. Vehicle owners enter through the carnival's online form. Based on the 2026 details (2027 to be confirmed), the show runs 11am-3pm and vehicle entry is £10 online or £12 on the day.",
+    tiers: [
+      { name: "Vehicle entry, online (2026 price; 2027 not yet confirmed)", price: 10 },
+      { name: "Vehicle entry, on the day (2026 price; 2027 not yet confirmed)", price: 12 },
+    ],
+    free: false,
+    bookingUrl: "https://swanagecarnival.com/car-show/",
+  },
 ];
