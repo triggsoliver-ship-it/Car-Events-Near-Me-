@@ -81,4 +81,46 @@ export const SEED_11: CarEvent[] = [
     free: false,
     bookingUrl: "https://www.senlacstleonardsrotary.org",
   },
+
+  // St Michael's Hospice Classic Car Show & Open Garden — added 25 Nov 2026.
+  // Moira Davidson (Fundraising Engagement Administrator,
+  // mdavidson@smhospicehereford.org, cc Gaynor Warren) replied 09:42 to that
+  // morning's outreach: "This sounds great ... let me know what you need".
+  //
+  // Verified 25 Nov 2026 on st-michaels-hospice.org.uk (classic-car-show
+  // event page): Sunday 5 July 2026, 10am-4pm (exhibitor cars from 8am),
+  // St Michael's Hospice, Bartestree, Hereford HR1 4HA; "Pre-booked tickets:
+  // Adults £10.00 | 12-17 yrs £5 | U12s Free"; "No tickets will be sold on
+  // the day"; Richard Hammond and The Smallest Cog team attended, Richard
+  // judging "Best Car in show"; open garden; tea, coffee, cakes, ice creams,
+  // bacon rolls, burgers; free on-site parking; sponsored by Vertu VW
+  // Hereford; owners can offer a classic car or bike to exhibit.
+  //
+  // NO 2027 DATE IS PUBLISHED YET. Dates are left on the 2026 show so nothing
+  // invented goes live; it therefore sits out of browse/search (which only
+  // shows upcoming events) but the detail page works. Change start/end to
+  // the 2027 date as soon as Moira sends it and it will appear in search.
+  {
+    id: 1724,
+    name: "St Michael's Hospice Classic Car Show & Open Garden",
+    type: "show",
+    categories: ["classic"],
+    region: "West Midlands",
+    county: "Herefordshire",
+    town: "Bartestree",
+    venue: "St Michael's Hospice, Bartestree, Hereford, Herefordshire, HR1 4HA",
+    start: "2026-07-05",
+    end: "2026-07-05",
+    img: 2272281,
+    organiser: "St Michael's Hospice",
+    desc:
+      "St Michael's Hospice's Classic Car Show & Open Garden brings classic cars and bikes from passionate local enthusiasts to the hospice grounds at Bartestree, with the chance to stroll through the hospice's garden too. The 2026 show on Sunday 5 July welcomed Richard Hammond and The Smallest Cog team, who brought a selection of cars and bikes, with Richard judging Best Car in Show. The 2027 date is still to be announced. Tickets must be booked in advance through the hospice's own website: no tickets are sold on the day. In 2026 the show ran 10am-4pm, with tea, coffee, homemade cakes, ice creams, bacon rolls and burgers, and free parking on site. If you have a classic car or bike you'd like to exhibit, the hospice would love to hear from you. Every ticket supports St Michael's Hospice.",
+    tiers: [
+      { name: "Adult, pre-booked (2026 price; 2027 not yet confirmed)", price: 10 },
+      { name: "Age 12-17, pre-booked (2026 price; 2027 not yet confirmed)", price: 5 },
+      { name: "Under 12", price: 0 },
+    ],
+    free: false,
+    bookingUrl: "https://www.st-michaels-hospice.org.uk/how-you-can-help-us/fundraise-for-us/events/classic-car-show/",
+  },
 ];
