@@ -59,6 +59,10 @@ export const SEED_11: CarEvent[] = [
   //   the club's charity, The Yellowmen.
   // - Colin didn't restate the venue, so the description says Rye Rugby Club
   //   hosted in 2026; times and price are 2026's, flagged 2027 TBC.
+  // - Photos: Colin sent two at 10:32 ("for your use, no copyright
+  //   involved"), resized to 1200px wide and uploaded as
+  //   public/photos/senlac-2026-triumph-roadster.jpg (listing image) and
+  //   senlac-2026-morris-police.jpg (spare). No credit asked for.
   {
     id: 1723,
     name: "Senlac St Leonards Classic Car Show",
@@ -71,6 +75,7 @@ export const SEED_11: CarEvent[] = [
     start: "2027-06-20",
     end: "2027-06-20",
     img: 2272281,
+    imgUrl: "https://careventsnearme.uk/photos/senlac-2026-triumph-roadster.jpg",
     organiser: "Rotary Club of Senlac St Leonards",
     desc:
       "The Rotary Club of Senlac St Leonards' Classic Car Show returns on Father's Day, Sunday 20 June 2027. In 2026 it filled Rye Rugby Club with more than 200 cars and over 30 craft and charity stalls, plus local entertainment, children's rides and a bar. For 2027 the club is also welcoming vintage and classic commercial vehicles, military vehicles and motorcycles alongside the cars. Profits go to local good causes and the club's own charity, The Yellowmen. Car and stall entries go through senlacstleonardsrotary.org or senlacstleonardscarshow@gmail.com. Based on the 2026 details (2027 to be confirmed), the show ran 10am-5pm at Rye Rugby Club, and adult entry was £5 at the gate, with programmes, parking and accompanied under-16s free.",
