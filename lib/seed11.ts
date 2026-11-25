@@ -155,7 +155,7 @@ export const SEED_11: CarEvent[] = [
     img: 2272281,
     organiser: "Barnes Publishing and Events Ltd (Jersey Concours d'Elegance)",
     desc:
-      "The Jersey Concours d'Elegance returns to People's Park in St Helier on Saturday 12 June 2027, following its 75th-anniversary edition in 2026. Some of the finest classic and collectable cars on the island line up on the grass for judging, and admission is free for everyone, so it's an easy day out for visitors and locals alike. Owners who'd like to enter a car can apply through the concours website.",
+      "The Jersey Concours d'Elegance returns to People's Park in St Helier on Saturday 12 June 2027, following its 75th-anniversary edition in 2026. Admission is free for everyone. Owners who'd like to enter a car can apply through the concours website.",
     tiers: [{ name: "Spectator admission", price: 0 }],
     free: true,
     bookingUrl: "https://www.jerseyconcoursdelegance.com",
