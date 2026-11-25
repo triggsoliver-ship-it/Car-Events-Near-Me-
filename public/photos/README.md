@@ -54,6 +54,8 @@ staged under locally (this tripped us up with the Aynho photos on 15 Oct 2026).
 
 | File | Event | Given by | Date | Credit as |
 | --- | --- | --- | --- | --- |
+| `senlac-2026-triumph-roadster.jpg` | Senlac St Leonards Classic Car Show, Rye (events/1723) — in use as `imgUrl` (his "2026_MZ_90.JPG", resized to 1200x799) | Colin Goldsack, Rotary Club of Senlac St Leonards (ceegeeSenlacRC@outlook.com) | 25 Nov 2026 | — ("for your use, no copyright involved") |
+| `senlac-2026-morris-police.jpg` | Senlac St Leonards Classic Car Show (events/1723) — spare (his "2026_MZ_66.JPG", 1200x806) | Colin Goldsack (as above) | 25 Nov 2026 | — |
 | `cotc-2025-crowd.jpg` | Classics on the Common, Harpenden (events/1720) — in use as `imgUrl` (his "COTC2025_c_Steve_Collins-137.jpg", resized to 1200x799) | John Murray, for the Classics on the Common Committee of Rotary in Harpenden (classicsonthecommon@btinternet.com) | 24 Nov 2026 | Steve Collins Photography ("supplied FOC to us, providing we acknowledge the copyright") |
 | `cotc-2025-spitfire.jpg` | Classics on the Common (events/1720) — spare (his "COTC2025_c_Steve_Collins-119.jpg") | John Murray (as above) | 24 Nov 2026 | Steve Collins Photography |
 | `cotc-2025-marcos-mustang.jpg` | Classics on the Common (events/1720) — spare (his "COTC2025_c_Steve_Collins-20.jpg") | John Murray (as above) | 24 Nov 2026 | Steve Collins Photography |
