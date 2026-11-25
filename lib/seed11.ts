@@ -128,4 +128,36 @@ export const SEED_11: CarEvent[] = [
     free: false,
     bookingUrl: "https://www.st-michaels-hospice.org.uk/how-you-can-help-us/fundraise-for-us/events/classic-car-show/",
   },
+
+  // Jersey Concours d'Elegance — added 25 Nov 2026. Ian Barnes (Managing
+  // Director, Barnes Publishing and Events Ltd, organiser of the concours,
+  // ian@barnespublishing.com) replied 11:10 to that morning's outreach:
+  // "LIST me. 2027 date Saturday 12th June."
+  //
+  // Verified 25 Nov 2026: sthelier.je event listing for 2026 ("Jersey
+  // Concours D'Elegance 2026 (75th Anniversary)", People's Park, St Helier,
+  // Sat 13 June 2026, "with free admission for all"); jerseyconcoursdelegance
+  // .com ("Now in its fifth year", with a "how to apply" route for entrants).
+  // Region: REGIONS has no Channel Islands entry; region is free text in the
+  // DB, so it is set to "Channel Islands" (it won't appear under the 12 UK
+  // region filters, but shows in date browse and search).
+  {
+    id: 1725,
+    name: "Jersey Concours d'Elegance",
+    type: "show",
+    categories: ["classic"],
+    region: "Channel Islands",
+    county: "Jersey",
+    town: "St Helier",
+    venue: "People's Park, St Helier, Jersey",
+    start: "2027-06-12",
+    end: "2027-06-12",
+    img: 2272281,
+    organiser: "Barnes Publishing and Events Ltd (Jersey Concours d'Elegance)",
+    desc:
+      "The Jersey Concours d'Elegance returns to People's Park in St Helier on Saturday 12 June 2027, following its 75th-anniversary edition in 2026. Some of the finest classic and collectable cars on the island line up on the grass for judging, and admission is free for everyone, so it's an easy day out for visitors and locals alike. Owners who'd like to enter a car can apply through the concours website.",
+    tiers: [{ name: "Spectator admission", price: 0 }],
+    free: true,
+    bookingUrl: "https://www.jerseyconcoursdelegance.com",
+  },
 ];
