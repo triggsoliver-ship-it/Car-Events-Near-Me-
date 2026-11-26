@@ -102,9 +102,9 @@ export const SEED_11: CarEvent[] = [
   // Hereford; owners can offer a classic car or bike to exhibit.
   //
   // NO 2027 DATE IS PUBLISHED YET. Dates are left on the 2026 show so nothing
-  // invented goes live; it therefore sits out of browse/search (which only
-  // shows upcoming events) but the detail page works. Change start/end to
-  // the 2027 date as soon as Moira sends it and it will appear in search.
+  // invented goes live; datesTBA (26 Nov 2026) keeps it live in browse/search
+  // labelled "2027 date TBA". When Moira sends the date, set start/end and
+  // delete datesTBA.
   {
     id: 1724,
     name: "St Michael's Hospice Classic Car Show & Open Garden",
@@ -116,6 +116,7 @@ export const SEED_11: CarEvent[] = [
     venue: "St Michael's Hospice, Bartestree, Hereford, Herefordshire, HR1 4HA",
     start: "2026-07-05",
     end: "2026-07-05",
+    datesTBA: "2027 date TBA",
     img: 2272281,
     organiser: "St Michael's Hospice",
     desc:
@@ -188,9 +189,9 @@ export const SEED_11: CarEvent[] = [
   //   exhibitor form "There is no charge for exhibiting your vehicle".
   //
   // NO 2027 DATE IS PUBLISHED YET. Dates are left on the 2026 Autumn
-  // Transport Show so nothing invented goes live (same approach as id 1724):
-  // the detail page works but it sits out of browse/search until real dates
-  // are added. Alice will send the 2027 list; add each event then.
+  // Transport Show so nothing invented goes live; datesTBA keeps it live in
+  // browse/search with a "2027 dates TBA" label and the museum link. Alice
+  // will send the 2027 list; add each event then.
   {
     id: 1726,
     name: "British Commercial Vehicle Museum vehicle events",
@@ -202,6 +203,7 @@ export const SEED_11: CarEvent[] = [
     venue: "British Commercial Vehicle Museum, King Street, Leyland, Lancashire, PR25 2LE",
     start: "2026-10-04",
     end: "2026-10-04",
+    datesTBA: "2027 dates TBA",
     img: 2272281,
     organiser: "British Commercial Vehicle Museum",
     desc:
