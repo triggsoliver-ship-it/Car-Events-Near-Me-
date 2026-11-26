@@ -35,4 +35,39 @@ export const SEED_12: CarEvent[] = [
     free: false,
     bookingUrl: "https://leistoneventsgroup.com/sizewell-vintage-classic-vehicle-show/",
   },
+
+  // The Sandown Motor Show — added 26 Nov 2026. Jay Jones (Daily Driven
+  // Events, info@dailydrivenevents.com) replied 17:06 to that morning's
+  // outreach: "Thanks Oli, please do share the event on your platforms."
+  //
+  // Verified 26 Nov 2026 on dailydrivenevents.com (homepage and
+  // sandown-display-your-vehicle) and the Ticket Tailor event page
+  // (tickettailor.com/events/dailydrivenbrit/2265202):
+  // - Saturday 19 June 2027 at Sandown Park, Esher, Surrey.
+  // - "hundreds of cars, bikes, trucks and customs"; "Displaying is free,
+  //   with entry for you and a guest."
+  // - Adult £20 until 31 Dec 2026, £24 from 1 Jan to 18 Jun 2027, £28 on
+  //   the gate (Ticket Tailor). Child prices not captured, so not listed.
+  {
+    id: 1728,
+    name: "The Sandown Motor Show",
+    type: "show",
+    region: "South East",
+    county: "Surrey",
+    town: "Esher",
+    venue: "Sandown Park, Esher, Surrey",
+    start: "2027-06-19",
+    end: "2027-06-19",
+    img: 17075732,
+    organiser: "Daily Driven Events",
+    desc:
+      "Daily Driven Events' flagship Sandown Motor Show takes over Sandown Park in Esher on Saturday 19 June 2027, with hundreds of cars, bikes, trucks and customs on display. Got a car, bike or truck worth showing? Displaying is free and includes entry for you and a guest. Adult tickets are cheapest booked early: £20 until 31 December 2026, then £24 from 1 January, with gate tickets at £28.",
+    tiers: [
+      { name: "Adult, advance (until 31 Dec 2026)", price: 20 },
+      { name: "Adult, advance (1 Jan to 18 Jun 2027)", price: 24 },
+      { name: "Adult, on the gate", price: 28 },
+    ],
+    free: false,
+    bookingUrl: "https://www.tickettailor.com/events/dailydrivenbrit/2265202",
+  },
 ];
