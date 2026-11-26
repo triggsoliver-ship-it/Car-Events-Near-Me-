@@ -160,4 +160,59 @@ export const SEED_11: CarEvent[] = [
     free: true,
     bookingUrl: "https://www.jerseyconcoursdelegance.com",
   },
+
+  // British Commercial Vehicle Museum — added 26 Nov 2026. Alice (museum,
+  // enquiries@britishcommercialvehiclemuseum.com) replied 11:32 to Oli's
+  // offer to list the museum now and add events as dates are announced:
+  // "provided it is a free listing with no fees for the museum, I have no
+  // problem with you creating the listing ahead of time ... for now visitors
+  // to your site could be directed to the museum website for further info."
+  // Oli confirmed in chat (26 Nov) that the listing should go live.
+  //
+  // Verified 26 Nov 2026 on britishcommercialvehiclemuseum.com (homepage,
+  // plan-your-visit, programme-of-events):
+  // - "King Street, Leyland, Lancashire PR25 2LE"; "just 3 minutes from M6
+  //   JCT 28"; "The Big Story of Big Vehicles"; archive records "dating far
+  //   back to the 1890s"; Leyland, Albion, AEC, Maudslay, Thornycroft and
+  //   Scammell vehicles on display; self-funding registered charity.
+  // - Open "Wednesday – Sunday 10.00 a.m. – 4.30 p.m. PLUS – Bank Holiday
+  //   Mondays" (header bar says Tuesday-Sunday; body text used).
+  // - Standard admission Adult £12, Concession (over 60) £10.50, Child (4-16)
+  //   £6, under 4s free; "Pre-booking is not essential"; prices exclude
+  //   special shows.
+  // - Homepage mentions "classic lorry and car events" and "collector and
+  //   craft fairs" with no dates. No 2027 vehicle-event dates published.
+  // - From the 19 Nov 2026 outreach research (programme page at the time):
+  //   Autumn Transport Show Sun 4 Oct 2026; the museum also hosts the Ribble
+  //   & Fishwick Joint Bus Rally and the Leyland Society Gathering; 2026
+  //   exhibitor form "There is no charge for exhibiting your vehicle".
+  //
+  // NO 2027 DATE IS PUBLISHED YET. Dates are left on the 2026 Autumn
+  // Transport Show so nothing invented goes live (same approach as id 1724):
+  // the detail page works but it sits out of browse/search until real dates
+  // are added. Alice will send the 2027 list; add each event then.
+  {
+    id: 1726,
+    name: "British Commercial Vehicle Museum vehicle events",
+    type: "show",
+    categories: ["classic"],
+    region: "North West",
+    county: "Lancashire",
+    town: "Leyland",
+    venue: "British Commercial Vehicle Museum, King Street, Leyland, Lancashire, PR25 2LE",
+    start: "2026-10-04",
+    end: "2026-10-04",
+    img: 2272281,
+    organiser: "British Commercial Vehicle Museum",
+    desc:
+      "The British Commercial Vehicle Museum in Leyland tells the big story of big vehicles, from horse-drawn and steam to petrol, diesel and electric, with Leyland, Albion, AEC, Maudslay, Thornycroft and Scammell vehicles on display. Through the year it hosts classic lorry and car events, including its Autumn Transport Show (held on Sunday 4 October in 2026), the Ribble & Fishwick Joint Bus Rally and the Leyland Society Gathering, along with collector and craft fairs. The 2027 event dates are still to be announced, so check the museum's website for the latest programme. The museum is just 3 minutes from M6 junction 28 and is normally open Wednesday to Sunday, 10am-4.30pm, plus bank holiday Mondays. It is a self-funding registered charity.",
+    tiers: [
+      { name: "Adult, standard museum admission (special shows priced separately)", price: 12 },
+      { name: "Concession (over 60), standard admission", price: 10.5 },
+      { name: "Child (4-16), standard admission", price: 6 },
+      { name: "Under 4", price: 0 },
+    ],
+    free: false,
+    bookingUrl: "https://www.britishcommercialvehiclemuseum.com/programme-of-events/",
+  },
 ];
