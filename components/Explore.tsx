@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { CarEvent } from "@/lib/types";
 import { CATEGORIES, REGIONS, TYPES } from "@/lib/events";
-import { px, eventImg, fmtPrice, dateRange, priceFrom, priceBadge, GRAD } from "@/lib/util";
+import { px, eventImg, fmtPrice, eventDateLabel, priceFrom, priceBadge, GRAD, isLive, byDate } from "@/lib/util";
 
 const TODAY = new Date().toISOString().slice(0, 10);
 
@@ -26,14 +26,14 @@ export default function Explore({ events }: { events: CarEvent[] }) {
 
   const list = useMemo(() => {
     const l = events.filter((e) => {
-      if (e.end < TODAY) return false;
+      if (!isLive(e, TODAY)) return false;
       if (q) {
         const s = q.toLowerCase();
         if (!(e.name + e.town + e.county + e.venue + e.region).toLowerCase().includes(s)) return false;
       }
       if (region && e.region !== region) return false;
       if (type && !matchesCategory(e, type)) return false;
-      if (dateFrom && e.end < dateFrom) return false;
+      if (dateFrom && (e.datesTBA || e.end < dateFrom)) return false;
       if (freeOnly && priceFrom(e) !== 0) return false;
       if (maxPrice !== "") {
         const pf = priceFrom(e);
@@ -44,7 +44,7 @@ export default function Explore({ events }: { events: CarEvent[] }) {
     return l.sort((a, b) =>
       sort === "price" ? (priceFrom(a) ?? Infinity) - (priceFrom(b) ?? Infinity)
       : sort === "name" ? a.name.localeCompare(b.name)
-      : a.start.localeCompare(b.start)
+      : byDate(a, b)
     );
   }, [events, q, region, type, dateFrom, maxPrice, freeOnly, sort]);
 
@@ -120,7 +120,7 @@ export default function Explore({ events }: { events: CarEvent[] }) {
                   <div className="scrim" />
                   <span className="tag">{e.type}</span>
                   <span className={pf === 0 ? "price free" : "price"}>{priceBadge(pf)}</span>
-                  <span className="date">📅 {dateRange(e.start, e.end)}</span>
+                  <span className="date">📅 {eventDateLabel(e)}</span>
                 </div>
                 <div className="body">
                   <h4>{e.name}</h4>

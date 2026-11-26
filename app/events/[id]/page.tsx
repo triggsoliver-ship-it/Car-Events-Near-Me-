@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getEventById } from "@/lib/events";
-import { eventImg, eventImgCredit, dateRange, GRAD, priceFrom } from "@/lib/util";
+import { eventImg, eventImgCredit, dateRange, eventDateLabel, GRAD, priceFrom } from "@/lib/util";
 import BookingBox from "@/components/BookingBox";
 
 export const dynamic = "force-dynamic";
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const e = await getEventById(Number(id));
   if (!e) return { title: "Event not found" };
   const image = eventImg(e, 1200, 630);
-  const past = e.end < new Date().toISOString().slice(0, 10);
+  const past = !e.datesTBA && e.end < new Date().toISOString().slice(0, 10);
   // A pending/rejected event is only reachable via its exact direct link
   // (see getEventById) — keep it out of search entirely, and don't let
   // crawlers follow out from it either, until it's actually approved.
@@ -50,7 +50,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   const e = await getEventById(Number(id));
   if (!e) notFound();
   const grad = GRAD[(e.id - 1) % GRAD.length];
-  const past = e.end < new Date().toISOString().slice(0, 10);
+  const past = !e.datesTBA && e.end < new Date().toISOString().slice(0, 10);
   const notApproved = Boolean(e.status && e.status !== "approved");
 
   // Set only where an organiser gave us the photo and asked to be credited.
@@ -103,7 +103,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
 
   return (
     <main className="detail" id="main-content">
-      {!notApproved && (
+      {!notApproved && !e.datesTBA && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -148,7 +148,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
       <div className="cols">
         <div>
           <div className="chips">
-            <span className="chip">📅 <b>{dateRange(e.start, e.end)}</b></span>
+            <span className="chip">📅 <b>{eventDateLabel(e)}</b></span>
             <span className="chip">📍 <b>{e.town}</b>, {e.county}</span>
             <span className="chip">🗺️ {e.region}</span>
             <span className="chip">🏟️ {e.venue}</span>
