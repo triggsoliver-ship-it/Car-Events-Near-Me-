@@ -40,6 +40,18 @@ export const REGIONS: string[] = [
 const SEED: CarEvent[] = [...SEED_1, ...SEED_2, ...SEED_3, ...SEED_4, ...SEED_5, ...SEED_6, ...SEED_7, ...SEED_8, ...SEED_9, ...SEED_10, ...SEED_11];
 const today = () => new Date().toISOString().slice(0, 10);
 
+// "Dates TBA" lives only in the bundled seed (no DB column needed): DB rows
+// for seed events carry external_id "seed-<id>", so the label is re-attached
+// here, and those rows are fetched even though their end_date has passed.
+const TBA = new Map(SEED.filter((e) => e.datesTBA).map((e) => ["seed-" + e.id, e.datesTBA as string]));
+const withTBA = (r: EventRow): CarEvent => {
+  const e = rowToEvent(r);
+  const t = r.external_id ? TBA.get(r.external_id) : undefined;
+  return t ? { ...e, datesTBA: t } : e;
+};
+const byDateTBA = (a: CarEvent, b: CarEvent) =>
+  (a.datesTBA ? 1 : 0) - (b.datesTBA ? 1 : 0) || a.start.localeCompare(b.start);
+
 /** Bundled seed events (fallback + used to pre-seed the database). */
 export function getSeedEvents(): CarEvent[] {
   return SEED;
@@ -58,13 +70,25 @@ export async function getUpcomingEvents(): Promise<CarEvent[]> {
           .gte("end_date", today())
           .order("start_date", { ascending: true })
           .limit(5000);
-        if (!error && data) return (data as EventRow[]).map(rowToEvent);
+        if (!error && data) {
+          const rows = data as EventRow[];
+          if (TBA.size) {
+            const have = new Set(rows.map((r) => r.external_id));
+            const { data: tba } = await sb
+              .from("events")
+              .select("*")
+              .eq("status", "approved")
+              .in("external_id", [...TBA.keys()]);
+            for (const r of (tba || []) as EventRow[]) if (!have.has(r.external_id)) rows.push(r);
+          }
+          return rows.map(withTBA).sort(byDateTBA);
+        }
       }
     } catch {
       /* fall through to seed */
     }
   }
-  return SEED.filter((e) => e.end >= today()).sort((a, b) => a.start.localeCompare(b.start));
+  return SEED.filter((e) => e.datesTBA || e.end >= today()).sort(byDateTBA);
 }
 
 /**
@@ -89,7 +113,7 @@ export async function getEventById(id: number): Promise<CarEvent | undefined> {
           .select("*")
           .eq("id", id)
           .maybeSingle();
-        if (data) return rowToEvent(data as EventRow);
+        if (data) return withTBA(data as EventRow);
       }
     } catch {
       /* fall through to seed */

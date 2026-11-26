@@ -28,5 +28,10 @@ export type CarEvent = {
   tiers: Tier[];
   free?: boolean;
   bookingUrl?: string;
+  // Set when the organiser has said yes but next year's dates aren't fixed
+  // yet, e.g. "2027 dates TBA". The listing then stays live in browse/search
+  // (sorted after dated events), shows this label instead of a date, and
+  // keeps its link to the organiser. start/end hold the last known date.
+  datesTBA?: string;
   status?: string; // pending | approved | rejected — undefined for bundled seed events (always treated as approved)
 };

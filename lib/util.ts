@@ -126,3 +126,16 @@ export const priceFrom = (e: { free?: boolean; tiers: { name: string; price: num
 /** The price badge on an event card: "Free", "from £12", or "See prices". */
 export const priceBadge = (pf: number | null) =>
   pf === null ? "See prices" : pf === 0 ? "Free" : "from " + fmtPrice(pf);
+
+
+/** Live in browse/search: dated events until their end date, plus "dates TBA" listings. */
+export const isLive = (e: { end: string; datesTBA?: string }, today: string) =>
+  Boolean(e.datesTBA) || e.end >= today;
+
+/** Date label for cards and chips: the TBA label when set, else the date range. */
+export const eventDateLabel = (e: { start: string; end: string; datesTBA?: string }) =>
+  e.datesTBA || dateRange(e.start, e.end);
+
+/** Date sort that puts "dates TBA" listings after every dated event. */
+export const byDate = (a: { start: string; datesTBA?: string }, b: { start: string; datesTBA?: string }) =>
+  (a.datesTBA ? 1 : 0) - (b.datesTBA ? 1 : 0) || a.start.localeCompare(b.start);

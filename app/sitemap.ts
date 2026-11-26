@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const today = new Date().toISOString().slice(0, 10);
-  const upcoming = events.filter((e) => e.end >= today);
+  const upcoming = events.filter((e) => Boolean(e.datesTBA) || e.end >= today);
   const counties = countiesFromEvents(upcoming);
 
   return [
