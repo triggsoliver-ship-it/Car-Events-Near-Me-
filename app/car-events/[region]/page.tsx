@@ -5,6 +5,7 @@ import type { CarEvent } from "@/lib/types";
 import { getUpcomingEvents, REGIONS } from "@/lib/events";
 import { slugify, nameFromSlug, countiesFromEvents } from "@/lib/seo";
 import EventCard from "@/components/EventCard";
+import { isLive, byDate } from "@/lib/util";
 
 export const revalidate = 3600;
 
@@ -87,8 +88,8 @@ export default async function RegionPage(
   const today = TODAY();
   const all: CarEvent[] = await getUpcomingEvents();
   const events = all
-    .filter((e) => e.end >= today && e.region === region)
-    .sort((a, b) => a.start.localeCompare(b.start));
+    .filter((e) => isLive(e, today) && e.region === region)
+    .sort(byDate);
 
   const counties = countiesFromEvents(events);
   const intro =

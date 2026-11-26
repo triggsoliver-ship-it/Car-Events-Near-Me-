@@ -5,6 +5,7 @@ import type { CarEvent } from "@/lib/types";
 import { getUpcomingEvents } from "@/lib/events";
 import { slugify, nameFromSlug, countiesFromEvents } from "@/lib/seo";
 import EventCard from "@/components/EventCard";
+import { isLive, byDate } from "@/lib/util";
 
 export const revalidate = 3600;
 
@@ -16,7 +17,7 @@ const YEAR = new Date().getFullYear();
 async function upcomingByCounty() {
   const today = TODAY();
   const all: CarEvent[] = await getUpcomingEvents();
-  return all.filter((e) => e.end >= today);
+  return all.filter((e) => isLive(e, today));
 }
 
 export async function generateStaticParams() {
@@ -65,7 +66,7 @@ export default async function CountyPage(
 
   const events = all
     .filter((e) => e.county === county)
-    .sort((a, b) => a.start.localeCompare(b.start));
+    .sort(byDate);
 
   const region = events[0]?.region;
   const intro = `Discover upcoming car events in ${county}${region ? `, ${region}` : ""} — find and book car shows, classic meets, track days, auctions and motorsport near you.`;
