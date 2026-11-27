@@ -140,4 +140,60 @@ export const SEED_12: CarEvent[] = [
     free: true,
     bookingUrl: "https://www.walledgardenbaumber.co.uk/",
   },
+  // West Wilts Charity Classic Car Show + monthly club meets — added 27 Nov
+  // 2026. Pete and Tom (West Wilts Classic Car Club, wwclassiccarclub@gmail.com)
+  // replied 13:33 to the 27 Nov follow-up: "Yes we are very much interested,
+  // Our Club meets will start back up in March every month through to October
+  // last Thursday ... The definite one is our Charity Car show 24th July
+  // working on details 12 noon to Midnight car show in the afternoon with live
+  // music in the evening."
+  //
+  // Verified 27 Nov 2026 on westwiltsclassiccarclub.co.uk (/carshow,
+  // /clubmeet, /carshow-1): first show "held on 23rd August" with
+  // "approximately 170 vehicles", "we raised an incredible £3,015.10!" for
+  // Dorothy House Hospice & Wessex Multiple Sclerosis Therapy Centre; 2026
+  // show at Bramble Farm, North Bradley; monthly meet "on the last Thursday
+  // of each month, at the Royal Oak in Corsley" (Royal Oak, Corsley Heath).
+  // NOT known yet, so not stated: 2027 show venue, prices, meet start time.
+  {
+    id: 1731,
+    name: "West Wilts Charity Classic Car Show",
+    type: "show",
+    categories: ["classic"],
+    region: "South West",
+    county: "Wiltshire",
+    town: "Trowbridge",
+    venue: "Venue to be confirmed (2026 show: Bramble Farm, North Bradley)",
+    start: "2027-07-24",
+    end: "2027-07-24",
+    img: 17075732,
+    organiser: "West Wilts Classic Car Club",
+    desc:
+      "West Wilts Classic Car Club's charity show is back on Saturday 24 July 2027, running from 12 noon to midnight: a classic car show in the afternoon, then live music into the evening. The club's first show in 2026 drew around 170 vehicles and raised £3,015.10 for Dorothy House Hospice and the Wessex Multiple Sclerosis Therapy Centre. Venue, entry details and prices for 2027 are still being worked out, so check with the club before you travel.",
+    tiers: [],
+    bookingUrl: "https://www.westwiltsclassiccarclub.co.uk/carshow",
+  },
+  // Monthly meets, last Thursday of each month, March to October 2027
+  // (club: "meets will start back up in March every month through to
+  // October last Thursday"). Ids 1732-1739.
+  ...["2027-03-25", "2027-04-29", "2027-05-27", "2027-06-24", "2027-07-29", "2027-08-26", "2027-09-30", "2027-10-28"].map(
+    (d, i): CarEvent => ({
+      id: 1732 + i,
+      name: "West Wilts Classic Car Club Monthly Meet",
+      type: "meet",
+      categories: ["classic"],
+      region: "South West",
+      county: "Wiltshire",
+      town: "Corsley",
+      venue: "The Royal Oak, Corsley Heath",
+      start: d,
+      end: d,
+      img: 33419743,
+      organiser: "West Wilts Classic Car Club",
+      desc:
+        "West Wilts Classic Car Club meets on the last Thursday of every month from March to October at the Royal Oak in Corsley Heath: a friendly get-together for local classic owners and anyone who enjoys old cars. Start time not yet published, so check with the club before you go.",
+      tiers: [],
+      bookingUrl: "https://www.westwiltsclassiccarclub.co.uk/clubmeet",
+    }),
+  ),
 ];
